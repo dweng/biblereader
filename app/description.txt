@@ -1,0 +1,6 @@
+Bible Reader是一个研读圣经的工具软件，主要的受众是以中文为母语的基督徒。Bible Reader提供了圣经阅读，字典查询，注释书参考，经文比较等功能；提供相对比较丰富的圣经中文译本，以供研读。
+
+Bible Reader不做任何版权的声明，唯一一点声明：任何人不得将此程序（BibleReader）用于商业目的，作者保留申诉法律的权利。
+
+主页: <a href="http://biblereader.godlove.us/">Bible Reader主页</a>
+若有问题请联系 <a href="mailto:dweng123@gmail.com">dweng123@gmail.com</a>
