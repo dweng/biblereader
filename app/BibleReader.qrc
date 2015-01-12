@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/img">
+        <file>assets/images/32X32.ico</file>
         <file>assets/images/app.jpg</file>
+    </qresource>
+    <qresource prefix="/data">
+        <file>assets/data/description.txt</file>
+        <file>assets/data/donation.txt</file>
     </qresource>
 </RCC>

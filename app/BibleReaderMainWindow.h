@@ -108,10 +108,17 @@ private:
     QAction *navToNextChapterAction;
     QAction *navToPrevChapterAction;
 
-    // menu actions
+    // File menu actions
     QAction *exitAppAction;
+
+    // Edit menu actions
     QAction *copyAction;
+
+    // Help menu actions
     QAction *aboutMeAction;
+    QAction *checkUpdate;
+    QAction *showHelpContent;
+    QAction *donateBibleReader;
 
     // menus
     QMenu *fileMenu;
@@ -135,9 +142,16 @@ signals:
 private slots:
     void onChapterVerseChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void onChapterChanged(int book, int chapter, int verse);
-    void quitBibleReader();
     void navToNextChapter();
     void navToPrevChapter();
+
+    // menu actions slots
+    void quitBibleReader();
+    // show about dialog
+    void showAboutDlg();
+    // show donate dialog
+    void showDonationDlg();
+
 };
 
 #endif // MAINWINDOW_H

@@ -35,6 +35,9 @@
 
 #include "bibletreewidget.h"
 #include "bibledictionarywidget.h"
+#include "biblereaderaboutdlg.h"
+#include "biblereaderdonationdlg.h"
+
 // for logging
 #include "Logger.h"
 #include "ConsoleAppender.h"
@@ -102,18 +105,31 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
             SLOT(onBibleVersionChanged(QString)));
     // build menus
     mainMenuBar = new QMenuBar(this);
-    fileMenu = new QMenu(tr("File"), mainMenuBar);
-    editMenu = new QMenu(tr("Edit"), mainMenuBar);
-    helpMenu = new QMenu(tr("Help"), mainMenuBar);
+    fileMenu = new QMenu(tr("File(&F)"), mainMenuBar);
+    editMenu = new QMenu(tr("Edit(&E)"), mainMenuBar);
+    helpMenu = new QMenu(tr("Help(&H)"), mainMenuBar);
+
+    // add actions to File menu
     mainMenuBar->addMenu(fileMenu);
     exitAppAction = fileMenu->addAction(tr("Exit"));
+    connect(exitAppAction, SIGNAL(triggered()), this, SLOT(quitBibleReader()));
+
+    // add actions to Edit menu
     mainMenuBar->addMenu(editMenu);
     copyAction = editMenu->addAction(tr("Copy"));
-    mainMenuBar->addMenu(helpMenu);
-    aboutMeAction = helpMenu->addAction(tr("About me"));
-    this->setMenuBar(mainMenuBar);
 
-    connect(exitAppAction, SIGNAL(triggered()), this, SLOT(quitBibleReader()));
+    // add actions to Help menu
+    mainMenuBar->addMenu(helpMenu);
+    aboutMeAction = helpMenu->addAction(tr("About [Bible Reader]..."));
+    connect(aboutMeAction, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
+
+    checkUpdate = helpMenu->addAction(tr("Check Update..."));
+    showHelpContent = helpMenu->addAction(tr("Show Help Content..."));
+    donateBibleReader = helpMenu->addAction(tr("Donate [Bible Reader]..."));
+    connect(donateBibleReader, SIGNAL(triggered()), this, SLOT(showDonationDlg()));
+
+    // set main menu
+    this->setMenuBar(mainMenuBar);
 
     // add status bar
     statusBar = new QStatusBar();
@@ -179,6 +195,20 @@ void BibleReaderMainWindow::onChapterChanged(int book, int chapter, int verse)
 void BibleReaderMainWindow::quitBibleReader()
 {
     QApplication::exit();
+}
+
+void BibleReaderMainWindow::showAboutDlg()
+{
+    BibleReaderAboutDlg dlg(this);
+    dlg.show();
+    dlg.exec();
+}
+
+void BibleReaderMainWindow::showDonationDlg()
+{
+    BibleReaderDonationDlg dlg(this);
+    dlg.show();
+    dlg.exec();
 }
 
 void BibleReaderMainWindow::navToNextChapter()

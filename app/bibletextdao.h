@@ -27,6 +27,12 @@
 #include <QtSql/QSqlDatabase>
 #include <QMap>
 
+/**
+ * @brief The BibleTextDAO class
+ *
+ * This database access object class is used to communicate with
+ * SQLite's database of bible text.
+ */
 class BibleTextDAO
 {
 public:
