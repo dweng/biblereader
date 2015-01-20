@@ -107,14 +107,7 @@ BibleChapter BibleReaderCore::getChapter(QString version, int bookNumber, int ch
     return allBTDAOs.value(version)->getChapter(bookNumber, chapter);
 }
 
-/**
- * @brief BibleReaderCore::getChapterText
- * To get one chapter from bible book which has number in database.
- *
- * @param bookNumber book number the chapter in
- * @param chapter chapter number
- * @return {QString} chapter string
- */
+
 QString BibleReaderCore::getChapterText(int bookNumber, int chapter)
 {
     return currentBibleDAO->getChapter(bookNumber, chapter).text();
@@ -134,9 +127,9 @@ QList<BibleVerse> BibleReaderCore::search(QString q,
     return currentBibleDAO->search(q, scope, customBooks);
 }
 
-void BibleReaderCore::copyVerses(BibleVersePos start, BibleVersePos end)
+bool BibleReaderCore::copyVerses(BibleVersePos start, BibleVersePos end)
 {
-
+    return true;
 }
 
 QList<BibleBook> BibleReaderCore::getAllBooks()
@@ -208,6 +201,11 @@ void BibleReaderCore::navPrevChapter()
     emit currentChapterChanged(currentBookNumber, currentChapterNumber);
 }
 
+void BibleReaderCore::fireCmpCurVerse()
+{
+    emit compareCurrentVerse();
+}
+
 int BibleReaderCore::getCurrentVerseNumber() const
 {
     return currentVerseNumber;
@@ -225,6 +223,7 @@ int BibleReaderCore::setCurrentBCV(int b, int c, int v)
     setCurrentVerseNumber(v);
 
     emit currentChapterChanged(b, c);
+    return 1;
 }
 
 QString BibleReaderCore::getExplaination(QString dict, QString word)

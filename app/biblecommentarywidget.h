@@ -18,6 +18,8 @@
 #include <QWidget>
 #include <QTreeWidget>
 #include <QTextEdit>
+#include <QSplitter>
+#include "biblereadercore.h"
 
 /**
  * @brief The BibleCommentaryWidget class
@@ -27,15 +29,40 @@ class BibleCommentaryWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BibleCommentaryWidget(QWidget *parent = 0);
-
+    explicit BibleCommentaryWidget(BibleReaderCore *brc, QWidget *parent = 0);
+    ~BibleCommentaryWidget();
 signals:
 
 public slots:
 
 private:
-    QTreeWidget *contents;
+    /**
+     * @brief section, commentary contents
+     */
+    QTreeWidget *section;
+
+    /**
+     * @brief commentary content
+     */
     QTextEdit *content;
+
+    /**
+     * @brief Splitter widget for dictionary widget
+     */
+    QSplitter *dictSplitter;
+
+    /**
+     * @brief Left side of widget container.
+     */
+    QWidget *leftContainer;
+
+    /**
+     * @brief bible reader core instance
+     */
+    BibleReaderCore *brCore;
+private:
+    void createWidgets();
+    void destroyWidgets();
 };
 
 #endif // BIBLECOMMENTARYWIDGET_H

@@ -32,22 +32,76 @@ public:
     // default constructor
     BibleBook();
 
+    /**
+     * @brief getter of book number
+     * @return int book number
+     */
     int getBookNumber() const;
+
+    /**
+     * @brief setter of book number
+     * @param value
+     */
     void setBookNumber(int value);
 
+    /**
+     * @brief getter of chapters count
+     * @return int
+     */
     int getChaptersCount() const;
+
+    /**
+     * @brief setter of chapters count
+     * @param value
+     */
     void setChaptersCount(int value);
 
+    /**
+     * @brief getter of verses count
+     * @return int
+     */
     int getVersesCount() const;
+
+    /**
+     * @brief setter of verses count
+     * @param value
+     */
     void setVersesCount(int value);
 
+    /**
+     * @brief getter of bible version
+     * @return QString
+     */
     QString getBibleVersion() const;
+
+    /**
+     * @brief setter of bible version
+     * @param value
+     */
     void setBibleVersion(const QString &value);
 
+    /**
+     * @brief getter of long name of book
+     * @return QString
+     */
     QString getLongName() const;
+
+    /**
+     * @brief setter of long name
+     * @param value
+     */
     void setLongName(const QString &value);
 
+    /**
+     * @brief getter of short name
+     * @return QString
+     */
     QString getShortName() const;
+
+    /**
+     * @brief setter of short name
+     * @param value
+     */
     void setShortName(const QString &value);
 
 private:

@@ -94,6 +94,8 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     commentaryDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
     commentaryDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
     addDockWidget(Qt::BottomDockWidgetArea, commentaryDockWidget);
+    commentaryWidget = new BibleCommentaryWidget(bibleReaderCore, this);
+    commentaryDockWidget->setWidget(commentaryWidget);
 
     // bible tree
     bibleTreeWidget = new BibleTreeWidget(bibleReaderCore, this);
@@ -139,9 +141,9 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     dictDockWidget = new QDockWidget(tr("Dictionary Window"),this);
     dictDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
     dictDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    BibleDictionaryWidget *dictWidget = new BibleDictionaryWidget(bibleReaderCore,
-                                                                  bibleReaderCore->getCurrentDict(),
-                                                                  this);
+    dictWidget = new BibleDictionaryWidget(bibleReaderCore,
+                                              bibleReaderCore->getCurrentDict(),
+                                              this);
     dictDockWidget->setWidget(dictWidget);
     addDockWidget(Qt::BottomDockWidgetArea, dictDockWidget);
     setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
@@ -156,6 +158,7 @@ BibleReaderMainWindow::~BibleReaderMainWindow()
     delete dictDockWidget;
     delete commentaryDockWidget;
     delete toolBar;
+    // delete dictWidget;
 }
 
 void BibleReaderMainWindow::onChapterVerseChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)

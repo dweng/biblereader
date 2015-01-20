@@ -47,6 +47,8 @@ private:
 
 private:
     QTranslator translator;
+    QTranslator qtTranslator;
+
     BibleReaderMainWindow *w;
 
     BibleReaderCore *brCore;

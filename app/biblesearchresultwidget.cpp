@@ -45,11 +45,30 @@ void BibleSearchResultWidget::contextMenuEvent(QContextMenuEvent *event)
         QMenu *menu = new QMenu(this);
         QAction *copyVerse = menu->addAction(tr("Copy this verse"));
         connect(copyVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
-        menu->exec(event->globalPos());
 
+        QAction *cmpVerse = menu->addAction(tr("Compare this verse"));
+        connect(cmpVerse, SIGNAL(triggered()), brCore, SLOT(fireCmpCurVerse()));
+
+        setCurrentVerse();
+        menu->exec(event->globalPos());
         delete menu;
     }
     QTreeWidget::contextMenuEvent(event);
+}
+
+void BibleSearchResultWidget::setCurrentVerse()
+{
+    QTreeWidgetItem *current = currentItem();
+    if (current->parent()) {
+
+        QString version = current->data(2, Qt::DisplayRole).toString();
+        int book = current->data(3, Qt::DisplayRole).toInt();
+        int chapter = current->data(4, Qt::DisplayRole).toInt();
+        int verse = current->data(5, Qt::DisplayRole).toInt();
+
+        brCore->setCurrentVersion(version);
+        brCore->setCurrentBCV(book, chapter, verse);
+    }
 }
 
 bool BibleSearchResultWidget::copyCurVerse()

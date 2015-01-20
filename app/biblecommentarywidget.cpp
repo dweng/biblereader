@@ -12,9 +12,40 @@
  * this application, please email me at dweng123@gmail to get the source
  * code.
  */
+
+#include <QHBoxLayout>
 #include "biblecommentarywidget.h"
 
-BibleCommentaryWidget::BibleCommentaryWidget(QWidget *parent) :
+BibleCommentaryWidget::BibleCommentaryWidget(BibleReaderCore *brc, QWidget *parent) :
     QWidget(parent)
 {
+    brCore = brc;
+    createWidgets();
+}
+
+BibleCommentaryWidget::~BibleCommentaryWidget()
+{
+    destroyWidgets();
+}
+
+void BibleCommentaryWidget::createWidgets()
+{
+    section = new QTreeWidget(this);
+    section->setMaximumWidth(150);
+    content = new QTextEdit(this);
+    content->setReadOnly(true);
+
+
+    dictSplitter = new QSplitter(Qt::Horizontal, this);
+    dictSplitter->addWidget(section);
+    dictSplitter->addWidget(content);
+
+    QHBoxLayout* hLayout = new QHBoxLayout(this);
+    hLayout->addWidget(dictSplitter);
+}
+
+void BibleCommentaryWidget::destroyWidgets()
+{
+    delete section;
+    delete content;
 }

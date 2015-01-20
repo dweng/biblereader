@@ -135,6 +135,11 @@
         <source>Copy this verse</source>
         <translation>复制该节经文</translation>
     </message>
+    <message>
+        <location filename="../biblesearchresultwidget.cpp" line="49"/>
+        <source>Compare this verse</source>
+        <translation>比较该节经文</translation>
+    </message>
 </context>
 <context>
     <name>BibleSearchWidget</name>
@@ -267,6 +272,11 @@
         <source>Copy this verse</source>
         <translation>复制该节经文</translation>
     </message>
+    <message>
+        <location filename="../bibletextbrowser.cpp" line="108"/>
+        <source>Compare this verse</source>
+        <translation>比较该节经文</translation>
+    </message>
 </context>
 <context>
     <name>BibleTextCompareBrowser</name>
@@ -279,7 +289,7 @@
 <context>
     <name>BibleTextTabWidget</name>
     <message>
-        <location filename="../bibletexttabwidget.cpp" line="49"/>
+        <location filename="../bibletexttabwidget.cpp" line="50"/>
         <source>Parallel Bible Text Tab</source>
         <translation>经文对照</translation>
     </message>

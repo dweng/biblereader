@@ -12,6 +12,8 @@ TARGET = BibleReader
 TEMPLATE = subdirs
 SUBDIRS = app cutelogger
 
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
+
 debug {
     DESTDIR = $$PWD/bin/debug
 }

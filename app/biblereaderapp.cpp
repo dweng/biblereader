@@ -28,13 +28,15 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
 
     // logging
     FileAppender* fileAppender = new FileAppender("debug.log");
-    fileAppender->setFormat("[%{type:-7}] <%{Function}> %{message}\n");
+    fileAppender->setFormat("[%{time}{yyyy-MM-ddTHH:mm:ss.zzz}] [%{type:-7}] <%{Function}> %{message}\n");
     logger->registerAppender(fileAppender);
     LOG_INFO("Bible Reader started!");
 
     LOG_INFO() << "Loading translations...";
-    LOG_INFO() << "Loading ZH_cn:" << translator.load("./translations/ZH_cn.qm");;
+    LOG_INFO() << "Loading ZH_cn:" << translator.load("./translations/ZH_cn.qm");
+    LOG_INFO() << "Loading Qt ZH_cn:" << qtTranslator.load("./translations/qt_zh_CN.qm");
     installTranslator(&translator);
+    installTranslator(&qtTranslator);
 
     // init biblereadercore
     initBibleReaderCore();

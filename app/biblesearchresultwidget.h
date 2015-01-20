@@ -25,8 +25,6 @@ class BibleSearchResultWidget : public QTreeWidget
 public:
     explicit BibleSearchResultWidget(BibleReaderCore *brc, QWidget *parent = 0);
 
-signals:
-
 public slots:
 
 protected:
@@ -41,6 +39,9 @@ protected:
 
 private:
     BibleReaderCore *brCore;
+
+private:
+    void setCurrentVerse();
 };
 
 #endif // BIBLESEARCHRESULTWIDGET_H

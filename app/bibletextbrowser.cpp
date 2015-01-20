@@ -105,7 +105,9 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
             brCore->setCurrentVerseNumber(d->getVerse());
         }
         QAction *copyCurrentVerse = menu->addAction(tr("Copy this verse"));
+        QAction *compareCurrentVerse = menu->addAction(tr("Compare this verse"));
         connect(copyCurrentVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
+        connect(compareCurrentVerse, SIGNAL(triggered()), brCore, SLOT(fireCmpCurVerse()));
     }
     menu->exec(e->globalPos());
     delete menu;
@@ -210,3 +212,4 @@ bool BibleTextBrowser::copyCurVerse()
 
     return true;
 }
+

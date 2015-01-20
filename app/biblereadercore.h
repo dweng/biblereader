@@ -88,10 +88,53 @@ public:
      */
     BibleInfo getCurrentBibleInfo();
 
+    /**
+     * @brief getVerses
+     * Get verses from [start] to [end]
+     * @param start
+     * @param end
+     * @return bible text of these verses
+     */
     QString getVerses(BibleVersePos start, BibleVersePos end);
+
+    /**
+     * @brief getChapter
+     * Get a bible chapter of default bible version
+     * @param bookNumber book id
+     * @param chapter chapter id
+     * @return a chapter of a bible book
+     */
     BibleChapter getChapter(int bookNumber, int chapter);
+
+    /**
+     * @brief getChapter
+     * Get a bible chapter of [version]
+     * @param version bible version
+     * @param bookNumber book id
+     * @param chapter chapter id
+     * @return a chapter of a bible book of [version]
+     */
     BibleChapter getChapter(QString version, int bookNumber, int chapter);
+
+    /**
+     * @brief BibleReaderCore::getChapterText
+     * To get one chapter from bible book which has number in database.
+     *
+     * @param bookNumber book number the chapter in
+     * @param chapter chapter number
+     * @return {QString} chapter string
+     */
     QString getChapterText(int bookNumber, int chapter);
+
+    /**
+     * @brief BibleReaderCore::getChapterText
+     * To get one chapter from bible book which has number in database.
+     *
+     * @param version bible version
+     * @param bookNumber book number the chapter in
+     * @param chapter chapter number
+     * @return {QString} chapter string
+     */
     QString getChapterText(QString version, int bookNumber, int chapter);
 
     /**
@@ -106,12 +149,42 @@ public:
                              BibleTextDAO::SearchScope scope = BibleTextDAO::All,
                              QList<int> customBooks = QList<int>());
 
-    void copyVerses(BibleVersePos start, BibleVersePos end);
+    /**
+     * @todo
+     * @brief copyVerses
+     * copy verse from [start] to [end]
+     * @param start start verse
+     * @param end end verse
+     */
+    bool copyVerses(BibleVersePos start, BibleVersePos end);
 
+    /**
+     * @brief getAllBooks
+     * Get all books of current bible
+     * @return a book list
+     */
     QList<BibleBook> getAllBooks();
+
+    /**
+     * @brief getChaptersCountOfOneBook
+     * see as name :)
+     * @param n book id
+     * @return
+     */
     QList<int> getChaptersCountOfOneBook(int n);
 
+    /**
+     * @brief getCurrentVersion
+     * current bible version getter
+     * @return current version
+     */
     QString getCurrentVersion() const;
+
+    /**
+     * @brief setCurrentVersion
+     * current bible version setter
+     * @param value the version want to be set
+     */
     void setCurrentVersion(const QString &value);
 
     bool addBibleVersion(QString &version, QString &dataPath);
@@ -172,9 +245,28 @@ signals:
      */
     void currentBibleVersionChanged(QString version);
 
+    /**
+     * @brief this signal will be emited when user triggered [compare this verse]
+     * action in menu or on toolbar
+     */
+    void compareCurrentVerse();
+
 public slots:
+    /**
+     * @brief navigate to next chapter
+     */
     void navNextChapter();
+
+    /**
+     * @brief navigate to previous chapter
+     */
     void navPrevChapter();
+
+    /**
+     * @brief this slot will fire compareCurrentVerse singal.
+     * for public scope usage
+     */
+    void fireCmpCurVerse();
 
 private:
     /**

@@ -63,6 +63,12 @@ private slots:
      * @param verse verse id
      */
     void goToVerse(QString version, int book, int chapter, int verse);
+
+    /**
+     * @brief showCmpTxtTab
+     * show compare text browser tab
+     */
+    void showCmpTxtTab();
 private:
     /**
      * @brief BibleReaderCore instance

@@ -34,6 +34,7 @@ BibleTextTabWidget::BibleTextTabWidget(BibleReaderCore *brc, QWidget *parent) :
         BibleTextBrowser *btBrowser = new BibleTextBrowser(brCore, this);
         connect(brCore, SIGNAL(currentChapterChanged(int,int)), btBrowser,
                 SLOT(showCurrentChapter()));
+        connect(brCore, SIGNAL(compareCurrentVerse()), this, SLOT(showCmpTxtTab()));
 
         btBrowser->setBibleVersion(bibles[i].getVersion());
         btBrowser->showCurrentChapter();
@@ -87,4 +88,10 @@ void BibleTextTabWidget::goToVerse(QString version, int book, int chapter, int v
     setCurrentIndex(index);
     brCore->setCurrentVersion(version);
     brCore->setCurrentBCV(book, chapter, verse);
+}
+
+void BibleTextTabWidget::showCmpTxtTab()
+{
+    setCurrentIndex(compareBrowserTabIndex);
+    compareBrowser->showComparedBibleText();
 }
