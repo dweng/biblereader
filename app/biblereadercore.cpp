@@ -29,8 +29,7 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     previousVerseNumber = 0;
 
     // get configurations of BibleReader
-    QString configFile = "biblereader.ini";
-    configurator = new BibleReaderConfigurator(configFile);
+    configurator = new BibleReaderConfigurator();
     biblePathBase = configurator->getBiblePathBase();
     getAllBibleVersions();
     setCurrentVersion(configurator->getDefaultBibleVersion());

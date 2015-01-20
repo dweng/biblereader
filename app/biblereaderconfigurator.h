@@ -27,7 +27,7 @@ class BibleReaderConfigurator : public QObject
 {
     Q_OBJECT
 public:
-    explicit BibleReaderConfigurator(QString &file, QObject *parent = 0);
+    explicit BibleReaderConfigurator(QObject *parent = 0);
     ~BibleReaderConfigurator();
 
     QString getBiblePathBase() const;

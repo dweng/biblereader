@@ -1,16 +1,17 @@
 #include "biblereaderconfigurator.h"
 #include <QFile>
+#include <QApplication>
 
-BibleReaderConfigurator::BibleReaderConfigurator(QString &file, QObject *parent) :
+BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     QObject(parent)
 {
     settings = NULL;
-    settingsFile = file;
+    settingsFile = QApplication::applicationDirPath() + "/biblereader.ini";
     if (!QFile(settingsFile).exists()) {
         // create default settings
-        settings = new QSettings(file, QSettings::IniFormat);
-        settings->setValue("/base/biblePathBase", "./bibles/");
-        settings->setValue("/base/dictPathBase", "./dicts/");
+        settings = new QSettings(settingsFile, QSettings::IniFormat);
+        settings->setValue("/base/biblePathBase", QApplication::applicationDirPath() + "/bibles/");
+        settings->setValue("/base/dictPathBase", QApplication::applicationDirPath() + "/dicts/");
         settings->setValue("/base/defaultBibleVersion", "LZZ");
         settings->setValue("/base/defaultDict", "SNCHS");
         settings->setValue("/base/lastBook", "1");
@@ -18,7 +19,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QString &file, QObject *parent)
         settings->setValue("/base/lastVerse", "1");
     }
     if (!settings)
-        settings = new QSettings(file, QSettings::IniFormat);
+        settings = new QSettings(settingsFile, QSettings::IniFormat);
 
     biblePathBase = settings->value("/base/biblePathBase").toString();
     dictPathBase = settings->value("/base/dictPathBase").toString();
