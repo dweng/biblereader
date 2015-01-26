@@ -141,10 +141,8 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     dictDockWidget = new QDockWidget(tr("Dictionary Window"),this);
     dictDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
     dictDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    dictWidget = new BibleDictionaryWidget(bibleReaderCore,
-                                              bibleReaderCore->getCurrentDict(),
-                                              this);
-    dictDockWidget->setWidget(dictWidget);
+    bdTabWidget = new BibleDictTabWidget(bibleReaderCore, this);
+    dictDockWidget->setWidget(bdTabWidget);
     addDockWidget(Qt::BottomDockWidgetArea, dictDockWidget);
     setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);

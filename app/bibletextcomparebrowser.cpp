@@ -48,6 +48,7 @@ void BibleTextCompareBrowser::showComparedBibleText()
     QTextTableFormat tfmt;
     fmt.setForeground(QColor("green"));
     fmt.setFontPointSize(16.0);
+    fmt.setFontFamily(QString("Microsoft YaHei"));
     cursor->insertText(tr("Compare verse "), fmt);
     cursor->insertText(QString("["), fmt);
     cursor->insertText(currentBookName, fmt);

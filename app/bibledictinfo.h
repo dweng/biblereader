@@ -17,22 +17,47 @@
 
 #include <QString>
 
+/**
+ * @brief The BibleDictInfo class
+ * this class represents information of a bible dict
+ *
+ * @version 1.0
+ */
 class BibleDictInfo
 {
 public:
     BibleDictInfo();
     BibleDictInfo(QString& n, QString& d);
 
-    void setName(QString& value);
+    void setName(const QString& value);
     QString getName();
 
     void setDescription(QString& value);
     QString getDescription();
 
+    QString getShortname() const;
+    void setShortname(const QString &value);
+
+    QString getCopyright() const;
+    void setCopyright(const QString &value);
+
+    int getVersion() const;
+    void setVersion(int value);
+
+    QString getLang() const;
+    void setLang(const QString &value);
+
+    QString getFullname() const;
+    void setFullname(const QString &value);
+
 private:
     QString name;
     QString description;
-
+    QString shortname;
+    QString fullname;
+    QString copyright;
+    int version;
+    QString lang;
 };
 
 #endif // BIBLEDICTINFO_H

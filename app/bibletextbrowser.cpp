@@ -22,6 +22,8 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
     bgColor = QColor(0xe5, 0xe5, 0xe5);
     fgColor = QColor("blue");
 
+    setFontFamily(QString("Microsoft YaHei"));
+
     setMouseTracking(true);
     setContentsMargins(2, 2, 2, 2);
 }
@@ -140,6 +142,7 @@ bool BibleTextBrowser::showCurrentChapter()
     // add book name and chapter number
     fmt.setForeground(QColor("green"));
     fmt.setFontPointSize(14.0);
+    fmt.setFontFamily(QString("Microsoft YaHei"));
     cursor->insertText(chapter.getBook().getLongName(), fmt);
     cursor->insertText(QString(" "), fmt);
     cursor->insertText(QString::number(chapter.getChapter()), fmt);

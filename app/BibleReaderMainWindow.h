@@ -18,6 +18,7 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include "bibletexttabwidget.h"
+#include "bibledicttabwidget.h"
 #include "biblereadercore.h"
 #include "bibletextbrowser.h"
 #include "bibletreewidget.h"
@@ -97,11 +98,6 @@ private:
     BibleSearchWidget *bibleSearchWidget;
 
     /**
-     * @brief bible dictionary widget instance
-     */
-    BibleDictionaryWidget *dictWidget;
-
-    /**
      * @brief bible commentary widget instance
      */
     BibleCommentaryWidget *commentaryWidget;
@@ -115,6 +111,11 @@ private:
      * @brief Bible Text Tab widget
      */
     BibleTextTabWidget *btTabWidget;
+
+    /**
+     * @brief bible dict tab widget
+     */
+    BibleDictTabWidget *bdTabWidget;
 
     // toolbar actions
     QAction *navToNextChapterAction;

@@ -187,7 +187,24 @@ public:
      */
     void setCurrentVersion(const QString &value);
 
+    /**
+     * @brief addBibleVersion
+     * add bible [version] to bibles list, and this bible data is store at
+     * [dataPath]
+     * @param version bible version
+     * @param dataPath bible data stored path
+     * @return succeed with true else false
+     */
     bool addBibleVersion(QString &version, QString &dataPath);
+
+    /**
+     * @brief addBibleVersions
+     * add bibles [versions] to bibles list, and these bible data are stored at
+     * [dataPaths] list
+     * @param versions bible versions' list
+     * @param dataPaths bible data paths list
+     * @return
+     */
     bool addBibleVersions(QStringList &versions, QStringList &dataPaths);
 
     QString getCurrentDict() const;

@@ -43,8 +43,25 @@ QMap<QString, QString> BibleDictDAO::getAllWordsAndExplainations()
 
 BibleDictInfo BibleDictDAO::getBibleDictInfo()
 {
-    di.setName(dictName);
-    di.setDescription(dictPath);
+    LOG_INFO() << "get bible dict:" << dictName;
+    QString name;
+    QString sql = "select * from info";
+    query->exec(sql);
+    while (query->next()) {
+        name = query->value(0).toString();
+        if (name == "version") {
+            di.setVersion(query->value(1).toInt());
+        } else if (name == "shortname") {
+            di.setShortname(query->value(1).toString());
+            di.setName(query->value(1).toString());
+        } else if (name == "fullname") {
+            di.setFullname(query->value(1).toString());
+        } else if (name == "copyright") {
+            di.setCopyright(query->value(1).toString());
+        } else if (name == "lang") {
+            di.setLang(query->value(1).toString());
+        }
+    }
 
     return di;
 }
@@ -60,7 +77,7 @@ bool BibleDictDAO::init()
     }
 
     if (!dictDB.open()) {
-        LOG_INFO() << "Can not open database:" << dictName << "\n"
+        LOG_ERROR() << "Can not open database:" << dictName << "\n"
                     << dictDB.lastError().text();
         return false;
     }
