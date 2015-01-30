@@ -207,18 +207,51 @@ public:
      */
     bool addBibleVersions(QStringList &versions, QStringList &dataPaths);
 
+    /**
+     * @brief getCurrentDict
+     * @return current dict name
+     */
     QString getCurrentDict() const;
+
+    /**
+     * @brief setCurrentDict
+     * set current dict name
+     * @param dictName dictionary name
+     */
     void setCurrentDict(const QString &dictName);
 
+    /**
+     * @brief addDictionary
+     * add a dict to dict DB instances map
+     * @param name dict name
+     * @param path dict database file path
+     * @return true if succeed or false if failed
+     */
     bool addDictionary(QString &name, QString& path);
 
-    // scan bible data
+    /**
+     * @brief scan bible data
+     * @return a list contains all bible versions information
+     */
     QList<BibleInfo> getAllBibleVersions();
-    // scan dictionarys data
+
+    /** @return a list contains all dicts information
+     * @brief scan dictionarys data
+     *
+     */
     QList<BibleDictInfo> getAllDictionarys();
 
-    // get all words and explainations of a dictionary
+    /**
+     * @brief get all words and explainations of current dictionary
+     */
     QMap<QString, QString> getAllWordsAndExplainationsOfCurrentDict();
+
+    /**
+     * @brief getAllWordsAndExplainations
+     * get all words and explainations of a dictionary
+     * @param dictName dict name
+     * @return dict map
+     */
     QMap<QString, QString> getAllWordsAndExplainations(QString& dictName);
 
     QString getBiblePathBase() const;
