@@ -78,6 +78,16 @@ void BibleDictionaryWidget::destoryWidgets()
     delete dictWordsCombo;
     delete dictWordsList;
 }
+QString BibleDictionaryWidget::getDictName() const
+{
+    return dictName;
+}
+
+void BibleDictionaryWidget::setDictName(const QString &value)
+{
+    dictName = value;
+}
+
 
 
 void BibleDictionaryWidget::showExplaination(QListWidgetItem* current,

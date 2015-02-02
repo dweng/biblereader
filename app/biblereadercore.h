@@ -254,7 +254,18 @@ public:
      */
     QMap<QString, QString> getAllWordsAndExplainations(QString& dictName);
 
+    /**
+     * @brief getBiblePathBase
+     * return base path of bibles' store
+     * @return QString
+     */
     QString getBiblePathBase() const;
+
+    /**
+     * @brief setBiblePathBase
+     * set base path of bibles' store
+     * @param QString base path of bibles' store
+     */
     void setBiblePathBase(const QString &value);
 
     int getCurrentBookNumber() const;
@@ -271,6 +282,9 @@ public:
     QString getExplaination(QString dict, QString word);
 
     BibleBook getCurrentBook(QList<BibleBook> &books);
+
+    BibleReaderConfigurator *getConfigurator() const;
+    void setConfigurator(BibleReaderConfigurator *value);
 
 signals:
     /**
@@ -332,6 +346,7 @@ private:
      * @brief current bible dict name
      */
     QString currentDict;
+
     /**
      * @brief current dictionary DAO
      */

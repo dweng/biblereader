@@ -90,15 +90,18 @@ private:
      * example: /Users/user/biblereader/dicts/
      */
     QString dictPath;
+
     /**
      * bible dictionary inforamtion
      * @todo for future usage
      */
     BibleDictInfo di;
+
     /**
      * dict database instance
      */
     QSqlDatabase dictDB;
+
     /**
      * database query instace for dictionary
      */

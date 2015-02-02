@@ -44,6 +44,9 @@ public:
      * @brief Destructor.
      */
     ~BibleDictionaryWidget();
+    QString getDictName() const;
+    void setDictName(const QString &value);
+
 signals:
     
 public slots:

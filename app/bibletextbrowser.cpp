@@ -62,7 +62,7 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
             }
             QToolTip::showText(e->globalPos(),
                                brCore->getExplaination(
-                                   brCore->getCurrentDict(), sn).replace("\\r\\n", "\r\n"));
+                                   QString("SNCHS"), sn).replace("\\r\\n", "\r\n"));
         }
 
     } else {

@@ -204,6 +204,16 @@ void BibleReaderCore::fireCmpCurVerse()
 {
     emit compareCurrentVerse();
 }
+BibleReaderConfigurator *BibleReaderCore::getConfigurator() const
+{
+    return configurator;
+}
+
+void BibleReaderCore::setConfigurator(BibleReaderConfigurator *value)
+{
+    configurator = value;
+}
+
 
 int BibleReaderCore::getCurrentVerseNumber() const
 {
@@ -346,6 +356,9 @@ QList<BibleInfo> BibleReaderCore::getAllBibleVersions()
 QList<BibleDictInfo> BibleReaderCore::getAllDictionarys()
 {
     LOG_INFO() << "add dictionary in:"<<dictPathBase;
+    QString dict;
+    QString dictDataPath;
+
     if (allDicts.empty()) {
         QDir dictPath = QDir(dictPathBase);
         if (!dictPath.exists()) {
@@ -356,10 +369,10 @@ QList<BibleDictInfo> BibleReaderCore::getAllDictionarys()
         QFileInfoList dicts = dictPath.entryInfoList();
 
         for (int i = 0; i < dicts.count(); i++) {
-            QString dict = dicts[i].fileName();
+            dict = dicts[i].fileName();
             if (dict == "." || dict == "..") continue;
 
-            QString dictDataPath = dictPathBase + dict +QDir::separator()+dict+".BIBDICT";
+            dictDataPath = dictPathBase + dict +QDir::separator()+dict+".BIBDICT";
             addDictionary(dict, dictDataPath);
             BibleDictInfo di = allBDDAOs.value(dict)->getBibleDictInfo();
 
