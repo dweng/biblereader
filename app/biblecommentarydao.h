@@ -24,8 +24,7 @@ public:
     ~BibleCommentaryDAO();
 
 private:
-    QString fullname;
-    QString shortname;
+
 
 };
 

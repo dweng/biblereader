@@ -12,19 +12,45 @@
  * this application, please email me at dweng123@gmail to get the source
  * code.
  */
-#ifndef BIBLECOMMENTARY_H
-#define BIBLECOMMENTARY_H
+#ifndef BIBLECOMMENTARYINFO_H
+#define BIBLECOMMENTARYINFO_H
 
 #include <QString>
 
-class BibleCommentary
+class BibleCommentaryInfo
 {
 public:
-    BibleCommentary();
+    BibleCommentaryInfo();
+
+    QString getName() const;
+    void setName(const QString &value);
+
+    QString getDescription() const;
+    void setDescription(const QString &value);
+
+    QString getShortname() const;
+    void setShortname(const QString &value);
+
+    QString getFullname() const;
+    void setFullname(const QString &value);
+
+    QString getCopyright() const;
+    void setCopyright(const QString &value);
+
+    int getVersion() const;
+    void setVersion(int value);
+
+    QString getLang() const;
+    void setLang(const QString &value);
 
 private:
-    QString fullname;
+    QString name;
+    QString description;
     QString shortname;
+    QString fullname;
+    QString copyright;
+    int version;
+    QString lang;
 
 };
 
