@@ -12,13 +12,44 @@
  * this application, please email me at dweng123@gmail to get the source
  * code.
  */
+#include <QSqlError>
 #include "biblecommentarydao.h"
+#include "Logger.h"
 
-BibleCommentaryDAO::BibleCommentaryDAO()
+BibleCommentaryDAO::BibleCommentaryDAO(QString &bc, QString &bcp)
 {
+    LOG_INFO() << "Constructor Bible Commentary with " << bc << "," << bcp;
+    bcName = bc;
+    bcPath = bcp;
+
+    init();
 }
 
 BibleCommentaryDAO::~BibleCommentaryDAO()
 {
+    bcDB.close();
+    if (query) {
+        delete query;
+    }
+}
 
+bool BibleCommentaryDAO::init()
+{
+    LOG_INFO() << "init bible commentary data: " << bcName << "," << bcPath;
+    if (QSqlDatabase::contains(bcName)) {
+        bcDB = QSqlDatabase::database(bcName);
+    } else {
+        bcDB = QSqlDatabase::addDatabase("QSQLITE", bcName);
+        bcDB.setDatabaseName(bcPath);
+    }
+
+    if (!bcDB.open()) {
+        LOG_ERROR() << "Can not open database:" << bcName << "\n"
+                    << bcDB.lastError().text();
+        return false;
+    }
+
+    query = new QSqlQuery(bcDB);
+
+    return true;
 }

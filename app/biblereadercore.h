@@ -25,7 +25,7 @@
 #include "bibleinfo.h"
 #include "bibledictinfo.h"
 #include "biblereaderconfigurator.h"
-
+#include "biblecommentarydao.h"
 /**
  * @brief
  * The core class of Bible Reader
@@ -34,7 +34,7 @@
  * 2. search dictory
  * 3. bible text compare
  * 4. dictionary
- * @todo 3. commentary
+ * 5. commentary
  * @todo 4. Bible maps
  * @todo 5. original text processing
  */
@@ -286,6 +286,12 @@ public:
     BibleReaderConfigurator *getConfigurator() const;
     void setConfigurator(BibleReaderConfigurator *value);
 
+    QString getCurrentCommentary() const;
+    void setCurrentCommentary(const QString &value);
+
+    QString getBcPathBase() const;
+    void setBcPathBase(const QString &value);
+
 signals:
     /**
      * @brief this signal will be emited when current
@@ -353,6 +359,16 @@ private:
     BibleDictDAO *currentDictDAO;
 
     /**
+     * @brief currentCommentary
+     */
+    QString currentCommentary;
+
+    /**
+     * @brief currentCmtDAO
+     */
+    BibleCommentaryDAO *currentCmtDAO;
+
+    /**
      * @brief current book number
      */
     int currentBookNumber;
@@ -397,6 +413,16 @@ private:
      * @brief all dictionarys
      */
     QList<BibleDictInfo> allDicts;
+
+    /**
+     * @brief bcPathBase
+     */
+    QString bcPathBase;
+
+    /**
+     * @brief allCmts
+     */
+    QList<BibleCommentaryInfo> allCmts;
 
     /**
      * @brief Bible Reader configurator instance
