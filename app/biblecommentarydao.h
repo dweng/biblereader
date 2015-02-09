@@ -16,15 +16,28 @@
 #define BIBLECOMMENTARYDAO_H
 
 #include <QString>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QMap>
+
+#include "biblecommentaryinfo.h"
+#include "bibleversepos.h"
 
 class BibleCommentaryDAO
 {
 public:
-    explicit BibleCommentaryDAO();
+    explicit BibleCommentaryDAO(QString &bc, QString &bcp);
     ~BibleCommentaryDAO();
 
 private:
+    bool init();
+private:
+    QString bcName;
+    QString bcPath;
 
+    QSqlDatabase bcDB;
+    QSqlQuery *query;
+    BibleCommentaryInfo bci;
 
 };
 

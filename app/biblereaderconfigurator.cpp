@@ -12,8 +12,10 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
         settings = new QSettings(settingsFile, QSettings::IniFormat);
         settings->setValue("/base/biblePathBase", QApplication::applicationDirPath() + "/bibles/");
         settings->setValue("/base/dictPathBase", QApplication::applicationDirPath() + "/dicts/");
+        settings->setValue("/base/bcPathBase", QApplication::applicationDirPath() + "/commentarys/");
         settings->setValue("/base/defaultBibleVersion", "LZZ");
         settings->setValue("/base/defaultDict", "SNCHS");
+        settings->setValue("/base/defaultCommentary", "DDE");
         settings->setValue("/base/lastBook", "1");
         settings->setValue("/base/lastChapter", "1");
         settings->setValue("/base/lastVerse", "1");
@@ -23,8 +25,10 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
 
     biblePathBase = settings->value("/base/biblePathBase").toString();
     dictPathBase = settings->value("/base/dictPathBase").toString();
+    bcPathBase = settings->value("/base/bcPathBase").toString();
     defaultBibleVersion = settings->value("/base/defaultBibleVersion").toString();
     defaultDict = settings->value("/base/defaultDict").toString();
+    defaultCommentary = settings->value("/base/defaultCommentary").toString();
     lastBook = settings->value("/base/lastBook").toInt();
     lastChapter = settings->value("/base/lastChapter").toInt();
     lastVerse = settings->value("/base/lastVerse").toInt();
@@ -40,8 +44,10 @@ BibleReaderConfigurator::~BibleReaderConfigurator()
     if (settings) {
         settings->setValue("/base/biblePathBase", biblePathBase);
         settings->setValue("/base/dictPathBase", dictPathBase);
+        settings->setValue("/base/bcPathBase", bcPathBase);
         settings->setValue("/base/defaultBibleVersion", defaultBibleVersion);
         settings->setValue("/base/defaultDict", defaultDict);
+        settings->setValue("/base/defaultCommentary", defaultCommentary);
         settings->setValue("/base/lastBook", QString::number(lastBook));
         settings->setValue("/base/lastChapter", QString::number(lastChapter));
         settings->setValue("/base/lastVerse", QString::number(lastVerse));
@@ -112,6 +118,25 @@ QString BibleReaderConfigurator::getDefaultDict() const
 void BibleReaderConfigurator::setDefaultDict(QString &value)
 {
     defaultDict = value;
+}
+
+QString BibleReaderConfigurator::getDefaultCommentary() const
+{
+    return defaultCommentary;
+}
+
+void BibleReaderConfigurator::setDefaultCommentary(QString &value)
+{
+    defaultCommentary = value;
+}
+QString BibleReaderConfigurator::getBcPathBase() const
+{
+    return bcPathBase;
+}
+
+void BibleReaderConfigurator::setBcPathBase(const QString &value)
+{
+    bcPathBase = value;
 }
 
 

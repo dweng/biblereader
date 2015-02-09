@@ -30,13 +30,20 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
 
     // get configurations of BibleReader
     configurator = new BibleReaderConfigurator();
+    // process bibles
     biblePathBase = configurator->getBiblePathBase();
     getAllBibleVersions();
     setCurrentVersion(configurator->getDefaultBibleVersion());
 
+    // process dicts
     dictPathBase = configurator->getDictPathBase();
     getAllDictionarys();
     setCurrentDict(configurator->getDefaultDict());
+
+    // process commentarys
+    bcPathBase = configurator->getBcPathBase();
+    // getAllCmts();
+    setCurrentCommentary(configurator->getDefaultCommentary());
 
     currentBookNumber = configurator->getLastBook();
     currentChapterNumber = configurator->getLastChapter();
@@ -204,6 +211,26 @@ void BibleReaderCore::fireCmpCurVerse()
 {
     emit compareCurrentVerse();
 }
+QString BibleReaderCore::getBcPathBase() const
+{
+    return bcPathBase;
+}
+
+void BibleReaderCore::setBcPathBase(const QString &value)
+{
+    bcPathBase = value;
+}
+
+QString BibleReaderCore::getCurrentCommentary() const
+{
+    return currentCommentary;
+}
+
+void BibleReaderCore::setCurrentCommentary(const QString &value)
+{
+    currentCommentary = value;
+}
+
 BibleReaderConfigurator *BibleReaderCore::getConfigurator() const
 {
     return configurator;

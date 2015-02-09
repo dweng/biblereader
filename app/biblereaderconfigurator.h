@@ -51,6 +51,12 @@ public:
     QString getDefaultDict() const;
     void setDefaultDict(QString &value);
 
+    QString getDefaultCommentary() const;
+    void setDefaultCommentary(QString &value);
+
+    QString getBcPathBase() const;
+    void setBcPathBase(const QString &value);
+
 signals:
 
 public slots:
@@ -66,6 +72,12 @@ private:
      * this path is point to where dictionatys stored
      */
     QString dictPathBase;
+
+    /**
+     * @brief bible commentary path base
+     */
+    QString bcPathBase;
+
     /**
      * @brief default dictionary
      */
@@ -75,6 +87,12 @@ private:
      * BibleReader will open this default bible on startup
      */
     QString defaultBibleVersion;
+
+    /**
+     * @brief BR will open this commentary on start up
+     */
+    QString defaultCommentary;
+
     /**
      * @brief settings
      * this QSettings pointer will store biblereader.ini's information.
