@@ -26,6 +26,9 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 
+#ifdef Q_OS_LINUX
+    setFont(QFont(QString("Noto Sans CJK SC"), 10));
+#endif
     // logging
     QString appDirPath = QApplication::applicationDirPath();
     FileAppender* fileAppender = new FileAppender(appDirPath + "/debug.log");

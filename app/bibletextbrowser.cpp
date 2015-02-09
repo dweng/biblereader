@@ -21,9 +21,9 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
 
     bgColor = QColor(0xe5, 0xe5, 0xe5);
     fgColor = QColor("blue");
-
+#ifdef Q_OS_WIN
     setFontFamily(QString("Microsoft YaHei"));
-
+#endif
     setMouseTracking(true);
     setContentsMargins(2, 2, 2, 2);
 }

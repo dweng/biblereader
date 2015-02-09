@@ -14,7 +14,7 @@
  */
 #include "biblecommentaryinfo.h"
 
-BibleCommentary::BibleCommentaryInfo()
+BibleCommentaryInfo::BibleCommentaryInfo()
 {
 }
 
