@@ -15,7 +15,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
         settings->setValue("/base/bcPathBase", QApplication::applicationDirPath() + "/commentarys/");
         settings->setValue("/base/defaultBibleVersion", "LZZ");
         settings->setValue("/base/defaultDict", "SNCHS");
-        settings->setValue("/base/defaultCommentary", "DDE");
+        settings->setValue("/base/defaultCommentary", "DDESJZS");
         settings->setValue("/base/lastBook", "1");
         settings->setValue("/base/lastChapter", "1");
         settings->setValue("/base/lastVerse", "1");
@@ -125,10 +125,11 @@ QString BibleReaderConfigurator::getDefaultCommentary() const
     return defaultCommentary;
 }
 
-void BibleReaderConfigurator::setDefaultCommentary(QString &value)
+void BibleReaderConfigurator::setDefaultCommentary(const QString &value)
 {
     defaultCommentary = value;
 }
+
 QString BibleReaderConfigurator::getBcPathBase() const
 {
     return bcPathBase;

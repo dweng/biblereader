@@ -33,6 +33,8 @@ BibleTreeWidget::BibleTreeWidget(BibleReaderCore *brc, QWidget *parent) :
     this->addTopLevelItems(bookItems);
     // hide "book number" column
     this->setColumnHidden(1, true);
+    this->setColumnHidden(2, true);
+    this->setColumnHidden(3, true);
     LOG_INFO() << "bible tree widget inited.";
 }
 
@@ -54,7 +56,7 @@ void BibleTreeWidget::rebuildBibleTreeData()
 
 void BibleTreeWidget::onBibleVersionChanged(QString version)
 {
-    rebuildBibleTreeData();
+    //rebuildBibleTreeData();
 }
 
 void BibleTreeWidget::buildBibleTreeData()
@@ -73,18 +75,19 @@ void BibleTreeWidget::buildBibleTreeData()
         bookItem->setData(0, Qt::DisplayRole, book.getShortName());
         bookItem->setData(1, Qt::DisplayRole, book.getBookNumber());
         // for default, show chapter 1 text of each book of Bible
-        bookItem->setData(2, Qt::DisplayRole, 1);
+        bookItem->setData(2, Qt::DisplayRole, 0);
 
         // get all chapters for one book
         QList<int> chapters = brCore->getChaptersCountOfOneBook(book.getBookNumber());
         for(int j=0;j<chapters.count();j++)
         {
             QTreeWidgetItem *chapterItem = new QTreeWidgetItem(bookItem);
-            chapterItem->setData(0, Qt::DisplayRole, book.getShortName());
+            chapterItem->setData(0, Qt::DisplayRole, j+1);
             chapterItem->setData(1, Qt::DisplayRole, book.getBookNumber());
             chapterItem->setData(2, Qt::DisplayRole, j+1);
-            int versesCount = chapters.value(j);
+            // int versesCount = chapters.value(j);
             // add verses to chapter
+            /*
             for (int k=0; k<versesCount;k++)
             {
                 QTreeWidgetItem *verseItem = new QTreeWidgetItem(chapterItem);
@@ -92,7 +95,7 @@ void BibleTreeWidget::buildBibleTreeData()
                 verseItem->setData(1, Qt::DisplayRole, book.getBookNumber());
                 verseItem->setData(2, Qt::DisplayRole, j+1);
                 verseItem->setData(3, Qt::DisplayRole, k+1);
-            }
+            }*/
         }
 
         bookItems.push_back(bookItem);

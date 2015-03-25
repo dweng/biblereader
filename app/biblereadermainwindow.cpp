@@ -94,8 +94,8 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     commentaryDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
     commentaryDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
     addDockWidget(Qt::BottomDockWidgetArea, commentaryDockWidget);
-    commentaryWidget = new BibleCommentaryWidget(bibleReaderCore, this);
-    commentaryDockWidget->setWidget(commentaryWidget);
+    bcTabWidget = new BibleCommentaryTabWidget(bibleReaderCore, this);
+    commentaryDockWidget->setWidget(bcTabWidget);
 
     // bible tree
     bibleTreeWidget = new BibleTreeWidget(bibleReaderCore, this);
@@ -181,7 +181,8 @@ void BibleReaderMainWindow::onChapterVerseChanged(QTreeWidgetItem *current, QTre
     }
     LOG_INFO() << "getting chapter...book:" << bookNumber
                << "chapter:" << chapter;
-    bibleReaderCore->setCurrentBCV(bookNumber, chapter, verse);
+    if (chapter != 0)
+        bibleReaderCore->setCurrentBCV(bookNumber, chapter, verse);
 }
 
 void BibleReaderMainWindow::onChapterChanged(int book, int chapter, int verse)

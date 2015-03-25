@@ -52,7 +52,7 @@ public:
     void setDefaultDict(QString &value);
 
     QString getDefaultCommentary() const;
-    void setDefaultCommentary(QString &value);
+    void setDefaultCommentary(const QString &value);
 
     QString getBcPathBase() const;
     void setBcPathBase(const QString &value);

@@ -17,6 +17,7 @@
 
 #include <QWidget>
 #include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QTextEdit>
 #include <QSplitter>
 #include "biblereadercore.h"
@@ -35,6 +36,9 @@ signals:
 
 public slots:
 
+private slots:
+    QString changeChapterCmt(int book, int chapter);
+    QString changeChapterCmt(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 private:
     /**
      * @brief section, commentary contents

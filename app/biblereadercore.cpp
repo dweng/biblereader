@@ -42,7 +42,7 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
 
     // process commentarys
     bcPathBase = configurator->getBcPathBase();
-    // getAllCmts();
+    getAllCommentarys();
     setCurrentCommentary(configurator->getDefaultCommentary());
 
     currentBookNumber = configurator->getLastBook();
@@ -55,6 +55,7 @@ BibleReaderCore::~BibleReaderCore()
     LOG_DEBUG("destructor");
     qDeleteAll(allBTDAOs);
     qDeleteAll(allBDDAOs);
+    qDeleteAll(allBCDAOs);
 
     configurator->setLastBook(currentBookNumber);
     configurator->setLastChapter(currentChapterNumber);
@@ -221,6 +222,22 @@ void BibleReaderCore::setBcPathBase(const QString &value)
     bcPathBase = value;
 }
 
+bool BibleReaderCore::addCommentary(QString &name, QString &path)
+{
+    LOG_INFO() << "add commentary:" << name << ", " << path;
+    if (!allBCDAOs.contains(name)) {
+        BibleCommentaryDAO *bcDAO = new BibleCommentaryDAO(name, path);
+        allBCDAOs.insert(name, bcDAO);
+    }
+
+    return true;
+}
+
+QString BibleReaderCore::getChapterCmt(int book, int chapter)
+{
+    return currentCmtDAO->getChapterCmt(book, chapter);
+}
+
 QString BibleReaderCore::getCurrentCommentary() const
 {
     return currentCommentary;
@@ -228,7 +245,15 @@ QString BibleReaderCore::getCurrentCommentary() const
 
 void BibleReaderCore::setCurrentCommentary(const QString &value)
 {
-    currentCommentary = value;
+    LOG_INFO() << "set current commentary:" << value;
+    if (allBCDAOs.contains(value)) {
+        currentCommentary = value;
+        currentCmtDAO = allBCDAOs.value(value);
+
+        configurator->setDefaultCommentary(value);
+
+        // some sigal can be emit here
+    }
 }
 
 BibleReaderConfigurator *BibleReaderCore::getConfigurator() const
@@ -407,6 +432,36 @@ QList<BibleDictInfo> BibleReaderCore::getAllDictionarys()
         }
     }
     return allDicts;
+}
+
+QList<BibleCommentaryInfo> BibleReaderCore::getAllCommentarys()
+{
+    LOG_INFO() << "add commentayrs in:"<<bcPathBase;
+    QString cmt;
+    QString cmtDataPath;
+
+    if (allCmts.empty()) {
+        QDir cmtPath = QDir(bcPathBase);
+        if (!cmtPath.exists()) {
+            return allCmts;
+        }
+
+        cmtPath.setFilter(QDir::AllDirs | QDir::NoSymLinks);
+        QFileInfoList cmts = cmtPath.entryInfoList();
+
+        for (int i = 0; i < cmts.count(); i++) {
+            cmt = cmts[i].fileName();
+            if (cmt == "." || cmt == "..") continue;
+
+            cmtDataPath = bcPathBase + cmt;
+            addCommentary(cmt, cmtDataPath);
+            BibleCommentaryInfo ci = allBCDAOs.value(cmt)->getCmtInfo();
+
+            allCmts.push_back(ci);
+        }
+    }
+
+    return allCmts;
 }
 
 QMap<QString, QString> BibleReaderCore::getAllWordsAndExplainationsOfCurrentDict()

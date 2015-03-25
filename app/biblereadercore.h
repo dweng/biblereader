@@ -235,11 +235,17 @@ public:
      */
     QList<BibleInfo> getAllBibleVersions();
 
-    /** @return a list contains all dicts information
+    /**
      * @brief scan dictionarys data
-     *
+     * @return a list contains all dicts information
      */
     QList<BibleDictInfo> getAllDictionarys();
+
+    /**
+     * @brief scan commentarys data
+     * @return a list contains all commentarys information
+     */
+    QList<BibleCommentaryInfo> getAllCommentarys();
 
     /**
      * @brief get all words and explainations of current dictionary
@@ -292,6 +298,8 @@ public:
     QString getBcPathBase() const;
     void setBcPathBase(const QString &value);
 
+    bool addCommentary(QString &name, QString &path);
+    QString getChapterCmt(int book, int chapter);
 signals:
     /**
      * @brief this signal will be emited when current
@@ -393,6 +401,11 @@ private:
      * @brief <dict name, dict DAO>
      */
     QMap<QString, BibleDictDAO*> allBDDAOs;
+
+    /**
+     * @brief <commentary name, commentary DAO>
+     */
+    QMap<QString, BibleCommentaryDAO*> allBCDAOs;
 
     /**
      * @brief bibles store path

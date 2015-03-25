@@ -24,7 +24,7 @@
 #include "bibletreewidget.h"
 #include "biblesearchwidget.h"
 #include "bibledictionarywidget.h"
-#include "biblecommentarywidget.h"
+#include "biblecommentarytabwidget.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -100,7 +100,7 @@ private:
     /**
      * @brief bible commentary widget instance
      */
-    BibleCommentaryWidget *commentaryWidget;
+    BibleCommentaryTabWidget *bcTabWidget;
 
     /**
      * @brief Tool bar for main application

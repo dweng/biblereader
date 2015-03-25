@@ -15,11 +15,12 @@
 
 #include <QHBoxLayout>
 #include "biblecommentarywidget.h"
-
+#include "bibletreewidget.h"
 BibleCommentaryWidget::BibleCommentaryWidget(BibleReaderCore *brc, QWidget *parent) :
     QWidget(parent)
 {
     brCore = brc;
+    connect(brCore, SIGNAL(currentChapterChanged(int,int)), this, SLOT(changeChapterCmt(int,int)));
     createWidgets();
 }
 
@@ -28,12 +29,35 @@ BibleCommentaryWidget::~BibleCommentaryWidget()
     destroyWidgets();
 }
 
+QString BibleCommentaryWidget::changeChapterCmt(int book, int chapter)
+{
+    QString text = brCore->getChapterCmt(book, chapter);
+    content->setText(text);
+
+    return text;
+}
+
+QString BibleCommentaryWidget::changeChapterCmt(QTreeWidgetItem *current,
+                                                QTreeWidgetItem *previous)
+{
+    int book = current->data(1, Qt::DisplayRole).toInt();
+    int chapter = current->data(2, Qt::DisplayRole).toInt();
+
+    return changeChapterCmt(book, chapter);
+}
+
 void BibleCommentaryWidget::createWidgets()
 {
-    section = new QTreeWidget(this);
+    section = new BibleTreeWidget(brCore, this);
     section->setMaximumWidth(150);
+    connect(section, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+            this, SLOT(changeChapterCmt(QTreeWidgetItem*,QTreeWidgetItem*)));
     content = new QTextEdit(this);
     content->setReadOnly(true);
+    content->setText(brCore->getChapterCmt(
+                         brCore->getCurrentBookNumber(),
+                         brCore->getCurrentChapterNumber()
+                         ));
 
 
     dictSplitter = new QSplitter(Qt::Horizontal, this);

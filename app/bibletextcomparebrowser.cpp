@@ -60,7 +60,7 @@ void BibleTextCompareBrowser::showComparedBibleText()
     cursor->setBlockFormat(bfmt);
 
     QList<BibleInfo> bibles = brCore->getAllBibleVersions();
-    tfmt.setBorderStyle(QTextTableFormat::BorderStyle_Groove);
+    tfmt.setBorderStyle(QTextTableFormat::BorderStyle_Solid);
     QTextTable *cmpTable = cursor->insertTable(bibles.count(), 2, tfmt);
     for (int i = 0; i < bibles.count(); i++) {
         bibleVersion = bibles[i].getVersion();

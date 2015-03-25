@@ -12,7 +12,10 @@
  * this application, please email me at dweng123@gmail to get the source
  * code.
  */
-#include <QSqlError>
+#include <QDir>
+#include <QSettings>
+#include <QFile>
+#include <QObject>
 #include "biblecommentarydao.h"
 #include "Logger.h"
 
@@ -27,29 +30,44 @@ BibleCommentaryDAO::BibleCommentaryDAO(QString &bc, QString &bcp)
 
 BibleCommentaryDAO::~BibleCommentaryDAO()
 {
-    bcDB.close();
-    if (query) {
-        delete query;
+}
+
+BibleCommentaryInfo BibleCommentaryDAO::getCmtInfo()
+{
+    QString infoFile = bcPath + QDir::separator()+"info.ini";
+    QSettings info(infoFile, QSettings::IniFormat);
+
+    BibleCommentaryInfo bcinfo;
+
+    bcinfo.setFullname(info.value("name").toString());
+    bcinfo.setName(info.value("name").toString());
+    bcinfo.setCopyright(info.value("copyright").toString());
+    bcinfo.setDescription(info.value("description").toString());
+    bcinfo.setLang(info.value("lang").toString());
+    bcinfo.setShortname(info.value("shortname").toString());
+    bcinfo.setVersion(info.value("version").toInt());
+
+    return bcinfo;
+}
+
+QString BibleCommentaryDAO::getChapterCmt(int book, int chapter)
+{
+    QString bookNumber = QString("%1").arg(book, 2, 10, QChar('0'));
+    QString chapterNumber = QString("%1").arg(chapter, 2, 10, QChar('0'));
+    QString cmtfile = bcPath + QDir::separator() +
+            bookNumber + QDir::separator() + chapterNumber + ".txt";
+    QFile f(cmtfile);
+
+    if (f.open(QIODevice::ReadOnly)) {
+        return f.readAll();
+    } else {
+        return QObject::tr("There is no commentary file for this chapter");
     }
 }
 
 bool BibleCommentaryDAO::init()
 {
     LOG_INFO() << "init bible commentary data: " << bcName << "," << bcPath;
-    if (QSqlDatabase::contains(bcName)) {
-        bcDB = QSqlDatabase::database(bcName);
-    } else {
-        bcDB = QSqlDatabase::addDatabase("QSQLITE", bcName);
-        bcDB.setDatabaseName(bcPath);
-    }
-
-    if (!bcDB.open()) {
-        LOG_ERROR() << "Can not open database:" << bcName << "\n"
-                    << bcDB.lastError().text();
-        return false;
-    }
-
-    query = new QSqlQuery(bcDB);
 
     return true;
 }

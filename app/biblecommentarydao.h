@@ -16,8 +16,6 @@
 #define BIBLECOMMENTARYDAO_H
 
 #include <QString>
-#include <QSqlDatabase>
-#include <QSqlQuery>
 #include <QMap>
 
 #include "biblecommentaryinfo.h"
@@ -29,14 +27,15 @@ public:
     explicit BibleCommentaryDAO(QString &bc, QString &bcp);
     ~BibleCommentaryDAO();
 
+    BibleCommentaryInfo getCmtInfo();
+    QString getChapterCmt(int book, int chapter);
+
 private:
     bool init();
 private:
     QString bcName;
     QString bcPath;
 
-    QSqlDatabase bcDB;
-    QSqlQuery *query;
     BibleCommentaryInfo bci;
 
 };
