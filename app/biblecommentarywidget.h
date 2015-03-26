@@ -30,7 +30,7 @@ class BibleCommentaryWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BibleCommentaryWidget(BibleReaderCore *brc, QWidget *parent = 0);
+    explicit BibleCommentaryWidget(BibleReaderCore *brc, QString cn, QWidget *parent = 0);
     ~BibleCommentaryWidget();
 signals:
 
@@ -64,6 +64,11 @@ private:
      * @brief bible reader core instance
      */
     BibleReaderCore *brCore;
+
+    /**
+     * @brief commentary name
+     */
+    QString cmtName;
 private:
     void createWidgets();
     void destroyWidgets();

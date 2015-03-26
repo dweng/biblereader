@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QFile>
 #include <QObject>
+#include <QtXml>
 #include "biblecommentarydao.h"
 #include "Logger.h"
 
@@ -34,31 +35,63 @@ BibleCommentaryDAO::~BibleCommentaryDAO()
 
 BibleCommentaryInfo BibleCommentaryDAO::getCmtInfo()
 {
-    QString infoFile = bcPath + QDir::separator()+"info.ini";
-    QSettings info(infoFile, QSettings::IniFormat);
+    if (bci.getShortname() == "") {
+        QString infoFile = bcPath + QDir::separator()+"info.xml";
+        QDomDocument doc;
+        QFile file(infoFile);
+        if (!file.open(QIODevice::ReadOnly))
+            return bci;
+        if (!doc.setContent(&file)) {
+            file.close();
+            return bci;
+        }
+        file.close();
 
-    BibleCommentaryInfo bcinfo;
+        // print out the element names of all elements that are direct children
+        // of the outermost element.
+        QDomElement docElem = doc.documentElement();
 
-    bcinfo.setFullname(info.value("name").toString());
-    bcinfo.setName(info.value("name").toString());
-    bcinfo.setCopyright(info.value("copyright").toString());
-    bcinfo.setDescription(info.value("description").toString());
-    bcinfo.setLang(info.value("lang").toString());
-    bcinfo.setShortname(info.value("shortname").toString());
-    bcinfo.setVersion(info.value("version").toInt());
+        QDomNode n = docElem.firstChild();
+        while(!n.isNull()) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if(!e.isNull()) {
+                LOG_INFO() << qPrintable(e.tagName()) << qPrintable(e.text()) <<endl; // the node really is an element.
+                if (e.tagName() == "name") {
+                    bci.setName(e.text());
+                } else if (e.tagName() == "fullname") {
+                    bci.setFullname(e.text());
+                } else if (e.tagName() == "shortname") {
+                    bci.setShortname(e.text());
+                } else if (e.tagName() == "version") {
+                    bci.setVersion(e.text().toInt());
+                } else if (e.tagName() == "copyright") {
+                    bci.setCopyright(e.text());
+                } else if (e.tagName() == "creator") {
 
-    return bcinfo;
+                } else if (e.tagName() == "lang") {
+                    bci.setLang(e.text());
+                } else if (e.tagName() == "description") {
+                    bci.setDescription(e.text());
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+
+    return bci;
 }
 
 QString BibleCommentaryDAO::getChapterCmt(int book, int chapter)
 {
     QString bookNumber = QString("%1").arg(book, 2, 10, QChar('0'));
-    QString chapterNumber = QString("%1").arg(chapter, 2, 10, QChar('0'));
+    int len = (book == 19 ? 3 : 2);
+    QString chapterNumber = QString("%1").arg(chapter, len, 10, QChar('0'));
     QString cmtfile = bcPath + QDir::separator() +
-            bookNumber + QDir::separator() + chapterNumber + ".txt";
+            bookNumber + "_" + chapterNumber + ".htm";
+    LOG_INFO() << "loading cmt: " << cmtfile;
     QFile f(cmtfile);
 
-    if (f.open(QIODevice::ReadOnly)) {
+    if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return f.readAll();
     } else {
         return QObject::tr("There is no commentary file for this chapter");

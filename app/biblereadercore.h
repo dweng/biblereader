@@ -299,7 +299,7 @@ public:
     void setBcPathBase(const QString &value);
 
     bool addCommentary(QString &name, QString &path);
-    QString getChapterCmt(int book, int chapter);
+    QString getChapterCmt(QString cn, int book, int chapter);
 signals:
     /**
      * @brief this signal will be emited when current

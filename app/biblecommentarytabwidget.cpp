@@ -9,7 +9,8 @@ BibleCommentaryTabWidget::BibleCommentaryTabWidget(BibleReaderCore *brc,
 
     for (int i = 0; i < allcmts.size(); i++) {
         BibleCommentaryInfo tempinfo = allcmts[i];
-        BibleCommentaryWidget *newCmtWidget = new BibleCommentaryWidget(brc, this);
+        BibleCommentaryWidget *newCmtWidget = new
+                BibleCommentaryWidget(brc, tempinfo.getShortname(), this);
         bcWidgets.push_back(newCmtWidget);
         addTab(newCmtWidget, tempinfo.getFullname());
     }

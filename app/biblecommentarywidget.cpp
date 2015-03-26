@@ -16,10 +16,11 @@
 #include <QHBoxLayout>
 #include "biblecommentarywidget.h"
 #include "bibletreewidget.h"
-BibleCommentaryWidget::BibleCommentaryWidget(BibleReaderCore *brc, QWidget *parent) :
+BibleCommentaryWidget::BibleCommentaryWidget(BibleReaderCore *brc, QString cn, QWidget *parent) :
     QWidget(parent)
 {
     brCore = brc;
+    cmtName = cn;
     connect(brCore, SIGNAL(currentChapterChanged(int,int)), this, SLOT(changeChapterCmt(int,int)));
     createWidgets();
 }
@@ -31,8 +32,8 @@ BibleCommentaryWidget::~BibleCommentaryWidget()
 
 QString BibleCommentaryWidget::changeChapterCmt(int book, int chapter)
 {
-    QString text = brCore->getChapterCmt(book, chapter);
-    content->setText(text);
+    QString text = brCore->getChapterCmt(cmtName, book, chapter);
+    content->setHtml(text);
 
     return text;
 }
@@ -54,7 +55,8 @@ void BibleCommentaryWidget::createWidgets()
             this, SLOT(changeChapterCmt(QTreeWidgetItem*,QTreeWidgetItem*)));
     content = new QTextEdit(this);
     content->setReadOnly(true);
-    content->setText(brCore->getChapterCmt(
+    content->setHtml(brCore->getChapterCmt(
+                         cmtName,
                          brCore->getCurrentBookNumber(),
                          brCore->getCurrentChapterNumber()
                          ));

@@ -233,9 +233,9 @@ bool BibleReaderCore::addCommentary(QString &name, QString &path)
     return true;
 }
 
-QString BibleReaderCore::getChapterCmt(int book, int chapter)
+QString BibleReaderCore::getChapterCmt(QString cn, int book, int chapter)
 {
-    return currentCmtDAO->getChapterCmt(book, chapter);
+    return allBCDAOs.value(cn)->getChapterCmt(book, chapter);
 }
 
 QString BibleReaderCore::getCurrentCommentary() const
