@@ -49,37 +49,42 @@
         <translation>圣经目录树</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="108"/>
+        <location filename="../biblereadermainwindow.cpp" line="110"/>
         <source>File(&amp;F)</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="109"/>
+        <location filename="../biblereadermainwindow.cpp" line="111"/>
         <source>Edit(&amp;E)</source>
         <translation>编辑(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="110"/>
+        <location filename="../biblereadermainwindow.cpp" line="112"/>
         <source>Help(&amp;H)</source>
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="123"/>
+        <location filename="../biblereadermainwindow.cpp" line="118"/>
+        <source>Project Verses</source>
+        <translation type="unfinished">投影圣经经文</translation>
+    </message>
+    <message>
+        <location filename="../biblereadermainwindow.cpp" line="127"/>
         <source>About [Bible Reader]...</source>
         <translation>关于【圣经研读】...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="126"/>
+        <location filename="../biblereadermainwindow.cpp" line="130"/>
         <source>Check Update...</source>
         <translation>检查更新...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="127"/>
+        <location filename="../biblereadermainwindow.cpp" line="131"/>
         <source>Show Help Content...</source>
         <translation>显示帮助内容...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="128"/>
+        <location filename="../biblereadermainwindow.cpp" line="132"/>
         <source>Donate [Bible Reader]...</source>
         <translation>捐助【圣经研读】...</translation>
     </message>
@@ -109,12 +114,12 @@
         <translation type="vanished">帮助</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="114"/>
+        <location filename="../biblereadermainwindow.cpp" line="116"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="119"/>
+        <location filename="../biblereadermainwindow.cpp" line="123"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
@@ -123,7 +128,7 @@
         <translation type="vanished">关于</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="139"/>
+        <location filename="../biblereadermainwindow.cpp" line="143"/>
         <source>Dictionary Window</source>
         <translation>字典窗口</translation>
     </message>
@@ -268,20 +273,25 @@
 <context>
     <name>BibleTextBrowser</name>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="107"/>
+        <location filename="../bibletextbrowser.cpp" line="110"/>
         <source>Copy this verse</source>
         <translation>复制该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="108"/>
+        <location filename="../bibletextbrowser.cpp" line="111"/>
         <source>Compare this verse</source>
         <translation>比较该节经文</translation>
+    </message>
+    <message>
+        <location filename="../bibletextbrowser.cpp" line="112"/>
+        <source>Project this verse</source>
+        <translation>投影该节经文</translation>
     </message>
 </context>
 <context>
     <name>BibleTextCompareBrowser</name>
     <message>
-        <location filename="../bibletextcomparebrowser.cpp" line="51"/>
+        <location filename="../bibletextcomparebrowser.cpp" line="52"/>
         <source>Compare verse </source>
         <translation>比较经节</translation>
     </message>
@@ -351,6 +361,11 @@
         <location filename="../bibledictdao.cpp" line="36"/>
         <source>There is no explaination for this word</source>
         <translation>在当前字典中无法找到该词的解释.</translation>
+    </message>
+    <message>
+        <location filename="../biblecommentarydao.cpp" line="97"/>
+        <source>There is no commentary file for this chapter</source>
+        <translation>该注释书没有这章经文的注释</translation>
     </message>
 </context>
 </TS>

@@ -25,6 +25,7 @@
 #include "biblesearchwidget.h"
 #include "bibledictionarywidget.h"
 #include "biblecommentarytabwidget.h"
+#include "biblereaderprojectdialog.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -117,12 +118,18 @@ private:
      */
     BibleDictTabWidget *bdTabWidget;
 
+    /**
+     * @brief brProjectDlg
+     */
+    BibleReaderProjectDialog *brProjectDlg;
+
     // toolbar actions
     QAction *navToNextChapterAction;
     QAction *navToPrevChapterAction;
 
     // File menu actions
     QAction *exitAppAction;
+    QAction *projectVersesAction;
 
     // Edit menu actions
     QAction *copyAction;
@@ -160,6 +167,8 @@ private slots:
 
     // menu actions slots
     void quitBibleReader();
+    void projectVerses();
+
     // show about dialog
     void showAboutDlg();
     // show donate dialog

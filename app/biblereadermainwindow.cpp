@@ -115,6 +115,8 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     mainMenuBar->addMenu(fileMenu);
     exitAppAction = fileMenu->addAction(tr("Exit"));
     connect(exitAppAction, SIGNAL(triggered()), this, SLOT(quitBibleReader()));
+    projectVersesAction = fileMenu->addAction(tr("Project Verses"));
+    connect(projectVersesAction, SIGNAL(triggered()), this, SLOT(projectVerses()));
 
     // add actions to Edit menu
     mainMenuBar->addMenu(editMenu);
@@ -156,6 +158,10 @@ BibleReaderMainWindow::~BibleReaderMainWindow()
     delete dictDockWidget;
     delete commentaryDockWidget;
     delete toolBar;
+
+    if (projectVersesAction) {
+        delete projectVersesAction;
+    }
     // delete dictWidget;
 }
 
@@ -197,6 +203,13 @@ void BibleReaderMainWindow::onChapterChanged(int book, int chapter, int verse)
 void BibleReaderMainWindow::quitBibleReader()
 {
     QApplication::exit();
+}
+
+void BibleReaderMainWindow::projectVerses()
+{
+    brProjectDlg = new BibleReaderProjectDialog(this, "");
+
+    brProjectDlg->showMaximized();
 }
 
 void BibleReaderMainWindow::showAboutDlg()

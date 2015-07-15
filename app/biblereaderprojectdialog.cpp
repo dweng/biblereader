@@ -1,12 +1,23 @@
 #include "biblereaderprojectdialog.h"
 #include <QGridLayout>
+#include <QTextCharFormat>
+
 BibleReaderProjectDialog::BibleReaderProjectDialog(QWidget *parent, QString text)
     :QDialog(parent)
 {
     setWindowFlags(Qt::Window);
     setStyleSheet("background-color: #000");
     panel = new QTextEdit(this);
-    panel->setReadOnly(true);
+
+    // set font and color
+    QTextCharFormat fmt;
+    fmt.setFontPointSize(30);
+    fmt.setForeground(QColor("yellow"));
+    QTextCursor cursor = panel->textCursor();
+    cursor.mergeCharFormat(fmt);
+    panel->mergeCurrentCharFormat(fmt);
+
+    //panel->setReadOnly(true);
     versesText = text;
 
     panel->setText(setFormat());
