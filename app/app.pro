@@ -62,7 +62,8 @@ SOURCES += main.cpp\
     biblereaderdonationdlg.cpp \
     bibledicttabwidget.cpp \
     biblecommentaryinfo.cpp \
-    biblecommentarytabwidget.cpp
+    biblecommentarytabwidget.cpp \
+    biblereaderprojectdialog.cpp
 
 HEADERS  += biblereadercore.h \
     biblechapter.h \
@@ -92,7 +93,8 @@ HEADERS  += biblereadercore.h \
     biblereaderdonationdlg.h \
     bibledicttabwidget.h \
     biblecommentaryinfo.h \
-    biblecommentarytabwidget.h
+    biblecommentarytabwidget.h \
+    biblereaderprojectdialog.h
 
 OTHER_FILES += \
     bar-descriptor.xml \

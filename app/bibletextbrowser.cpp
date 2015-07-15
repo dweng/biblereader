@@ -7,7 +7,8 @@
 #include <QMenu>
 #include <QClipboard>
 #include <QApplication>
-
+#include <QRegExp>
+#include "biblereaderprojectdialog.h"
 #include "bibletextblockdata.h"
 // for logging
 #include "Logger.h"
@@ -108,8 +109,10 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
         }
         QAction *copyCurrentVerse = menu->addAction(tr("Copy this verse"));
         QAction *compareCurrentVerse = menu->addAction(tr("Compare this verse"));
+        QAction *projectCurrentVerse = menu->addAction(tr("Project this verse"));
         connect(copyCurrentVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
         connect(compareCurrentVerse, SIGNAL(triggered()), brCore, SLOT(fireCmpCurVerse()));
+        connect(projectCurrentVerse, SIGNAL(triggered()), this, SLOT(projectVerse()));
     }
     menu->exec(e->globalPos());
     delete menu;
@@ -161,7 +164,7 @@ bool BibleTextBrowser::showCurrentChapter()
         fmt.setFontPointSize(12.0);
         cursor->insertText(QString("%1:%2 ").arg(QString::number(chapterId),
                                                 QString::number(verses[i].getVerse())), fmt);
-        cursor->insertText(verses[i].getVerseText(), fmt);
+        addVerse(cursor, verses[i].getVerseText());
         BibleTextBlockData *d = new BibleTextBlockData(
                     bv, bookId, chapterId, verses[i].getVerse());
         cursor->block().setUserData(d);
@@ -203,6 +206,26 @@ void BibleTextBrowser::dehighlight(QTextCursor &cursor)
     highlight(cursor, QColor("white"));
 }
 
+void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText)
+{
+    QTextCharFormat supFmt;
+
+    supFmt.setForeground(QColor("blue"));
+    supFmt.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    supFmt.setFontPointSize(14.0);
+
+    verseText.replace("<", "&lt;");
+    verseText.replace(">", "&gt;");
+
+    verseText.replace("&lt;", "<sup style='color:blue; font-size: 20px; font-family: Courier New, Arial;'>&lt;");
+    verseText.replace("&gt;", "&gt;</sup>");
+
+    verseText.prepend("<span style='font-size: 12pt; font-family: Microsoft YaHei'>");
+    verseText.append("</span>");
+
+    cursor->insertHtml(verseText);
+}
+
 bool BibleTextBrowser::copyCurVerse()
 {
     QClipboard *cb = QApplication::clipboard();
@@ -214,5 +237,17 @@ bool BibleTextBrowser::copyCurVerse()
     cb->setText(verse.text(), QClipboard::Clipboard);
 
     return true;
+}
+
+void BibleTextBrowser::projectVerse()
+{
+    BibleVerse verse = brCore->getVerse(
+                brCore->getCurrentVersion(),
+                brCore->getCurrentBookNumber(),
+                brCore->getCurrentChapterNumber(),
+                brCore->getCurrentVerseNumber());
+
+    BibleReaderProjectDialog *pDlg = new BibleReaderProjectDialog(this, verse.text());
+    pDlg->showFullScreen();
 }
 

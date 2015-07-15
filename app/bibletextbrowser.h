@@ -57,8 +57,11 @@ private:/* functions */
     void highlight(QTextCursor &cursor, const QColor &color);
     void dehighlight(QTextCursor &cursor);
 
+    void addVerse(QTextCursor *cursor, QString verseText);
+
 private slots:
     bool copyCurVerse();
+    void projectVerse();
 };
 
 #endif // BIBLETEXTBROWSER_H
