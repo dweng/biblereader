@@ -1,8 +1,9 @@
-#include <QCoreApplication>
+#include "brupdater.h"
+
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    BRUpdater a(argc, argv);
 
     return a.exec();
 }

@@ -6,7 +6,7 @@ BibleReaderProjectDialog::BibleReaderProjectDialog(QWidget *parent, QString text
     :QDialog(parent)
 {
     setWindowFlags(Qt::Window);
-    setStyleSheet("background-color: #000");
+    //setStyleSheet();
     panel = new QTextEdit(this);
 
     // set font and color

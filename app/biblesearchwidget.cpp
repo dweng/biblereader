@@ -19,6 +19,7 @@
 #include <QList>
 #include <QMessageBox>
 #include <QLineEdit>
+#include "biblereaderhtmldelegate.h"
 #include "bibleverse.h"
 #include "biblesearchwidget.h"
 
@@ -134,6 +135,8 @@ void BibleSearchWidget::createWidgets()
     searchResult->setColumnHidden(3, true);
     searchResult->setColumnHidden(4, true);
     searchResult->setColumnHidden(5, true);
+    // set item delegate
+    searchResult->setItemDelegateForColumn(1, new BibleReaderHTMLDelegate());
     // click widget item signal catch.
     connect(searchResult, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
             this, SLOT(navToChapter(QTreeWidgetItem*, int)));
@@ -198,9 +201,10 @@ void BibleSearchWidget::getSearchResult()
     } else {
         result = brCore->search(q, scope);
     }
+
     QTreeWidgetItem *root = new QTreeWidgetItem();
     root->setData(0, Qt::DisplayRole, QString("[%1:%2]").arg(q, QString::number(result.count())));
-    root->setToolTip(0, QString("%1\n%2").arg(brCore->getCurrentVersion(), q));
+    root->setToolTip(0, QString("Searched version:%1\nQuery string:%2").arg(brCore->getCurrentBibleInfo().getFullname(), q));
     for (int i = 0; i < result.count(); i++) {
         BibleVerse b = result[i];
 
@@ -208,13 +212,16 @@ void BibleSearchWidget::getSearchResult()
         QString verse = QString("%1 %2:%3").arg(b.getBookName(),
                   QString::number(b.getChapter()),
                   QString::number(b.getVerse()));
+        // apply verse text shower to QLabel
+
         item->setData(0, Qt::DisplayRole, verse);
-        item->setData(1, Qt::DisplayRole, b.getVerseText());
+        QString hilightText =  b.getVerseText().replace(q, QString("<font color=\"red\">"+q+"</font>"));
+        item->setData(1, Qt::DisplayRole, hilightText);
         item->setData(2, Qt::DisplayRole, b.getBibleVersion());
         item->setData(3, Qt::DisplayRole, b.getBookNumber());
         item->setData(4, Qt::DisplayRole, b.getChapter());
         item->setData(5, Qt::DisplayRole, b.getVerse());
-        item->setToolTip(0, verse.append(" ").append(b.getVerseText()));
+        item->setToolTip(0, verse.append(" ").append(hilightText));
     }
 
     searchResult->addTopLevelItem(root);

@@ -78,7 +78,17 @@ void BibleTextCompareBrowser::showComparedBibleText()
         // verse text
         tc = cmpTable->cellAt(i, 1);
         tmp = tc.firstCursorPosition();
-        tmp.insertText(verse.text(), fmt);
+
+        QString verseText = verse.text();
+        verseText.replace("<", "&lt;");
+        verseText.replace(">", "&gt;");
+
+        verseText.replace("&lt;", "<sup style='color:blue; font-size: 20px; font-family: Courier New, Arial;'>&lt;");
+        verseText.replace("&gt;", "&gt;</sup>");
+
+        verseText.prepend("<span style='font-size: 12pt; font-family: Microsoft YaHei'>");
+        verseText.append("</span>");
+        tmp.insertHtml(verseText);
 
         BibleTextBlockData *d = new BibleTextBlockData(
                     bibleVersion, currentBook, currentChapter, currentVerse);

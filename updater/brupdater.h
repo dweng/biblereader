@@ -1,18 +1,41 @@
 #ifndef BRUPDATER_H
 #define BRUPDATER_H
 
-#include <QObject>
+#include <QCoreApplication>
+#include <QString>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
-class BRUpdater : public QObject
+#include "brupdaterdata.h"
+
+class BRUpdater : public QCoreApplication
 {
     Q_OBJECT
 public:
-    explicit BRUpdater(QObject *parent = 0);
+    explicit BRUpdater(int argc, char *argv[]);
     ~BRUpdater();
 
 signals:
 
 public slots:
+    QString replyFinished(QNetworkReply *reply);
+
+private:
+    void parse();
+
+private:
+    /**
+     * @brief server
+     * updater server url
+     */
+    QString server;
+
+    QString replyString;
+
+    QNetworkAccessManager *manager;
+
+    BRUpdaterData *data;
 };
 
 #endif // BRUPDATER_H

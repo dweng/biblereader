@@ -57,11 +57,11 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     toolBar = new QToolBar(tr("Bible Navigator"), this);
     toolBar->show();
 
-    navToPrevChapterAction = new QAction(tr("previous chapter"),this);
+    navToPrevChapterAction = new QAction(QIcon(QString(":/img/assets/images/arrow_left.png")), tr("previous chapter"),this);
     toolBar->addAction(navToPrevChapterAction);
     connect(navToPrevChapterAction, SIGNAL(triggered()), this, SLOT(navToPrevChapter()));
 
-    navToNextChapterAction = new QAction(tr("next chapter"),this);
+    navToNextChapterAction = new QAction(QIcon(QString(":/img/assets/images/arrow_right.png")),tr("next chapter"),this);
     toolBar->addAction(navToNextChapterAction);
     connect(navToNextChapterAction, SIGNAL(triggered()), this, SLOT(navToNextChapter()));
     this->addToolBar(toolBar);

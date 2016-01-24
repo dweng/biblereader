@@ -10,7 +10,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = BibleReader
 TEMPLATE = subdirs
-SUBDIRS = app cutelogger
+SUBDIRS = app cutelogger \
+    updater
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
 

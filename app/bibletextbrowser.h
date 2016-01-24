@@ -18,6 +18,7 @@
 #include <QTextEdit>
 #include <QMouseEvent>
 #include <QColor>
+#include <QTextCursor>
 #include "biblereadercore.h"
 
 class BibleTextBrowser : public QTextEdit
@@ -25,7 +26,7 @@ class BibleTextBrowser : public QTextEdit
     Q_OBJECT
 public:
     explicit BibleTextBrowser(BibleReaderCore *brc, QWidget *parent = 0);
-    bool highlightCurrentVerse();
+    ~BibleTextBrowser();
 
     QString getBibleVersion() const;
     void setBibleVersion(const QString &value);
@@ -49,15 +50,17 @@ private:/* vars */
     QColor fgColor;
     QFont font;
 
+    QTextCursor *cursor;
+
     /**
      * @brief the bible version of this browser
      */
     QString bibleVersion;
 private:/* functions */
-    void highlight(QTextCursor &cursor, const QColor &color);
-    void dehighlight(QTextCursor &cursor);
+    void highlight(int verse, const QColor &color);
 
     void addVerse(QTextCursor *cursor, QString verseText);
+    QTextBlock getTextBlockByVerse(int verse);
 
 private slots:
     bool copyCurVerse();

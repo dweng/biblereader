@@ -44,6 +44,14 @@ QString BibleCommentaryWidget::changeChapterCmt(QTreeWidgetItem *current,
     int book = current->data(1, Qt::DisplayRole).toInt();
     int chapter = current->data(2, Qt::DisplayRole).toInt();
 
+    if (book == 0) {
+        book = brCore->getCurrentBookNumber();
+    }
+
+    if (chapter == 0) {
+        chapter = brCore->getCurrentChapterNumber();
+    }
+
     return changeChapterCmt(book, chapter);
 }
 

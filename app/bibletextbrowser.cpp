@@ -22,11 +22,23 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
 
     bgColor = QColor(0xe5, 0xe5, 0xe5);
     fgColor = QColor("blue");
+
+    cursor = NULL;
 #ifdef Q_OS_WIN
     setFontFamily(QString("Microsoft YaHei"));
 #endif
     setMouseTracking(true);
     setContentsMargins(2, 2, 2, 2);
+
+    // word wrap
+    setLineWrapMode(QTextEdit::WidgetWidth);
+}
+
+BibleTextBrowser::~BibleTextBrowser()
+{
+    if (cursor) {
+        delete cursor;
+    }
 }
 
 bool BibleTextBrowser::event(QEvent *event)
@@ -79,13 +91,18 @@ void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
     QTextBlock block = cursor.block();
     BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
     if (d) {
-        if (d->getVerse() != preVerseId) {
-            highlight(cursor, bgColor);
-            preVerseId = brCore->getCurrentVerseNumber();
+        if (d->getVerse() != preVerseId     ) {
+            // de hilight previous verse
+            highlight(preVerseId, QColor("white"));
+            // high light current verse
+            highlight(d->getVerse(), bgColor);
+            preVerseId = d->getVerse();
 
             brCore->setCurrentBookNumber(d->getBook());
             brCore->setCurrentChapterNumber(d->getChapter());
             brCore->setCurrentVerseNumber(d->getVerse());
+
+            //block.layout()->lineAt(0).setLineWidth(this->width());
         }
     }
 
@@ -100,8 +117,11 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
     BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
     if (d) {
         if (d->getVerse() != preVerseId) {
-            highlight(cursor, bgColor);
-            preVerseId = brCore->getCurrentVerseNumber();
+            // de hilight previous verse
+            highlight(preVerseId, QColor("white"));
+
+            highlight(d->getVerse(), bgColor);
+            preVerseId = d->getVerse();
 
             brCore->setCurrentBookNumber(d->getBook());
             brCore->setCurrentChapterNumber(d->getChapter());
@@ -134,7 +154,7 @@ bool BibleTextBrowser::showCurrentChapter()
     // clear all bible text
     clear();
 
-    QTextCursor *cursor = new QTextCursor(this->document());
+    cursor = new QTextCursor(this->document());
     QTextCharFormat fmt;
     QTextBlockFormat bfmt;
 
@@ -142,6 +162,11 @@ bool BibleTextBrowser::showCurrentChapter()
                     brCore->getCurrentBookNumber(),
                     brCore->getCurrentChapterNumber()
                 );
+    QList<BibleVerse> verses = chapter.getVersesList();
+    int chapterId = chapter.getChapter();
+    int bookId = chapter.getBook().getBookNumber();
+    QString bv = chapter.getBibleVersion();
+
     // add book name and chapter number
     fmt.setForeground(QColor("green"));
     fmt.setFontPointSize(14.0);
@@ -151,11 +176,10 @@ bool BibleTextBrowser::showCurrentChapter()
     cursor->insertText(QString::number(chapter.getChapter()), fmt);
     bfmt.setAlignment(Qt::AlignCenter);
     cursor->setBlockFormat(bfmt);
+    BibleTextBlockData *td = new BibleTextBlockData(
+                bv, bookId, chapterId, 0);
+    cursor->block().setUserData(td);
 
-    QList<BibleVerse> verses = chapter.getVersesList();
-    int chapterId = chapter.getChapter();
-    int bookId = chapter.getBook().getBookNumber();
-    QString bv = chapter.getBibleVersion();
     for (int i = 0; i < verses.count(); i++) {
         cursor->insertBlock();
         bfmt.setAlignment(Qt::AlignLeft);
@@ -171,19 +195,27 @@ bool BibleTextBrowser::showCurrentChapter()
     }
 
     setReadOnly(true);
+    highlight(brCore->getCurrentVerseNumber(), bgColor);
 
     return true;
 }
 
-void BibleTextBrowser::highlight(QTextCursor &cursor, const QColor &color)
+void BibleTextBrowser::highlight(int verse, const QColor &color)
 {
-    // change block format (will set the color background)
-    QTextBlockFormat blockFormat = cursor.blockFormat();
-    blockFormat.setBackground(color);
-    blockFormat.setNonBreakableLines(true);
-    blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+    QTextBlock block = getTextBlockByVerse(verse);
+    if (block.isValid()) {
+        QTextCursor *tmpCursor = new QTextCursor(block);
+        // change block format (will set the color background)
+        QTextBlockFormat blockFormat = tmpCursor->blockFormat();
+        blockFormat.setBackground(color);
+        blockFormat.setNonBreakableLines(true);
+        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
 
-    cursor.setBlockFormat(blockFormat);
+        tmpCursor->setBlockFormat(blockFormat);
+        setTextCursor(*tmpCursor);
+
+        delete tmpCursor;
+    }
     // change font for current block's fragments
     /*
     for (QTextBlock::iterator it = cursor.block().begin(); !(it.atEnd()); ++it)
@@ -199,11 +231,6 @@ void BibleTextBrowser::highlight(QTextCursor &cursor, const QColor &color)
     }
     */
 
-}
-
-void BibleTextBrowser::dehighlight(QTextCursor &cursor)
-{
-    highlight(cursor, QColor("white"));
 }
 
 void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText)
@@ -224,6 +251,19 @@ void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText)
     verseText.append("</span>");
 
     cursor->insertHtml(verseText);
+}
+
+QTextBlock BibleTextBrowser::getTextBlockByVerse(int verse)
+{
+    QTextDocument *doc = document();
+    for (QTextBlock it = doc->begin(); it != doc->end(); it = it.next()) {
+        BibleTextBlockData *d = (BibleTextBlockData *)it.userData();
+        if (d->getVerse() == verse) {
+            return it;
+        }
+    }
+
+    return QTextBlock();
 }
 
 bool BibleTextBrowser::copyCurVerse()

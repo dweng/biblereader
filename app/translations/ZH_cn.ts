@@ -149,123 +149,123 @@
 <context>
     <name>BibleSearchWidget</name>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="97"/>
+        <location filename="../biblesearchwidget.cpp" line="98"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="100"/>
+        <location filename="../biblesearchwidget.cpp" line="101"/>
         <source>Search range</source>
         <translation>搜索范围</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="101"/>
+        <location filename="../biblesearchwidget.cpp" line="102"/>
         <source>Base:</source>
         <translation>基础:</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="107"/>
+        <location filename="../biblesearchwidget.cpp" line="108"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="107"/>
+        <location filename="../biblesearchwidget.cpp" line="108"/>
         <source>Pentateuch</source>
         <translation>摩西五经</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="107"/>
+        <location filename="../biblesearchwidget.cpp" line="108"/>
         <source>History</source>
         <translation>历史书</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="108"/>
+        <location filename="../biblesearchwidget.cpp" line="109"/>
         <source>Wisdom</source>
         <translation>智慧书</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="108"/>
+        <location filename="../biblesearchwidget.cpp" line="109"/>
         <source>Prophets</source>
         <translation>先知书</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="108"/>
+        <location filename="../biblesearchwidget.cpp" line="109"/>
         <source>Gospels</source>
         <translation>福音书</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="109"/>
+        <location filename="../biblesearchwidget.cpp" line="110"/>
         <source>Acts</source>
         <translation>使徒行传</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="109"/>
+        <location filename="../biblesearchwidget.cpp" line="110"/>
         <source>Paul Epistles</source>
         <translation>保罗书信</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="109"/>
+        <location filename="../biblesearchwidget.cpp" line="110"/>
         <source>General Epistles</source>
         <translation>一般书信</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="110"/>
+        <location filename="../biblesearchwidget.cpp" line="111"/>
         <source>Revelation</source>
         <translation>启示录</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="110"/>
+        <location filename="../biblesearchwidget.cpp" line="111"/>
         <source>User Defined</source>
         <translation>自定义</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="115"/>
+        <location filename="../biblesearchwidget.cpp" line="116"/>
         <source>&lt;b&gt;OR&lt;/b&gt; Advanced:</source>
         <translation>&lt;b&gt;或&lt;/b&gt;高级:</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="117"/>
+        <location filename="../biblesearchwidget.cpp" line="118"/>
         <source>Start:</source>
         <translation>开始书卷:</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="122"/>
+        <location filename="../biblesearchwidget.cpp" line="123"/>
         <source>End:</source>
         <translation>结束书卷:</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="130"/>
         <location filename="../biblesearchwidget.cpp" line="131"/>
+        <location filename="../biblesearchwidget.cpp" line="132"/>
         <source>Verse</source>
         <translation>经文章节</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="130"/>
+        <location filename="../biblesearchwidget.cpp" line="131"/>
         <source>Text</source>
         <translation>经文文本</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="130"/>
+        <location filename="../biblesearchwidget.cpp" line="131"/>
         <source>Version</source>
         <translation>节</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="130"/>
+        <location filename="../biblesearchwidget.cpp" line="131"/>
         <source>Book</source>
         <translation>卷</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="131"/>
+        <location filename="../biblesearchwidget.cpp" line="132"/>
         <source>Chapter</source>
         <translation>章</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="189"/>
+        <location filename="../biblesearchwidget.cpp" line="192"/>
         <source>BibleReader Warning</source>
         <translation>应用程序警告</translation>
     </message>
     <message>
-        <location filename="../biblesearchwidget.cpp" line="189"/>
+        <location filename="../biblesearchwidget.cpp" line="192"/>
         <source>start book should before end book</source>
         <translation>开始书卷应该比结束书卷靠前</translation>
     </message>
@@ -273,17 +273,17 @@
 <context>
     <name>BibleTextBrowser</name>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="110"/>
+        <location filename="../bibletextbrowser.cpp" line="115"/>
         <source>Copy this verse</source>
         <translation>复制该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="111"/>
+        <location filename="../bibletextbrowser.cpp" line="116"/>
         <source>Compare this verse</source>
         <translation>比较该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="112"/>
+        <location filename="../bibletextbrowser.cpp" line="117"/>
         <source>Project this verse</source>
         <translation>投影该节经文</translation>
     </message>
