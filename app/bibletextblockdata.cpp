@@ -14,7 +14,7 @@
  */
 #include "bibletextblockdata.h"
 
-BibleTextBlockData::BibleTextBlockData(QString bv, int b, int c, int v)
+BibleTextBlockData::BibleTextBlockData(QString &bv, int b, int c, int v)
 {
     bibleVersion = bv;
     book = b;

@@ -66,25 +66,30 @@
     <message>
         <location filename="../biblereadermainwindow.cpp" line="118"/>
         <source>Project Verses</source>
-        <translation type="unfinished">投影圣经经文</translation>
+        <translation>投影圣经经文</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="127"/>
+        <location filename="../biblereadermainwindow.cpp" line="123"/>
+        <source>Copy current verse</source>
+        <translation>复制当前经文节</translation>
+    </message>
+    <message>
+        <location filename="../biblereadermainwindow.cpp" line="128"/>
         <source>About [Bible Reader]...</source>
         <translation>关于【圣经研读】...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="130"/>
+        <location filename="../biblereadermainwindow.cpp" line="131"/>
         <source>Check Update...</source>
         <translation>检查更新...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="131"/>
+        <location filename="../biblereadermainwindow.cpp" line="132"/>
         <source>Show Help Content...</source>
         <translation>显示帮助内容...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="132"/>
+        <location filename="../biblereadermainwindow.cpp" line="133"/>
         <source>Donate [Bible Reader]...</source>
         <translation>捐助【圣经研读】...</translation>
     </message>
@@ -119,16 +124,15 @@
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="123"/>
         <source>Copy</source>
-        <translation>复制</translation>
+        <translation type="vanished">复制</translation>
     </message>
     <message>
         <source>About me</source>
         <translation type="vanished">关于</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="143"/>
+        <location filename="../biblereadermainwindow.cpp" line="144"/>
         <source>Dictionary Window</source>
         <translation>字典窗口</translation>
     </message>
@@ -269,23 +273,46 @@
         <source>start book should before end book</source>
         <translation>开始书卷应该比结束书卷靠前</translation>
     </message>
+    <message>
+        <location filename="../biblesearchwidget.cpp" line="207"/>
+        <source>Searched version:&lt;font color=&quot;blue&quot;&gt;%1&lt;/font&gt;&lt;br /&gt;Query string:&lt;font color=&quot;blue&quot;&gt;%2&lt;/font&gt;</source>
+        <translation>搜索译本：&lt;font color=&quot;blue&quot;&gt;%1&lt;/font&gt;&lt;br /&gt;
+搜索词：&lt;font color=&quot;blue&quot;&gt;%2&lt;/font&gt;</translation>
+    </message>
+    <message>
+        <source>Searched version:&lt;font color=&quot;blue&quot;&gt;%1&lt;/font&gt;
+Query string:&lt;font color=&quot;blue&quot;&gt;%2&lt;/font&gt;</source>
+        <translation type="vanished">搜索译本：&lt;font color=&quot;blue&quot;&gt;%1&lt;/font&gt;
+搜索词：&lt;font color=&quot;blue&quot;&gt;%2&lt;/font&gt;</translation>
+    </message>
+    <message>
+        <source>Searched version:%1
+Query string:%2</source>
+        <translation type="vanished">搜索译本：%1
+搜索词：%2</translation>
+    </message>
 </context>
 <context>
     <name>BibleTextBrowser</name>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="115"/>
+        <location filename="../bibletextbrowser.cpp" line="131"/>
         <source>Copy this verse</source>
         <translation>复制该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="116"/>
+        <location filename="../bibletextbrowser.cpp" line="132"/>
         <source>Compare this verse</source>
         <translation>比较该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="117"/>
+        <location filename="../bibletextbrowser.cpp" line="133"/>
         <source>Project this verse</source>
         <translation>投影该节经文</translation>
+    </message>
+    <message>
+        <location filename="../bibletextbrowser.cpp" line="136"/>
+        <source>Copy verses from current verse to...</source>
+        <translation>复制经文从当前经文到...</translation>
     </message>
 </context>
 <context>

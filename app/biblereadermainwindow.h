@@ -174,6 +174,9 @@ private slots:
     // show donate dialog
     void showDonationDlg();
 
+    // copy current verse
+    void copyCurrentVerse();
+
 };
 
 #endif // MAINWINDOW_H

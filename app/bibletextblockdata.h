@@ -32,7 +32,7 @@ public:
      * @param c chapter id
      * @param v verse id
      */
-    BibleTextBlockData(QString bv, int b, int c, int v);
+    BibleTextBlockData(QString &bv, int b, int c, int v);
     /**
      * @brief destructor
      */

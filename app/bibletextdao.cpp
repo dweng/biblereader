@@ -64,9 +64,32 @@ BibleVerse BibleTextDAO::getOneVerse(int book, int chapter, int verse)
  * @brief BibleTextDAO::getSomeVerses
  * @return
  */
-QStringList BibleTextDAO::getSomeVerses()
+QList<BibleVerse> BibleTextDAO::getVerses(BibleVersePos start, BibleVersePos end)
 {
-    return QStringList();
+    QString sql = "select * from verses where book_number >= " +
+            QString::number(start.getBookNumber()) + " and book_number <= " +
+            QString::number(end.getBookNumber()) + " and chapter >= " +
+            QString::number(start.getChapterNumber()) + " and chapter <= " +
+            QString::number(end.getChapterNumber()) + " and verse >= " +
+            QString::number(start.getVerseNumber()) + " and verse <= " +
+            QString::number(end.getVerseNumber());
+
+    query->exec(sql);
+    QList<BibleVerse> verses;
+    BibleVerse bv;
+    int bookId;
+    while(query->next()) {
+        bookId = query->value(0).toInt();
+        bv.setBookNumber(bookId);
+        bv.setBookName(getBookByID(bookId).getShortName());
+        bv.setChapter(query->value(1).toInt());
+        bv.setVerse(query->value(2).toInt());
+        bv.setVerseText(query->value(3).toString());
+
+        verses.push_back(bv);
+    }
+
+    return verses;
 }
 
 BibleChapter BibleTextDAO::getChapter(int bookNumber, int chapter)

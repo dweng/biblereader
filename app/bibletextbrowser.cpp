@@ -18,6 +18,7 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
     QTextEdit(parent)
 {
     brCore = brc;
+
     preVerseId = 1;
 
     bgColor = QColor(0xe5, 0xe5, 0xe5);
@@ -130,6 +131,17 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
         QAction *copyCurrentVerse = menu->addAction(tr("Copy this verse"));
         QAction *compareCurrentVerse = menu->addAction(tr("Compare this verse"));
         QAction *projectCurrentVerse = menu->addAction(tr("Project this verse"));
+
+        // add sub menu
+        QMenu *copyTo = new QMenu(tr("Copy verses from current verse to..."), menu);
+        BibleChapter bc = brCore->getChapter(bibleVersion, d->getBook(), d->getChapter());
+        for (int i = d->getVerse(); i <= bc.getVersesCount(); i++) {
+            QAction *tmp = copyTo->addAction(QString::number(i, 10));
+            tmp->setData(QVariant(i));
+            connect(tmp, SIGNAL(triggered(bool)), this, SLOT(copyVerseTo()));
+        }
+
+        menu->addMenu(copyTo);
         connect(copyCurrentVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
         connect(compareCurrentVerse, SIGNAL(triggered()), brCore, SLOT(fireCmpCurVerse()));
         connect(projectCurrentVerse, SIGNAL(triggered()), this, SLOT(projectVerse()));
@@ -196,6 +208,9 @@ bool BibleTextBrowser::showCurrentChapter()
 
     setReadOnly(true);
     highlight(brCore->getCurrentVerseNumber(), bgColor);
+    if (brCore->getCurrentVerseNumber() != 1) {
+        preVerseId = brCore->getCurrentVerseNumber();
+    }
 
     return true;
 }
@@ -289,5 +304,19 @@ void BibleTextBrowser::projectVerse()
 
     BibleReaderProjectDialog *pDlg = new BibleReaderProjectDialog(this, verse.text());
     pDlg->showFullScreen();
+}
+
+void BibleTextBrowser::copyVerseTo()
+{
+    QAction *tmp = qobject_cast<QAction *>(sender());
+    int cbn = brCore->getCurrentBookNumber();
+    int ccn = brCore->getCurrentChapterNumber();
+    BibleVersePos begin = BibleVersePos(cbn, ccn, preVerseId);
+    BibleVersePos end = BibleVersePos(cbn, ccn, tmp->data().toInt());
+
+    QString bt = brCore->getVerses(begin, end);
+
+    QClipboard *cb = QApplication::clipboard();
+    cb->setText(bt, QClipboard::Clipboard);
 }
 

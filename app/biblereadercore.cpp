@@ -92,16 +92,14 @@ BibleInfo BibleReaderCore::getCurrentBibleInfo()
 
 QString BibleReaderCore::getVerses(BibleVersePos start, BibleVersePos end)
 {
-    QStringList text;
-    QString query = "select * from verses where book_number >= " +
-            QString::number(start.getBookNumber()) + " and book_number <= " +
-            QString::number(end.getBookNumber()) + " and chapter >= " +
-            QString::number(start.getChapterNumber()) + " and chapter <= " +
-            QString::number(end.getChapterNumber()) + " and verse >= " +
-            QString::number(start.getVerseNumber()) + " and verse <= " +
-            QString::number(end.getVerseNumber());
+    QList<BibleVerse> verses = currentBibleDAO->getVerses(start, end);
 
-    return text.join(" ");
+    QString text;
+    for (int i = 0; i < verses.size(); i++) {
+        text.append(verses[i].text()).append("\n");
+    }
+
+    return text;
 }
 
 BibleChapter BibleReaderCore::getChapter(int bookNumber, int chapter)

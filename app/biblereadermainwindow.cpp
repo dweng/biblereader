@@ -32,7 +32,7 @@
 // for document
 #include <QTextBlock>
 #include <QTextCursor>
-
+#include <QClipboard>
 #include "bibletreewidget.h"
 #include "bibledictionarywidget.h"
 #include "biblereaderaboutdlg.h"
@@ -120,7 +120,8 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
 
     // add actions to Edit menu
     mainMenuBar->addMenu(editMenu);
-    copyAction = editMenu->addAction(tr("Copy"));
+    copyAction = editMenu->addAction(tr("Copy current verse"));
+    connect(copyAction, SIGNAL(triggered()), this, SLOT(copyCurrentVerse()));
 
     // add actions to Help menu
     mainMenuBar->addMenu(helpMenu);
@@ -224,6 +225,17 @@ void BibleReaderMainWindow::showDonationDlg()
     BibleReaderDonationDlg dlg(this);
     dlg.show();
     dlg.exec();
+}
+
+void BibleReaderMainWindow::copyCurrentVerse()
+{
+    QClipboard *cb = QApplication::clipboard();
+    BibleVerse verse = bibleReaderCore->getVerse(
+                bibleReaderCore->getCurrentVersion(),
+                bibleReaderCore->getCurrentBookNumber(),
+                bibleReaderCore->getCurrentChapterNumber(),
+                bibleReaderCore->getCurrentVerseNumber());
+    cb->setText(verse.text(), QClipboard::Clipboard);
 }
 
 void BibleReaderMainWindow::navToNextChapter()

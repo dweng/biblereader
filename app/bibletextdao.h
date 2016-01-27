@@ -20,6 +20,7 @@
 #include "bibleinfo.h"
 #include "biblechapter.h"
 #include "bibleverse.h"
+#include "bibleversepos.h"
 #include <QSqlQuery>
 #include <QString>
 #include <QVariant>
@@ -57,7 +58,7 @@ public:
 
 public:
     BibleVerse getOneVerse(int book, int chapter, int verse);
-    QStringList getSomeVerses();
+    QList<BibleVerse> getVerses(BibleVersePos start, BibleVersePos end);
     BibleChapter getChapter(int bookNumber, int chapter);
 
     QList<BibleVerse> search(QString q,

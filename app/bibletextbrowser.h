@@ -65,6 +65,7 @@ private:/* functions */
 private slots:
     bool copyCurVerse();
     void projectVerse();
+    void copyVerseTo();
 };
 
 #endif // BIBLETEXTBROWSER_H

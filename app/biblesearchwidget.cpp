@@ -204,7 +204,8 @@ void BibleSearchWidget::getSearchResult()
 
     QTreeWidgetItem *root = new QTreeWidgetItem();
     root->setData(0, Qt::DisplayRole, QString("[%1:%2]").arg(q, QString::number(result.count())));
-    root->setToolTip(0, QString("Searched version:%1\nQuery string:%2").arg(brCore->getCurrentBibleInfo().getFullname(), q));
+    QString searchTip = tr("Searched version:<font color=\"blue\">%1</font><br />Query string:<font color=\"blue\">%2</font>");
+    root->setToolTip(0, searchTip.arg(brCore->getCurrentBibleInfo().getFullname(), q));
     for (int i = 0; i < result.count(); i++) {
         BibleVerse b = result[i];
 
