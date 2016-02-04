@@ -4,6 +4,7 @@
         <file>assets/images/app.jpg</file>
         <file>assets/images/arrow_left.png</file>
         <file>assets/images/arrow_right.png</file>
+        <file>assets/images/splash.png</file>
     </qresource>
     <qresource prefix="/data">
         <file>assets/data/description.txt</file>

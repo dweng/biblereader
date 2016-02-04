@@ -15,6 +15,9 @@
 #ifndef BIBLEREADERMAINWINDOW_H
 #define BIBLEREADERMAINWINDOW_H
 
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include "bibletexttabwidget.h"
@@ -26,6 +29,7 @@
 #include "bibledictionarywidget.h"
 #include "biblecommentarytabwidget.h"
 #include "biblereaderprojectdialog.h"
+#include "biblereaderconfigdlg.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -123,6 +127,11 @@ private:
      */
     BibleReaderProjectDialog *brProjectDlg;
 
+    /**
+     * @brief bible reader config dialog
+     */
+    BibleReaderConfigDlg *brConfigDlg;
+
     // toolbar actions
     QAction *navToNextChapterAction;
     QAction *navToPrevChapterAction;
@@ -134,6 +143,10 @@ private:
     // Edit menu actions
     QAction *copyAction;
 
+    // Tool menu actions
+    QAction *configAction;
+    QAction *resourceManagerAction;
+
     // Help menu actions
     QAction *aboutMeAction;
     QAction *checkUpdate;
@@ -144,6 +157,7 @@ private:
     QMenu *fileMenu;
     QMenu *editMenu;
     QMenu *helpMenu;
+    QMenu *toolMenu;
     QMenuBar *mainMenuBar;
 
 
@@ -168,6 +182,9 @@ private slots:
     // menu actions slots
     void quitBibleReader();
     void projectVerses();
+    void showCfgDlg();
+    void checkNewVersion();
+    void replyFinished(QNetworkReply *reply);
 
     // show about dialog
     void showAboutDlg();

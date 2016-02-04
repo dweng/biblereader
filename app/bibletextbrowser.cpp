@@ -33,6 +33,7 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
 
     // word wrap
     setLineWrapMode(QTextEdit::WidgetWidth);
+    setToolTipDuration(60000);
 }
 
 BibleTextBrowser::~BibleTextBrowser()

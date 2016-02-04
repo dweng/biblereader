@@ -14,7 +14,7 @@
  */
 #include "biblereadermainwindow.h"
 #include "biblereadercore.h"
-
+#include <QMessageBox>
 #include <QDockWidget>
 #include <QTreeWidget>
 #include <QGridLayout>
@@ -33,6 +33,13 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QClipboard>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonParseError>
+
+#include <QDesktopServices>
+
 #include "bibletreewidget.h"
 #include "bibledictionarywidget.h"
 #include "biblereaderaboutdlg.h"
@@ -46,6 +53,9 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     : QMainWindow(parent)
 {
     LOG_DEBUG("constructor");
+    brConfigDlg = NULL;
+    brProjectDlg = NULL;
+
     bibleReaderCore = brc;
 
     //Set main window
@@ -109,6 +119,7 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     mainMenuBar = new QMenuBar(this);
     fileMenu = new QMenu(tr("File(&F)"), mainMenuBar);
     editMenu = new QMenu(tr("Edit(&E)"), mainMenuBar);
+    toolMenu = new QMenu(tr("Tools(&T)"), mainMenuBar);
     helpMenu = new QMenu(tr("Help(&H)"), mainMenuBar);
 
     // add actions to File menu
@@ -123,12 +134,19 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     copyAction = editMenu->addAction(tr("Copy current verse"));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(copyCurrentVerse()));
 
+    // add actions to Tool menu
+    mainMenuBar->addMenu(toolMenu);
+    configAction = toolMenu->addAction(tr("Configure"));
+    connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showCfgDlg()));
+    resourceManagerAction = toolMenu->addAction(tr("Resources manager"));
+
     // add actions to Help menu
     mainMenuBar->addMenu(helpMenu);
     aboutMeAction = helpMenu->addAction(tr("About [Bible Reader]..."));
     connect(aboutMeAction, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
 
     checkUpdate = helpMenu->addAction(tr("Check Update..."));
+    connect(checkUpdate, SIGNAL(triggered(bool)), this, SLOT(checkNewVersion()));
     showHelpContent = helpMenu->addAction(tr("Show Help Content..."));
     donateBibleReader = helpMenu->addAction(tr("Donate [Bible Reader]..."));
     connect(donateBibleReader, SIGNAL(triggered()), this, SLOT(showDonationDlg()));
@@ -163,6 +181,12 @@ BibleReaderMainWindow::~BibleReaderMainWindow()
     if (projectVersesAction) {
         delete projectVersesAction;
     }
+
+    if (brProjectDlg)
+        delete brProjectDlg;
+
+    if (brConfigDlg)
+        delete brConfigDlg;
     // delete dictWidget;
 }
 
@@ -208,15 +232,82 @@ void BibleReaderMainWindow::quitBibleReader()
 
 void BibleReaderMainWindow::projectVerses()
 {
-    brProjectDlg = new BibleReaderProjectDialog(this, "");
+    if (!brProjectDlg)
+        brProjectDlg = new BibleReaderProjectDialog(this, "");
 
-    brProjectDlg->showMaximized();
+    brProjectDlg->showFullScreen();
+}
+
+void BibleReaderMainWindow::showCfgDlg()
+{
+    if (!brConfigDlg)
+        brConfigDlg = new BibleReaderConfigDlg(this);
+    brConfigDlg->exec();
+}
+
+void BibleReaderMainWindow::checkNewVersion()
+{
+    // 1. get update information from server
+    QString server = "http://biblereader.cn/brupdate.php";
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
+
+    manager->get(QNetworkRequest(QUrl(server)));
+}
+
+void BibleReaderMainWindow::replyFinished(QNetworkReply *reply)
+{
+    int major, middle, minor;
+    QString newVersionUrl;
+    QString replyString = reply->readAll();
+    if (!replyString.isEmpty()) {
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(replyString.toUtf8(), &error);
+
+        if (error.error == QJsonParseError::NoError) {
+            if (doc.isObject()) {
+                // get update version information
+                // and assign all information to data
+                qDebug() << doc.toJson();
+
+                QJsonObject object = doc.object();
+
+                major = object.value("major").toInt();
+                middle = object.value("middle").toInt();
+                minor = object.value("minor").toInt();
+                newVersionUrl = object.value("newversionurl").toString();
+
+                BibleReaderVersion *version = bibleReaderCore->getVersion();
+
+                int oldVersionNum = 100*version->getMajor()+10*version->getMiddle()+version->getMinor();
+                int newVersionNum = 100*major + 10*middle + minor;
+                if (newVersionNum > oldVersionNum) {
+                    QMessageBox::StandardButton reply;
+                    reply = QMessageBox::question(this, tr("Update"),
+                                                  tr("New version Bible Reader found, update?"), QMessageBox::Yes | QMessageBox::No);
+                    if(reply == QMessageBox::Yes)
+                    {
+                        QDesktopServices::openUrl(QUrl(newVersionUrl));
+                    }
+                    else
+                    {
+                        //do nothing
+                    }
+                } else {
+                    QMessageBox::information(this, tr("Update"), tr("No new version Bible Reader found."), QMessageBox::Ok);
+                }
+            }
+        } else {
+            qDebug() << replyString;
+        }
+    }
+    reply->deleteLater();
 }
 
 void BibleReaderMainWindow::showAboutDlg()
 {
     BibleReaderAboutDlg dlg(this);
-    dlg.show();
     dlg.exec();
 }
 

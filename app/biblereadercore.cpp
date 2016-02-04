@@ -23,6 +23,8 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     QObject(parent)
 {
     LOG_DEBUG("constructor");
+    version = new BibleReaderVersion(0, 0, 2);
+
     currentBookNumber = 0;
     currentChapterNumber = 0;
     currentVerseNumber = 0;
@@ -62,6 +64,7 @@ BibleReaderCore::~BibleReaderCore()
     configurator->setLastVerse(currentVerseNumber);
 
     delete configurator;
+    delete version;
 }
 
 BibleVerse BibleReaderCore::getVerse(QString book, int chapter, int verse)
@@ -209,6 +212,11 @@ void BibleReaderCore::navPrevChapter()
 void BibleReaderCore::fireCmpCurVerse()
 {
     emit compareCurrentVerse();
+}
+
+BibleReaderVersion *BibleReaderCore::getVersion() const
+{
+    return version;
 }
 QString BibleReaderCore::getBcPathBase() const
 {

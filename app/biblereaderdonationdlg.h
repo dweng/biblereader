@@ -1,9 +1,15 @@
 #ifndef BIBLEREADERDONATIONDLG_H
 #define BIBLEREADERDONATIONDLG_H
 
-#include <QTextEdit>
 #include <QDialog>
-#include <QString>
+
+QT_BEGIN_NAMESPACE
+class QListWidget;
+class QListWidgetItem;
+class QStackedWidget;
+class QTextEdit;
+
+QT_END_NAMESPACE
 
 class BibleReaderDonationDlg : public QDialog
 {

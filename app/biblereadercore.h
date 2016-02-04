@@ -26,6 +26,8 @@
 #include "bibledictinfo.h"
 #include "biblereaderconfigurator.h"
 #include "biblecommentarydao.h"
+#include "biblereaderversion.h"
+
 /**
  * @brief
  * The core class of Bible Reader
@@ -300,6 +302,8 @@ public:
 
     bool addCommentary(QString &name, QString &path);
     QString getChapterCmt(QString cn, int book, int chapter);
+    BibleReaderVersion *getVersion() const;
+
 signals:
     /**
      * @brief this signal will be emited when current
@@ -441,6 +445,11 @@ private:
      * @brief Bible Reader configurator instance
      */
     BibleReaderConfigurator *configurator;
+
+    /**
+     * @brief handle bible reader version information
+     */
+    BibleReaderVersion *version;
 
 private:/* Helper functions*/
     int getBookID(QString bookName);

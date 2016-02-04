@@ -14,7 +14,7 @@
  */
 #include "biblereaderapp.h"
 #include <QTextCodec>
-
+#include <QTimer>
 // for logging
 #include "Logger.h"
 #include "FileAppender.h"
@@ -29,6 +29,12 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
 #ifdef Q_OS_LINUX
     setFont(QFont(QString("Noto Sans CJK SC"), 10));
 #endif
+    QSplashScreen *splash = new QSplashScreen; // create a QSplashScreen
+    splash->setPixmap(QPixmap(":/img/assets/images/splash.png")); // set the image I would show
+    splash->show(); // after show it  close immediately
+    splash->raise();
+    qApp->processEvents();
+
     // logging
     QString appDirPath = QApplication::applicationDirPath();
     FileAppender* fileAppender = new FileAppender(appDirPath + "/debug.log");
@@ -37,15 +43,23 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     LOG_INFO("Bible Reader started!");
 
     LOG_INFO() << "Loading translations...";
+    splash->showMessage(tr("Loading translations..."), Qt::AlignBottom|Qt::AlignLeft, Qt::blue);
     LOG_INFO() << "Loading ZH_cn:" << translator.load(appDirPath + "/translations/ZH_cn.qm");
     LOG_INFO() << "Loading Qt ZH_cn:" << qtTranslator.load(appDirPath + "/translations/qt_zh_CN.qm");
     installTranslator(&translator);
     installTranslator(&qtTranslator);
 
     // init biblereadercore
+    splash->showMessage(tr("Loading modules..."), Qt::AlignBottom|Qt::AlignLeft, Qt::white);
     initBibleReaderCore();
+
+    // Initialize objects
     w = new BibleReaderMainWindow(brCore);
-    w->show();
+    //w->show();
+
+    QTimer::singleShot(2000, splash, SLOT(close()));
+    splash->finish(w);
+    delete splash;
 }
 
 BibleReaderApp::~BibleReaderApp()

@@ -2,6 +2,7 @@
 
 #include <QFile>
 #include <QGridLayout>
+#include <QTextEdit>
 
 BibleReaderDonationDlg::BibleReaderDonationDlg(QWidget *parent) :
     QDialog(parent)

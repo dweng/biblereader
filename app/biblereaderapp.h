@@ -19,6 +19,8 @@
 #include "biblereadermainwindow.h"
 #include <QApplication>
 #include <QTranslator>
+#include <QSplashScreen>
+
 /**
  * @brief The BibleReaderApp class
  * This class is the BibleReader application class
@@ -52,6 +54,8 @@ private:
     BibleReaderMainWindow *w;
 
     BibleReaderCore *brCore;
+
+    QSplashScreen *startScreen;
 };
 
 #endif // BIBLEREADERAPP_H

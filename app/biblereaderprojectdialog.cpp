@@ -6,8 +6,11 @@ BibleReaderProjectDialog::BibleReaderProjectDialog(QWidget *parent, QString text
     :QDialog(parent)
 {
     setWindowFlags(Qt::Window);
-    //setStyleSheet();
+    setStyleSheet("QTextEdit {background-color: black;}");
+
     panel = new QTextEdit(this);
+    panel->setWindowFlags(Qt::FramelessWindowHint);
+    panel->setReadOnly(true);
 
     // set font and color
     QTextCharFormat fmt;
@@ -23,6 +26,7 @@ BibleReaderProjectDialog::BibleReaderProjectDialog(QWidget *parent, QString text
     panel->setText(setFormat());
 
     QGridLayout *layout = new QGridLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(panel);
     setLayout(layout);
 
