@@ -2,7 +2,6 @@
 
 #include <QFile>
 #include <QGridLayout>
-#include <QTextEdit>
 
 BibleReaderDonationDlg::BibleReaderDonationDlg(QWidget *parent) :
     QDialog(parent)
@@ -12,7 +11,7 @@ BibleReaderDonationDlg::BibleReaderDonationDlg(QWidget *parent) :
     setFixedSize(480, 320);
     setModal(true);
 
-    donation = new QTextEdit(this);
+    donation = new DonationBrowser(this);
     donation->setReadOnly(true);
     donation->setHtml(readDonation(QString(":/data/assets/data/donation.txt")));
 
@@ -25,6 +24,7 @@ BibleReaderDonationDlg::~BibleReaderDonationDlg()
 {
 
 }
+
 
 QString BibleReaderDonationDlg::readDonation(QString path)
 {

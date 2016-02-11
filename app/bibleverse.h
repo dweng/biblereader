@@ -30,6 +30,8 @@ public:
     QString getBookName() const;
     void setBookName(const QString &value);
 
+    QString getVerseHeader();
+
 private:
     int bookNumber;
     QString bookName;

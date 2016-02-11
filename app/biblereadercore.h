@@ -306,14 +306,6 @@ public:
 
 signals:
     /**
-     * @brief this signal will be emited when current
-     * chapter changed.
-     * @param book current book id
-     * @param chapter current chapter id
-     */
-    void currentChapterChanged(int book, int chapter);
-
-    /**
      * @brief this signal will be emited when current verse changed
      * @param book current book id
      * @param chapter current chapter id
@@ -333,6 +325,13 @@ signals:
      */
     void compareCurrentVerse();
 
+    /**
+     * @brief this signal will be emited when a request to show dict item in some place.
+     * @param dict dict name
+     * @param itemName item name
+     */
+    void showDictItem(QString dictName, QString itemName);
+
 public slots:
     /**
      * @brief navigate to next chapter
@@ -349,6 +348,13 @@ public slots:
      * for public scope usage
      */
     void fireCmpCurVerse();
+
+    /**
+     * @brief to fire showDictItem signal
+     * @param dictName
+     * @param itemName
+     */
+    void fireShowDictItem(QString dictName, QString itemName);
 
 private:
     /**

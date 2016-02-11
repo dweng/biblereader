@@ -21,7 +21,7 @@ BibleCommentaryWidget::BibleCommentaryWidget(BibleReaderCore *brc, QString cn, Q
 {
     brCore = brc;
     cmtName = cn;
-    connect(brCore, SIGNAL(currentChapterChanged(int,int)), this, SLOT(changeChapterCmt(int,int)));
+    connect(brCore, SIGNAL(currentVerseChanged(int,int,int)), this, SLOT(changeChapterCmt(int,int,int)));
     createWidgets();
 }
 
@@ -30,7 +30,7 @@ BibleCommentaryWidget::~BibleCommentaryWidget()
     destroyWidgets();
 }
 
-QString BibleCommentaryWidget::changeChapterCmt(int book, int chapter)
+QString BibleCommentaryWidget::changeChapterCmt(int book, int chapter, int verse)
 {
     QString text = brCore->getChapterCmt(cmtName, book, chapter);
     content->setHtml(text);
@@ -44,29 +44,54 @@ QString BibleCommentaryWidget::changeChapterCmt(QTreeWidgetItem *current,
     int book = current->data(1, Qt::DisplayRole).toInt();
     int chapter = current->data(2, Qt::DisplayRole).toInt();
 
-    if (book == 0) {
+    if (book == 1 && chapter == 0 && previous == NULL) {
         book = brCore->getCurrentBookNumber();
-    }
-
-    if (chapter == 0) {
         chapter = brCore->getCurrentChapterNumber();
     }
 
-    return changeChapterCmt(book, chapter);
+    return changeChapterCmt(book, chapter, 1);
+}
+
+QString BibleCommentaryWidget::getCmtTitle() const
+{
+    return cmtTitle;
+}
+
+void BibleCommentaryWidget::setCmtTitle(const QString &value)
+{
+    cmtTitle = value;
+}
+
+QString BibleCommentaryWidget::getCmtFullName() const
+{
+    return cmtFullName;
+}
+
+void BibleCommentaryWidget::setCmtFullName(const QString &value)
+{
+    cmtFullName = value;
 }
 
 void BibleCommentaryWidget::createWidgets()
 {
+    int curBookNum = brCore->getCurrentBookNumber();
+    int curChapterNum = brCore->getCurrentChapterNumber();
+
     section = new BibleTreeWidget(brCore, this);
     section->setMaximumWidth(150);
+    QList<QTreeWidgetItem *> items =
+            section->findItems(QString::number(curBookNum), Qt::MatchExactly, 1);
+    section->expandItem(items.value(0));
+    section->setCurrentItem(items.value(0));
+
     connect(section, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
             this, SLOT(changeChapterCmt(QTreeWidgetItem*,QTreeWidgetItem*)));
     content = new QTextEdit(this);
     content->setReadOnly(true);
     content->setHtml(brCore->getChapterCmt(
                          cmtName,
-                         brCore->getCurrentBookNumber(),
-                         brCore->getCurrentChapterNumber()
+                         curBookNum,
+                         curChapterNum
                          ));
 
 

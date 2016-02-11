@@ -5,23 +5,29 @@
 #include <QStackedWidget>
 #include <QListWidget>
 
+#include "biblereaderconfigurator.h"
+
 class BibleReaderConfigDlg : public QDialog
 {
     Q_OBJECT
 public:
-    explicit BibleReaderConfigDlg(QWidget *parent = 0);
+    explicit BibleReaderConfigDlg(BibleReaderConfigurator *cfg, QWidget *parent = 0);
     ~BibleReaderConfigDlg();
 
 
 public slots:
     void changePage(QListWidgetItem *current, QListWidgetItem *previous);
 
+private slots:
+    void applySettings();
 private:
     void createIcons();
 private:
 
     QListWidget *contentsWidget;
     QStackedWidget *pagesWidget;
+
+    BibleReaderConfigurator *configurator;
 };
 
 #endif // BIBLEREADERCONFIGRATIONWINDOW_H

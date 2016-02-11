@@ -23,7 +23,7 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     QObject(parent)
 {
     LOG_DEBUG("constructor");
-    version = new BibleReaderVersion(0, 0, 2);
+    version = new BibleReaderVersion(0, 0, 3);
 
     currentBookNumber = 0;
     currentChapterNumber = 0;
@@ -177,7 +177,7 @@ void BibleReaderCore::navNextChapter()
             }
         }
     }
-    emit currentChapterChanged(currentBookNumber, currentChapterNumber);
+    emit currentVerseChanged(currentBookNumber, currentChapterNumber, 1);
 }
 
 void BibleReaderCore::navPrevChapter()
@@ -206,12 +206,17 @@ void BibleReaderCore::navPrevChapter()
         }
     }
 
-    emit currentChapterChanged(currentBookNumber, currentChapterNumber);
+    emit currentVerseChanged(currentBookNumber, currentChapterNumber, 1);
 }
 
 void BibleReaderCore::fireCmpCurVerse()
 {
     emit compareCurrentVerse();
+}
+
+void BibleReaderCore::fireShowDictItem(QString dictName, QString itemName)
+{
+    emit showDictItem(dictName, itemName);
 }
 
 BibleReaderVersion *BibleReaderCore::getVersion() const
@@ -289,7 +294,7 @@ int BibleReaderCore::setCurrentBCV(int b, int c, int v)
     setCurrentChapterNumber(c);
     setCurrentVerseNumber(v);
 
-    emit currentChapterChanged(b, c);
+    emit currentVerseChanged(b, c, v);
     return 1;
 }
 

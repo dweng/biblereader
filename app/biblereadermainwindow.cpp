@@ -68,10 +68,12 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     toolBar->show();
 
     navToPrevChapterAction = new QAction(QIcon(QString(":/img/assets/images/arrow_left.png")), tr("previous chapter"),this);
+    navToPrevChapterAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
     toolBar->addAction(navToPrevChapterAction);
     connect(navToPrevChapterAction, SIGNAL(triggered()), this, SLOT(navToPrevChapter()));
 
     navToNextChapterAction = new QAction(QIcon(QString(":/img/assets/images/arrow_right.png")),tr("next chapter"),this);
+    navToNextChapterAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
     toolBar->addAction(navToNextChapterAction);
     connect(navToNextChapterAction, SIGNAL(triggered()), this, SLOT(navToNextChapter()));
     this->addToolBar(toolBar);
@@ -148,6 +150,7 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     checkUpdate = helpMenu->addAction(tr("Check Update..."));
     connect(checkUpdate, SIGNAL(triggered(bool)), this, SLOT(checkNewVersion()));
     showHelpContent = helpMenu->addAction(tr("Show Help Content..."));
+    connect(showHelpContent, SIGNAL(triggered(bool)), this, SLOT(openHelpPage()));
     donateBibleReader = helpMenu->addAction(tr("Donate [Bible Reader]..."));
     connect(donateBibleReader, SIGNAL(triggered()), this, SLOT(showDonationDlg()));
 
@@ -157,6 +160,11 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     // add status bar
     statusBar = new QStatusBar();
     this->setStatusBar(statusBar);
+    showCurrentVerseInfo();
+    connect(bibleReaderCore, SIGNAL(currentVerseChanged(int,int,int)),
+            this, SLOT(showCurrentVerseInfo()));
+    connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)),
+            this, SLOT(showCurrentVerseInfo()));
 
     // add dict dockable widget
     dictDockWidget = new QDockWidget(tr("Dictionary Window"),this);
@@ -167,6 +175,11 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     addDockWidget(Qt::BottomDockWidgetArea, dictDockWidget);
     setCorner(Qt::BottomRightCorner, Qt::BottomDockWidgetArea);
     setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
+
+    // auto update
+    if (bibleReaderCore->getConfigurator()->getIsAutoUpdate()) {
+        checkNewVersion();
+    }
 }
 
 BibleReaderMainWindow::~BibleReaderMainWindow()
@@ -233,7 +246,7 @@ void BibleReaderMainWindow::quitBibleReader()
 void BibleReaderMainWindow::projectVerses()
 {
     if (!brProjectDlg)
-        brProjectDlg = new BibleReaderProjectDialog(this, "");
+        brProjectDlg = new BibleReaderProjectDialog(bibleReaderCore, "", this);
 
     brProjectDlg->showFullScreen();
 }
@@ -241,7 +254,7 @@ void BibleReaderMainWindow::projectVerses()
 void BibleReaderMainWindow::showCfgDlg()
 {
     if (!brConfigDlg)
-        brConfigDlg = new BibleReaderConfigDlg(this);
+        brConfigDlg = new BibleReaderConfigDlg(bibleReaderCore->getConfigurator(), this);
     brConfigDlg->exec();
 }
 
@@ -254,6 +267,11 @@ void BibleReaderMainWindow::checkNewVersion()
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
 
     manager->get(QNetworkRequest(QUrl(server)));
+}
+
+void BibleReaderMainWindow::openHelpPage()
+{
+    QDesktopServices::openUrl(QUrl("http://biblereader.cn/"));
 }
 
 void BibleReaderMainWindow::replyFinished(QNetworkReply *reply)
@@ -327,6 +345,16 @@ void BibleReaderMainWindow::copyCurrentVerse()
                 bibleReaderCore->getCurrentChapterNumber(),
                 bibleReaderCore->getCurrentVerseNumber());
     cb->setText(verse.text(), QClipboard::Clipboard);
+}
+
+void BibleReaderMainWindow::showCurrentVerseInfo()
+{
+    BibleInfo info = bibleReaderCore->getCurrentBibleInfo();
+    BibleVerse verse = bibleReaderCore->getVerse(bibleReaderCore->getCurrentBookNumber(),
+                                                 bibleReaderCore->getCurrentChapterNumber(),
+                                                 bibleReaderCore->getCurrentVerseNumber());
+
+    statusBar->showMessage(info.getFullname().append(" ").append(verse.getVerseHeader()));
 }
 
 void BibleReaderMainWindow::navToNextChapter()

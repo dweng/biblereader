@@ -136,7 +136,8 @@ void BibleSearchWidget::createWidgets()
     searchResult->setColumnHidden(4, true);
     searchResult->setColumnHidden(5, true);
     // set item delegate
-    searchResult->setItemDelegateForColumn(1, new BibleReaderHTMLDelegate());
+    searchResult->setItemDelegate(new BibleReaderHTMLDelegate());
+
     // click widget item signal catch.
     connect(searchResult, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
             this, SLOT(navToChapter(QTreeWidgetItem*, int)));
@@ -210,7 +211,7 @@ void BibleSearchWidget::getSearchResult()
         BibleVerse b = result[i];
 
         QTreeWidgetItem *item = new QTreeWidgetItem(root);
-        QString verse = QString("%1 %2:%3").arg(b.getBookName(),
+        QString verse = QString("<font color=\"green\">%1 %2:%3</font>").arg(b.getBookName(),
                   QString::number(b.getChapter()),
                   QString::number(b.getVerse()));
         // apply verse text shower to QLabel

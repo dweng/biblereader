@@ -7,4 +7,4 @@ Bible Reader是一个从零开始的项目，除了借用了网络上的一些�
 </font>
 </strong>< br/><br />
 所以作者没有声明版权，也将整个应用免费的、自由的给大家使用。<br /><br />
-如果你有感动要奉献金钱给BR项目组，请具体参看<a href="http://biblereader.cn/">http://biblereader.cn/</a>上关于奉献部分的声明，这上面也有具体的如何奉献的信息。
+如果你有感动要奉献金钱给BR项目组，请具体参看 <a href="http://biblereader.cn/">网站</a> 上关于奉献部分的声明，这上面也有具体的如何奉献的信息。

@@ -2,14 +2,34 @@
 #define BIBLEREADERDONATIONDLG_H
 
 #include <QDialog>
+#include <QTextBrowser>
+#include <QMouseEvent>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 class QListWidget;
 class QListWidgetItem;
 class QStackedWidget;
-class QTextEdit;
 
 QT_END_NAMESPACE
+
+class DonationBrowser: public QTextBrowser {
+public:
+    DonationBrowser(QWidget *parent): QTextBrowser(parent) {
+        setOpenExternalLinks(true);
+    }
+
+protected:
+    void mouseMoveEvent(QMouseEvent *e){
+        QTextCursor textCursor = cursorForPosition(e->pos());
+        textCursor.select(QTextCursor::WordUnderCursor);
+
+        QString href = textCursor.charFormat().anchorHref();
+        if (!href.isEmpty())
+            qDebug()<< href;
+        QTextBrowser::mouseMoveEvent(e);
+    }
+};
 
 class BibleReaderDonationDlg : public QDialog
 {
@@ -23,7 +43,7 @@ signals:
 public slots:
 
 private:
-    QTextEdit *donation;
+    DonationBrowser *donation;
     QString readDonation(QString path);
 };
 

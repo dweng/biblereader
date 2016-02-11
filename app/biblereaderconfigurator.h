@@ -18,6 +18,7 @@
 #include <QObject>
 #include <QString>
 #include <QSettings>
+#include <QColor>
 
 /**
  * @brief The BibleReaderConfigurator class
@@ -57,7 +58,22 @@ public:
     QString getBcPathBase() const;
     void setBcPathBase(const QString &value);
 
+    QColor getSelectedVerseBG() const;
+    void setSelectedVerseBG(const QColor &value);
+
+    QColor getProjectDlgBG() const;
+    void setProjectDlgBG(const QColor &value);
+
+    QColor getProjectDlgFG() const;
+    void setProjectDlgFG(const QColor &value);
+
+    bool getIsAutoUpdate() const;
+    void setIsAutoUpdate(bool value);
+
 signals:
+    void selectedVerseBGChanged(QColor newColor);
+    void projectDlgBGChanged(QColor newColor);
+    void projectDlgFGChanged(QColor newColor);
 
 public slots:
 
@@ -118,6 +134,30 @@ private:
      * the previous verse which is reading
      */
     int lastVerse;
+
+    /**
+     * @brief selectedVerseBG
+     * background of selected verse
+     */
+    QColor selectedVerseBG;
+
+    /**
+     * @brief projectDlgBG
+     * background of project dialog
+     */
+    QColor projectDlgBG;
+
+    /**
+     * @brief projectDlgFG
+     * foreground of project dialog
+     */
+    QColor projectDlgFG;
+
+    /**
+     * @brief isAutoUpdate
+     * auto update
+     */
+    bool isAutoUpdate;
 
 };
 

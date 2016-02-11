@@ -184,6 +184,8 @@ private slots:
     void projectVerses();
     void showCfgDlg();
     void checkNewVersion();
+    void openHelpPage();
+
     void replyFinished(QNetworkReply *reply);
 
     // show about dialog
@@ -193,6 +195,10 @@ private slots:
 
     // copy current verse
     void copyCurrentVerse();
+
+    // show current verse information in status bar.
+    void showCurrentVerseInfo();
+
 
 };
 

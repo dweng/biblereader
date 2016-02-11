@@ -41,17 +41,27 @@ void BibleSearchResultWidget::mousePressEvent(QMouseEvent *event)
 void BibleSearchResultWidget::contextMenuEvent(QContextMenuEvent *event)
 {
     QModelIndex current = currentIndex();
+    QMenu *menu = NULL;
     if (current.parent() != QModelIndex()) {
-        QMenu *menu = new QMenu(this);
+        menu = new QMenu(this);
         QAction *copyVerse = menu->addAction(tr("Copy this verse"));
         connect(copyVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
 
         QAction *cmpVerse = menu->addAction(tr("Compare this verse"));
         connect(cmpVerse, SIGNAL(triggered()), brCore, SLOT(fireCmpCurVerse()));
 
-        setCurrentVerse();
+        //setCurrentVerse();
         menu->exec(event->globalPos());
         delete menu;
+    } else {
+        menu = new QMenu(this);
+
+        QAction *removeCurResultAct = menu->addAction(tr("Remove current result"));
+        connect(removeCurResultAct, SIGNAL(triggered(bool)), this, SLOT(removeCurResult()));
+
+        menu->exec(event->globalPos());
+        delete menu;
+
     }
     QTreeWidget::contextMenuEvent(event);
 }
@@ -84,4 +94,13 @@ bool BibleSearchResultWidget::copyCurVerse()
         cb->setText(verse.text(), QClipboard::Clipboard);
     }
     return true;
+}
+
+void BibleSearchResultWidget::removeCurResult()
+{
+    QModelIndex current = currentIndex();
+    if (current.parent() == QModelIndex()) {
+        takeTopLevelItem(current.row());
+    }
+
 }

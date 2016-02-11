@@ -74,6 +74,11 @@ void BibleVerse::setBookName(const QString &value)
     bookName = value;
 }
 
+QString BibleVerse::getVerseHeader()
+{
+    return QString("%1 %2:%3").arg(bookName, QString::number(chapter), QString::number(verse));
+}
+
 
 
 

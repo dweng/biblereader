@@ -19,6 +19,14 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
         settings->setValue("/base/lastBook", "1");
         settings->setValue("/base/lastChapter", "1");
         settings->setValue("/base/lastVerse", "1");
+
+        // bible text browser
+        settings->setValue("/text/selectedVerseBG", "#7dde96");
+        settings->setValue("/text/projectDlgBG", "#000000");
+        settings->setValue("/text/projectDlgFG", "#ffffff");
+
+        // app
+        settings->setValue("/app/autoupdate", true);
     }
     if (!settings)
         settings = new QSettings(settingsFile, QSettings::IniFormat);
@@ -37,6 +45,12 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
         lastChapter = 1;
         lastVerse = 1;
     }
+
+    // bible text
+    selectedVerseBG = QColor(settings->value("/text/selectedVerseBG").toString());
+    projectDlgBG = QColor(settings->value("/text/projectDlgBG").toString());
+    projectDlgFG = QColor(settings->value("/text/projectDlgFG").toString());
+    isAutoUpdate = settings->value("/app/autoupdate").toBool();
 }
 
 BibleReaderConfigurator::~BibleReaderConfigurator()
@@ -51,6 +65,15 @@ BibleReaderConfigurator::~BibleReaderConfigurator()
         settings->setValue("/base/lastBook", QString::number(lastBook));
         settings->setValue("/base/lastChapter", QString::number(lastChapter));
         settings->setValue("/base/lastVerse", QString::number(lastVerse));
+
+        // bible text settings
+        settings->setValue("/text/selectedVerseBG", selectedVerseBG.name());
+        settings->setValue("/text/projectDlgBG", projectDlgBG.name());
+        settings->setValue("/text/projectDlgFG", projectDlgFG.name());
+
+        // app setting
+        settings->setValue("/app/autoupdate", isAutoUpdate);
+
         delete settings;
     }
 }
@@ -139,6 +162,57 @@ void BibleReaderConfigurator::setBcPathBase(const QString &value)
 {
     bcPathBase = value;
 }
+
+QColor BibleReaderConfigurator::getSelectedVerseBG() const
+{
+    return selectedVerseBG;
+}
+
+void BibleReaderConfigurator::setSelectedVerseBG(const QColor &value)
+{
+    if (selectedVerseBG != value) {
+        selectedVerseBG = value;
+        emit selectedVerseBGChanged(value);
+    }
+}
+
+QColor BibleReaderConfigurator::getProjectDlgBG() const
+{
+    return projectDlgBG;
+}
+
+void BibleReaderConfigurator::setProjectDlgBG(const QColor &value)
+{
+    if (projectDlgBG != value) {
+        projectDlgBG = value;
+        emit projectDlgBGChanged(value);
+    }
+
+}
+
+QColor BibleReaderConfigurator::getProjectDlgFG() const
+{
+    return projectDlgFG;
+}
+
+void BibleReaderConfigurator::setProjectDlgFG(const QColor &value)
+{
+    if (projectDlgFG != value) {
+        projectDlgFG = value;
+        emit projectDlgFGChanged(value);
+    }
+}
+
+bool BibleReaderConfigurator::getIsAutoUpdate() const
+{
+    return isAutoUpdate;
+}
+
+void BibleReaderConfigurator::setIsAutoUpdate(bool value)
+{
+    isAutoUpdate = value;
+}
+
 
 
 

@@ -15,13 +15,13 @@
 #ifndef BIBLETEXTBROWSER_H
 #define BIBLETEXTBROWSER_H
 
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QMouseEvent>
 #include <QColor>
 #include <QTextCursor>
 #include "biblereadercore.h"
 
-class BibleTextBrowser : public QTextEdit
+class BibleTextBrowser : public QTextBrowser
 {
     Q_OBJECT
 public:
@@ -38,8 +38,10 @@ protected:
     bool event(QEvent *event);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
-
+    void wheelEvent(QWheelEvent *e);
     void contextMenuEvent(QContextMenuEvent *e);
+    void keyPressEvent(QKeyEvent *e);
+
 private:/* vars */
     int preVerseId;
 
@@ -61,11 +63,16 @@ private:/* functions */
 
     void addVerse(QTextCursor *cursor, QString verseText);
     QTextBlock getTextBlockByVerse(int verse);
+    QString convertSNForDict(QString oldSN);
 
 private slots:
     bool copyCurVerse();
     void projectVerse();
     void copyVerseTo();
+    void changeSelectedVerseBGColor(QColor nc);
+
+    // show strong number dict in dict win
+    void showStrongNumberDict(QUrl url);
 };
 
 #endif // BIBLETEXTBROWSER_H

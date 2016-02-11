@@ -32,12 +32,18 @@ class BibleCommentaryWidget : public QWidget
 public:
     explicit BibleCommentaryWidget(BibleReaderCore *brc, QString cn, QWidget *parent = 0);
     ~BibleCommentaryWidget();
+    QString getCmtFullName() const;
+    void setCmtFullName(const QString &value);
+
+    QString getCmtTitle() const;
+    void setCmtTitle(const QString &value);
+
 signals:
 
 public slots:
 
 private slots:
-    QString changeChapterCmt(int book, int chapter);
+    QString changeChapterCmt(int book, int chapter, int verse);
     QString changeChapterCmt(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 private:
     /**
@@ -69,6 +75,16 @@ private:
      * @brief commentary name
      */
     QString cmtName;
+
+    /**
+     * @brief cmtFullName
+     */
+    QString cmtFullName;
+
+    /**
+     * @brief cmtTitle
+     */
+    QString cmtTitle;
 private:
     void createWidgets();
     void destroyWidgets();

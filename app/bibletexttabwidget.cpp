@@ -32,7 +32,7 @@ BibleTextTabWidget::BibleTextTabWidget(BibleReaderCore *brc, QWidget *parent) :
 
     for (int i = 0; i < bibles.count(); i++) {
         BibleTextBrowser *btBrowser = new BibleTextBrowser(brCore, this);
-        connect(brCore, SIGNAL(currentChapterChanged(int,int)), btBrowser,
+        connect(brCore, SIGNAL(currentVerseChanged(int,int,int)), btBrowser,
                 SLOT(showCurrentChapter()));
         connect(brCore, SIGNAL(compareCurrentVerse()), this, SLOT(showCmpTxtTab()));
 

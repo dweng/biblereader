@@ -48,12 +48,14 @@ public:
     void setDictName(const QString &value);
 
 signals:
-    
-public slots:
 
 private slots:
     void showExplaination(QListWidgetItem *, QListWidgetItem *);
     void showExplaination(int index);
+
+public slots:
+    void showExplaination(QString itemName);
+
 private:
     /**
      * @brief Create widgets in this widgets.

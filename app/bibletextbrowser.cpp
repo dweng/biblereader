@@ -15,13 +15,15 @@
 #include "ConsoleAppender.h"
 
 BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
-    QTextEdit(parent)
+    QTextBrowser(parent)
 {
     brCore = brc;
+    connect(brCore->getConfigurator(), SIGNAL(selectedVerseBGChanged(QColor)),
+            this, SLOT(changeSelectedVerseBGColor(QColor)));
 
     preVerseId = 1;
 
-    bgColor = QColor(0xe5, 0xe5, 0xe5);
+    bgColor = brCore->getConfigurator()->getSelectedVerseBG();
     fgColor = QColor("blue");
 
     cursor = NULL;
@@ -33,7 +35,11 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
 
     // word wrap
     setLineWrapMode(QTextEdit::WidgetWidth);
-    setToolTipDuration(60000);
+
+    // disable open link
+    setOpenLinks(false);
+
+    connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(showStrongNumberDict(QUrl)));
 }
 
 BibleTextBrowser::~BibleTextBrowser()
@@ -58,7 +64,7 @@ bool BibleTextBrowser::event(QEvent *event)
         return true;
     }*/
 
-    return QTextEdit::event(event);
+    return QTextBrowser::event(event);
 }
 
 void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
@@ -67,24 +73,18 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
     cursor.select(QTextCursor::WordUnderCursor);
     if (!cursor.selectedText().isEmpty()) {
         QString text = cursor.selectedText();
-        if (text.startsWith(QString("W"))) {
-            QString sn = "";
-            int index = -1;
-            if ((index = text.indexOf(QString("H"))) != -1) {
-                sn = "H"+ text.mid(index+1).rightJustified(5, QChar('0'));
-            } else if ((index = text.indexOf(QString("G"))) != -1) {
-                sn = "G"+ text.mid(index+1).rightJustified(5, QChar('0'));;
-            }
+        if (text.startsWith("H") || text.startsWith("G")) {
+            //QString sn = convertSNForDict(text);
             QToolTip::showText(e->globalPos(),
                                brCore->getExplaination(
-                                   QString("SNCHS"), sn).replace("\\r\\n", "\r\n"));
+                                   QString("SNCHS"), text).replace("\\r\\n", "\r\n"));
         }
 
     } else {
         QToolTip::hideText();
     }
 
-    QTextEdit::mouseMoveEvent(e);
+    QTextBrowser::mouseMoveEvent(e);
 }
 
 void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
@@ -92,23 +92,31 @@ void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
     QTextCursor cursor = cursorForPosition(e->pos());
     QTextBlock block = cursor.block();
     BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
-    if (d) {
-        if (d->getVerse() != preVerseId     ) {
+    if (d && d->getVerse() != 0) {
+        if (d->getVerse() != preVerseId ) {
             // de hilight previous verse
             highlight(preVerseId, QColor("white"));
             // high light current verse
             highlight(d->getVerse(), bgColor);
             preVerseId = d->getVerse();
 
-            brCore->setCurrentBookNumber(d->getBook());
-            brCore->setCurrentChapterNumber(d->getChapter());
-            brCore->setCurrentVerseNumber(d->getVerse());
+            brCore->setCurrentBCV(d->getBook(),
+                                  d->getChapter(),
+                                  d->getVerse());
 
             //block.layout()->lineAt(0).setLineWidth(this->width());
         }
     }
 
-    QTextEdit::mousePressEvent(e);
+    QTextBrowser::mousePressEvent(e);
+}
+
+void BibleTextBrowser::wheelEvent(QWheelEvent *e)
+{
+    int numDegrees = e->delta() / 8;
+    int numSteps = numDegrees / 15;
+
+    QTextBrowser::wheelEvent(e);
 }
 
 void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
@@ -117,7 +125,7 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
     QTextCursor cursor = cursorForPosition(e->pos());
     QTextBlock block = cursor.block();
     BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
-    if (d) {
+    if (d && d->getVerse() != 0) {
         if (d->getVerse() != preVerseId) {
             // de hilight previous verse
             highlight(preVerseId, QColor("white"));
@@ -149,6 +157,46 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
     }
     menu->exec(e->globalPos());
     delete menu;
+}
+
+void BibleTextBrowser::keyPressEvent(QKeyEvent *e)
+{
+    BibleChapter chapter = brCore->getChapter(
+                brCore->getCurrentBookNumber(),
+                brCore->getCurrentChapterNumber());
+    switch (e->key()) {
+    case Qt::Key_Up:
+        if (preVerseId > 1) {
+            // de hilight previous verse
+            highlight(preVerseId, QColor("white"));
+            // high light current verse
+            highlight(preVerseId-1, bgColor);
+            preVerseId--;
+
+            brCore->setCurrentBCV(brCore->getCurrentBookNumber(),
+                                  brCore->getCurrentChapterNumber(),
+                                  preVerseId);
+        }
+        break;
+
+    case Qt::Key_Down:
+        if (preVerseId < chapter.getVersesCount()) {
+            // de hilight previous verse
+            highlight(preVerseId, QColor("white"));
+            // high light current verse
+            highlight(preVerseId+1, bgColor);
+            preVerseId++;
+
+            brCore->setCurrentBCV(brCore->getCurrentBookNumber(),
+                                  brCore->getCurrentChapterNumber(),
+                                  preVerseId);
+        }
+        break;
+    default:
+        break;
+    }
+
+    //QTextEdit::keyPressEvent(e);
 }
 
 
@@ -257,14 +305,29 @@ void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText)
     supFmt.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     supFmt.setFontPointSize(14.0);
 
-    verseText.replace("<", "&lt;");
-    verseText.replace(">", "&gt;");
+    // convert strong number for dict usage
+    QStringList SNs = verseText.split(QRegExp("[<>]"), QString::SkipEmptyParts);
+    if (!SNs.isEmpty()) {
+        for (int i = 0; i < SNs.size(); i++) {
+            if (SNs[i].startsWith("W")) {
+                // example:
+                // <WH00003> -> <a href="br://dict/snchs/H00003"><H00003></a>
+                QString newSN("<a href='br://dict/snchs/%1'><sup>&lt;%2&gt;</sup></a>");
+                QString sn = convertSNForDict(SNs[i]);
+                newSN = newSN.arg(sn, sn);
 
-    verseText.replace("&lt;", "<sup style='color:blue; font-size: 20px; font-family: Courier New, Arial;'>&lt;");
-    verseText.replace("&gt;", "&gt;</sup>");
-
-    verseText.prepend("<span style='font-size: 12pt; font-family: Microsoft YaHei'>");
-    verseText.append("</span>");
+                verseText.replace("<"+SNs[i]+">", newSN);
+            }
+        }
+        /*
+        verseText.replace("<", "&lt;");
+        verseText.replace(">", "&gt;");
+        verseText.replace("&lt;", "<a href='br://dict/snchs'><sup>&lt;");
+        verseText.replace("&gt;", "&gt;</sup></a>");
+        */
+        verseText.prepend("<p style='font-size: 12pt; font-family: Microsoft YaHei'>");
+        verseText.append("</p>");
+    }
 
     cursor->insertHtml(verseText);
 }
@@ -280,6 +343,19 @@ QTextBlock BibleTextBrowser::getTextBlockByVerse(int verse)
     }
 
     return QTextBlock();
+}
+
+QString BibleTextBrowser::convertSNForDict(QString oldSN)
+{
+    QString sn = "";
+    int index = -1;
+    if ((index = oldSN.indexOf(QString("H"))) != -1) {
+        sn = "H"+ oldSN.mid(index+1).rightJustified(5, QChar('0'));
+    } else if ((index = oldSN.indexOf(QString("G"))) != -1) {
+        sn = "G"+ oldSN.mid(index+1).rightJustified(5, QChar('0'));;
+    }
+
+    return sn;
 }
 
 bool BibleTextBrowser::copyCurVerse()
@@ -303,7 +379,10 @@ void BibleTextBrowser::projectVerse()
                 brCore->getCurrentChapterNumber(),
                 brCore->getCurrentVerseNumber());
 
-    BibleReaderProjectDialog *pDlg = new BibleReaderProjectDialog(this, verse.text());
+    BibleReaderProjectDialog *pDlg = new BibleReaderProjectDialog(brCore, verse.text(), this);
+    pDlg->setBgColor(QColor(brCore->getConfigurator()->getProjectDlgBG()));
+    pDlg->setFgColor(QColor(brCore->getConfigurator()->getProjectDlgFG()));
+    pDlg->showVerseText();
     pDlg->showFullScreen();
 }
 
@@ -319,5 +398,26 @@ void BibleTextBrowser::copyVerseTo()
 
     QClipboard *cb = QApplication::clipboard();
     cb->setText(bt, QClipboard::Clipboard);
+}
+
+void BibleTextBrowser::changeSelectedVerseBGColor(QColor nc)
+{
+    bgColor = nc;
+    highlight(preVerseId, bgColor);
+}
+
+void BibleTextBrowser::showStrongNumberDict(QUrl url)
+{
+    LOG_INFO() << "Strong Number Clicked:";
+    // br://dict/[dict name]/[item name]
+    QString dictPath = url.path();
+    LOG_INFO() << dictPath;
+
+    if (url.scheme() == "br") {
+        QStringList dictItemInfo = dictPath.split('/', QString::SkipEmptyParts);
+        LOG_INFO() << dictItemInfo;
+        brCore->fireShowDictItem(dictItemInfo[0].toUpper(), dictItemInfo[1]);
+    }
+
 }
 

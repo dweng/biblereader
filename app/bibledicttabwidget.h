@@ -38,6 +38,7 @@ private:
 
 private slots:
     void updateCurrentDict(int index);
+    void showDictItem(QString dictName, QString itemName);
 };
 
 #endif // BIBLEDICTTABWIDGET_H
