@@ -53,8 +53,10 @@ signals:
 
 public slots:
     void onBibleVersionChanged(QString version);
+
 private slots:
     bool navToChapter(QTreeWidgetItem *current, int column);
+    void searchText(QString q);
 
 private:
     // UI related members

@@ -63,118 +63,8 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     this->setWindowTitle(tr("Bible Reader"));
     this->showMaximized();
 
-    // set toolbar
-    toolBar = new QToolBar(tr("Bible Navigator"), this);
-    toolBar->show();
-
-    navToPrevChapterAction = new QAction(QIcon(QString(":/img/assets/images/arrow_left.png")), tr("previous chapter"),this);
-    navToPrevChapterAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
-    toolBar->addAction(navToPrevChapterAction);
-    connect(navToPrevChapterAction, SIGNAL(triggered()), this, SLOT(navToPrevChapter()));
-
-    navToNextChapterAction = new QAction(QIcon(QString(":/img/assets/images/arrow_right.png")),tr("next chapter"),this);
-    navToNextChapterAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
-    toolBar->addAction(navToNextChapterAction);
-    connect(navToNextChapterAction, SIGNAL(triggered()), this, SLOT(navToNextChapter()));
-    this->addToolBar(toolBar);
-
-    // set bible text tab widget
-    btTabWidget = new BibleTextTabWidget(bibleReaderCore, this);
-    this->setCentralWidget(btTabWidget);
-
-    // set search dockable widget
-    bibleSearchDockWidget = new QDockWidget(tr("Bible Search"),this);
-    bibleSearchDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    bibleSearchDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
-    addDockWidget(Qt::LeftDockWidgetArea, bibleSearchDockWidget);
-    bibleSearchWidget = new BibleSearchWidget(bibleReaderCore, this);
-    connect(bibleSearchWidget, SIGNAL(goToVerse(QString,int,int,int)), btTabWidget,
-            SLOT(goToVerse(QString,int,int,int)));
-    connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)), bibleSearchWidget,
-            SLOT(onBibleVersionChanged(QString)));
-    bibleSearchDockWidget->setWidget(bibleSearchWidget);
-
-    // Set dockable widgets
-    // bible tree dock widget
-    bibleTreeDockWidget = new QDockWidget(tr("Bible Tree"),this);
-    bibleTreeDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    bibleTreeDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
-    addDockWidget(Qt::RightDockWidgetArea, bibleTreeDockWidget);
-
-    // commentary dock widget
-    commentaryDockWidget = new QDockWidget(tr("Commentary"), this);
-    commentaryDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    commentaryDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    addDockWidget(Qt::BottomDockWidgetArea, commentaryDockWidget);
-    bcTabWidget = new BibleCommentaryTabWidget(bibleReaderCore, this);
-    commentaryDockWidget->setWidget(bcTabWidget);
-
-    // bible tree
-    bibleTreeWidget = new BibleTreeWidget(bibleReaderCore, this);
-    bibleTreeDockWidget->setWidget(bibleTreeWidget);
-    connect(bibleTreeWidget,
-            SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-                   this, SLOT(onChapterVerseChanged(QTreeWidgetItem*,QTreeWidgetItem*)));
-    connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)), bibleTreeWidget,
-            SLOT(onBibleVersionChanged(QString)));
-    // build menus
-    mainMenuBar = new QMenuBar(this);
-    fileMenu = new QMenu(tr("File(&F)"), mainMenuBar);
-    editMenu = new QMenu(tr("Edit(&E)"), mainMenuBar);
-    toolMenu = new QMenu(tr("Tools(&T)"), mainMenuBar);
-    helpMenu = new QMenu(tr("Help(&H)"), mainMenuBar);
-
-    // add actions to File menu
-    mainMenuBar->addMenu(fileMenu);
-    exitAppAction = fileMenu->addAction(tr("Exit"));
-    connect(exitAppAction, SIGNAL(triggered()), this, SLOT(quitBibleReader()));
-    projectVersesAction = fileMenu->addAction(tr("Project Verses"));
-    connect(projectVersesAction, SIGNAL(triggered()), this, SLOT(projectVerses()));
-
-    // add actions to Edit menu
-    mainMenuBar->addMenu(editMenu);
-    copyAction = editMenu->addAction(tr("Copy current verse"));
-    connect(copyAction, SIGNAL(triggered()), this, SLOT(copyCurrentVerse()));
-
-    // add actions to Tool menu
-    mainMenuBar->addMenu(toolMenu);
-    configAction = toolMenu->addAction(tr("Configure"));
-    connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showCfgDlg()));
-    resourceManagerAction = toolMenu->addAction(tr("Resources manager"));
-
-    // add actions to Help menu
-    mainMenuBar->addMenu(helpMenu);
-    aboutMeAction = helpMenu->addAction(tr("About [Bible Reader]..."));
-    connect(aboutMeAction, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
-
-    checkUpdate = helpMenu->addAction(tr("Check Update..."));
-    connect(checkUpdate, SIGNAL(triggered(bool)), this, SLOT(checkNewVersion()));
-    showHelpContent = helpMenu->addAction(tr("Show Help Content..."));
-    connect(showHelpContent, SIGNAL(triggered(bool)), this, SLOT(openHelpPage()));
-    donateBibleReader = helpMenu->addAction(tr("Donate [Bible Reader]..."));
-    connect(donateBibleReader, SIGNAL(triggered()), this, SLOT(showDonationDlg()));
-
-    // set main menu
-    this->setMenuBar(mainMenuBar);
-
-    // add status bar
-    statusBar = new QStatusBar();
-    this->setStatusBar(statusBar);
-    showCurrentVerseInfo();
-    connect(bibleReaderCore, SIGNAL(currentVerseChanged(int,int,int)),
-            this, SLOT(showCurrentVerseInfo()));
-    connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)),
-            this, SLOT(showCurrentVerseInfo()));
-
-    // add dict dockable widget
-    dictDockWidget = new QDockWidget(tr("Dictionary Window"),this);
-    dictDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    dictDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    bdTabWidget = new BibleDictTabWidget(bibleReaderCore, this);
-    dictDockWidget->setWidget(bdTabWidget);
-    addDockWidget(Qt::BottomDockWidgetArea, dictDockWidget);
-    setCorner(Qt::BottomRightCorner, Qt::BottomDockWidgetArea);
-    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
+    // create all widgets and do layout
+    createWidgets();
 
     // auto update
     if (bibleReaderCore->getConfigurator()->getIsAutoUpdate()) {
@@ -336,6 +226,14 @@ void BibleReaderMainWindow::showDonationDlg()
     dlg.exec();
 }
 
+void BibleReaderMainWindow::showResMgrDlg()
+{
+    BibleReaderResourceManagerDlg dlg(bibleReaderCore, this);
+
+    dlg.show();
+    dlg.exec();
+}
+
 void BibleReaderMainWindow::copyCurrentVerse()
 {
     QClipboard *cb = QApplication::clipboard();
@@ -357,6 +255,224 @@ void BibleReaderMainWindow::showCurrentVerseInfo()
     statusBar->showMessage(info.getFullname().append(" ").append(verse.getVerseHeader()));
 }
 
+void BibleReaderMainWindow::createWidgets()
+{
+    // create global toolbar
+    createGlobalToolbar();
+
+    // set bible text tab widget
+    createCentralWidget();
+
+    // set search dockable widget
+    createBSDockWidget();
+
+    // Set dockable widgets
+    // bible tree dock widget
+    createBibleTreeDockWidget();
+
+    // commentary dock widget
+    createBCDockWidget();
+
+    // add dict dockable widget
+    createDictDockWidget();
+
+    // create menus
+    createTopMenus();
+
+    // status bar
+    createStatusBar();
+}
+
+void BibleReaderMainWindow::createGlobalToolbar()
+{
+    // set global toolbar
+    toolBar = new QToolBar(tr("Bible Navigator"), this);
+    configAction = toolBar->addAction(QIcon(QString(":/img/assets/images/wrench.png")),tr("Configure"));
+    connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showCfgDlg()));
+    resourceManagerAction = toolBar->addAction(QIcon(QString(":/img/assets/images/package.png")),tr("Resources manager"));
+    connect(resourceManagerAction, SIGNAL(triggered(bool)), this, SLOT(showResMgrDlg()));
+    toolBar->show();
+
+    this->addToolBar(toolBar);
+}
+
+void BibleReaderMainWindow::createCentralWidget()
+{
+    QWidget *central = new QWidget(this);
+    QVBoxLayout *centralLayout = new QVBoxLayout(central);
+    QToolBar *txtBrowserToolBar = new QToolBar(central);
+    txtBrowserToolBar->setOrientation(Qt::Horizontal);
+    navToPrevChapterAction = new QAction(QIcon(QString(":/img/assets/images/book_previous.png")), tr("previous chapter"),this);
+    navToPrevChapterAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
+    txtBrowserToolBar->addAction(navToPrevChapterAction);
+    connect(navToPrevChapterAction, SIGNAL(triggered()), this, SLOT(navToPrevChapter()));
+
+    navToNextChapterAction = new QAction(QIcon(QString(":/img/assets/images/book_next.png")),tr("next chapter"),this);
+    navToNextChapterAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
+    txtBrowserToolBar->addAction(navToNextChapterAction);
+    connect(navToNextChapterAction, SIGNAL(triggered()), this, SLOT(navToNextChapter()));
+
+    navToHistoryBack = new QAction(QIcon(QString(":/img/assets/images/arrow_left.png")), tr("Back"), this);
+    navToHistoryBack->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Up));
+    txtBrowserToolBar->addAction(navToHistoryBack);
+    connect(navToHistoryBack, SIGNAL(triggered(bool)), this, SLOT(navToBackHistory()));
+
+    navToHistoryForword = new QAction(QIcon(QString(":/img/assets/images/arrow_right.png")), tr("Forword"), this);
+    navToHistoryForword->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Down));
+    txtBrowserToolBar->addAction(navToHistoryForword);
+    connect(navToHistoryForword, SIGNAL(triggered(bool)), this, SLOT(navToForwordHistory()));
+
+    btZoomInAction = new QAction(QIcon(QString(":/img/assets/images/zoom_in.png")), tr("Zoom in"), this);
+    btZoomInAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
+    txtBrowserToolBar->addAction(btZoomInAction);
+    connect(btZoomInAction, SIGNAL(triggered(bool)), this, SLOT(btZoomIn()));
+
+    btZoomOutAction = new QAction(QIcon(QString(":/img/assets/images/zoom_out.png")), tr("Zoom out"), this);
+    btZoomOutAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus));
+    txtBrowserToolBar->addAction(btZoomOutAction);
+    connect(btZoomOutAction, SIGNAL(triggered(bool)), this, SLOT(btZoomOut()));
+
+    txtBrowserToolBar->addSeparator();
+
+    copyCurVerseAction = new QAction(QIcon(QString(":/img/assets/images/page_copy.png")), tr("Copy current verse"), this);
+    copyCurVerseAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
+    txtBrowserToolBar->addAction(copyCurVerseAction);
+    connect(copyCurVerseAction, SIGNAL(triggered(bool)), this, SLOT(copyCurrentVerse()));
+
+    txtBrowserToolBar->addSeparator();
+    goVerseAction = new QAction(QIcon(QString(":/img/assets/images/page_go.png")), tr("Jump directly"), this);
+    goVerseAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
+    txtBrowserToolBar->addAction(goVerseAction);
+
+    /*
+    QLineEdit *verseJumper = new QLineEdit(this);
+    verseJumper->setMaximumWidth(40);
+    txtBrowserToolBar->addWidget(verseJumper);
+    */
+
+    btTabWidget = new BibleTextTabWidget(bibleReaderCore, this);
+    centralLayout->setContentsMargins(0, 0, 0, 0);
+    centralLayout->setMargin(0);
+    centralLayout->setSpacing(0);
+    centralLayout->addWidget(txtBrowserToolBar);
+    centralLayout->addWidget(btTabWidget);
+
+    central->setLayout(centralLayout);
+    this->setCentralWidget(central);
+}
+
+void BibleReaderMainWindow::createBibleTreeDockWidget()
+{
+    bibleTreeDockWidget = new QDockWidget(tr("Bible Tree"),this);
+    bibleTreeDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    bibleTreeDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    addDockWidget(Qt::RightDockWidgetArea, bibleTreeDockWidget);
+    // bible tree
+    bibleTreeWidget = new BibleTreeWidget(bibleReaderCore, this);
+    bibleTreeDockWidget->setWidget(bibleTreeWidget);
+    connect(bibleTreeWidget,
+            SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+                   this, SLOT(onChapterVerseChanged(QTreeWidgetItem*,QTreeWidgetItem*)));
+    connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)), bibleTreeWidget,
+            SLOT(onBibleVersionChanged(QString)));
+
+
+}
+
+void BibleReaderMainWindow::createBSDockWidget()
+{
+    bibleSearchDockWidget = new QDockWidget(tr("Bible Search"),this);
+    bibleSearchDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    bibleSearchDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    addDockWidget(Qt::LeftDockWidgetArea, bibleSearchDockWidget);
+    bibleSearchWidget = new BibleSearchWidget(bibleReaderCore, this);
+    connect(bibleSearchWidget, SIGNAL(goToVerse(QString,int,int,int)), btTabWidget,
+            SLOT(goToVerse(QString,int,int,int)));
+    connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)), bibleSearchWidget,
+            SLOT(onBibleVersionChanged(QString)));
+    bibleSearchDockWidget->setWidget(bibleSearchWidget);
+}
+
+void BibleReaderMainWindow::createBCDockWidget()
+{
+    commentaryDockWidget = new QDockWidget(tr("Commentary"), this);
+    commentaryDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    commentaryDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+    addDockWidget(Qt::BottomDockWidgetArea, commentaryDockWidget);
+    bcTabWidget = new BibleCommentaryTabWidget(bibleReaderCore, this);
+    commentaryDockWidget->setWidget(bcTabWidget);
+}
+
+void BibleReaderMainWindow::createDictDockWidget()
+{
+    dictDockWidget = new QDockWidget(tr("Dictionary Window"),this);
+    dictDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    dictDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+    bdTabWidget = new BibleDictTabWidget(bibleReaderCore, this);
+    dictDockWidget->setWidget(bdTabWidget);
+    addDockWidget(Qt::BottomDockWidgetArea, dictDockWidget);
+    setCorner(Qt::BottomRightCorner, Qt::BottomDockWidgetArea);
+    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
+}
+
+void BibleReaderMainWindow::createTopMenus()
+{
+    mainMenuBar = new QMenuBar(this);
+    fileMenu = new QMenu(tr("File(&F)"), mainMenuBar);
+    editMenu = new QMenu(tr("Edit(&E)"), mainMenuBar);
+    viewMenu = new QMenu(tr("View(&V)"), mainMenuBar);
+    toolMenu = new QMenu(tr("Tools(&T)"), mainMenuBar);
+    helpMenu = new QMenu(tr("Help(&H)"), mainMenuBar);
+
+    // add actions to File menu
+    mainMenuBar->addMenu(fileMenu);
+    projectVersesAction = fileMenu->addAction(QIcon(QString(":/img/assets/images/television.png")),tr("Project Verses"));
+    connect(projectVersesAction, SIGNAL(triggered()), this, SLOT(projectVerses()));
+    exitAppAction = fileMenu->addAction(QIcon(QString(":/img/assets/images/cancel.png")), tr("Exit"));
+    exitAppAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_X));
+    connect(exitAppAction, SIGNAL(triggered()), this, SLOT(quitBibleReader()));
+
+    // add actions to Edit menu
+    mainMenuBar->addMenu(editMenu);
+    editMenu->addAction(copyCurVerseAction);
+
+    // add action to view menu
+    mainMenuBar->addMenu(viewMenu);
+    viewMenu->addAction(btZoomInAction);
+    viewMenu->addAction(btZoomOutAction);
+
+    // add actions to Tool menu
+    mainMenuBar->addMenu(toolMenu);
+    toolMenu->addAction(configAction);
+    toolMenu->addAction(resourceManagerAction);
+
+    // add actions to Help menu
+    mainMenuBar->addMenu(helpMenu);
+    aboutMeAction = helpMenu->addAction(QIcon(QString(":/img/assets/images/32X32.ico")), tr("About [Bible Reader]..."));
+    connect(aboutMeAction, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
+
+    checkUpdate = helpMenu->addAction(QIcon(QString(":/img/assets/images/arrow_refresh.png")),tr("Check Update..."));
+    connect(checkUpdate, SIGNAL(triggered(bool)), this, SLOT(checkNewVersion()));
+    showHelpContent = helpMenu->addAction(QIcon(QString(":/img/assets/images/help.png")),tr("Show Help Content..."));
+    connect(showHelpContent, SIGNAL(triggered(bool)), this, SLOT(openHelpPage()));
+    donateBibleReader = helpMenu->addAction(QIcon(QString(":/img/assets/images/emoticon_smile.png")),tr("Donate [Bible Reader]..."));
+    connect(donateBibleReader, SIGNAL(triggered()), this, SLOT(showDonationDlg()));
+
+    // set main menu
+    this->setMenuBar(mainMenuBar);
+}
+
+void BibleReaderMainWindow::createStatusBar()
+{
+    statusBar = new QStatusBar();
+    this->setStatusBar(statusBar);
+    showCurrentVerseInfo();
+    connect(bibleReaderCore, SIGNAL(currentVerseChanged(int,int,int)),
+            this, SLOT(showCurrentVerseInfo()));
+    connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)),
+            this, SLOT(showCurrentVerseInfo()));
+}
+
 void BibleReaderMainWindow::navToNextChapter()
 {
     bibleReaderCore->navNextChapter();
@@ -365,4 +481,28 @@ void BibleReaderMainWindow::navToNextChapter()
 void BibleReaderMainWindow::navToPrevChapter()
 {
     bibleReaderCore->navPrevChapter();
+}
+
+void BibleReaderMainWindow::navToBackHistory()
+{
+    bibleReaderCore->navBackHistory();
+}
+
+void BibleReaderMainWindow::navToForwordHistory()
+{
+    bibleReaderCore->navForwordHistory();
+}
+
+void BibleReaderMainWindow::btZoomIn()
+{
+    double size = bibleReaderCore->getConfigurator()->getBibleTextFontSize();
+    if (size <= 46)
+        bibleReaderCore->getConfigurator()->setBibleTextFontSize(size + 2.0);
+}
+
+void BibleReaderMainWindow::btZoomOut()
+{
+    double size = bibleReaderCore->getConfigurator()->getBibleTextFontSize();
+    if (size >= 8)
+        bibleReaderCore->getConfigurator()->setBibleTextFontSize(size - 2.0);
 }

@@ -8,6 +8,8 @@ QT_BEGIN_NAMESPACE
 
 class QColor;
 class QPushButton;
+class QFontComboBox;
+class QComboBox;
 
 QT_END_NAMESPACE
 
@@ -34,6 +36,8 @@ private slots:
     void prjBGBtnClicked();
     void prjFGBtnClicked();
     void autoCheckBoxClicked(bool checked);
+    void btFontFamilyChanged(QFont f);
+    void btFontSizeChanged(QString size);
 
 private:
     QColor selectedVerseBG;
@@ -45,6 +49,9 @@ private:
     QPushButton *selectedVerseBGBtn;
     QPushButton *projectDlgBGBtn;
     QPushButton *projectDlgFGBtn;
+
+    QFontComboBox *fontCB;
+    QComboBox *fontSizeCB;
 
     BibleReaderConfigurator *configurator;
 };

@@ -4,6 +4,11 @@
 #include <QCheckBox>
 #include <QFormLayout>
 #include <QColorDialog>
+#include <QFontComboBox>
+#include <QComboBox>
+#include <QFontDatabase>
+#include <QList>
+#include <QStringList>
 
 #include "biblereaderconfiggeneralpage.h"
 
@@ -13,7 +18,7 @@ BibleReaderConfigGeneralPage::BibleReaderConfigGeneralPage(
     configurator = cfg;
 
     colorQSS = QString("background-color: %1");
-    QGroupBox *colorGroup = new QGroupBox(tr("Color"));
+    QGroupBox *colorGroup = new QGroupBox(tr("Font and Color"));
 
     QFormLayout *colorLayout = new QFormLayout(this);
     selectedVerseBGBtn = new QPushButton(tr(""));
@@ -26,14 +31,30 @@ BibleReaderConfigGeneralPage::BibleReaderConfigGeneralPage(
     projectDlgFGBtn->setStyleSheet(colorQSS.arg(configurator->getProjectDlgFG().name()));
     projectDlgFGBtn->setFixedSize(50,25);
 
-    connect(selectedVerseBGBtn, SIGNAL(clicked(bool)), this, SLOT(SVBGBtnClicked()));
-    connect(projectDlgBGBtn, SIGNAL(clicked(bool)), this, SLOT(prjBGBtnClicked()));
-    connect(projectDlgFGBtn, SIGNAL(clicked(bool)), this, SLOT(prjFGBtnClicked()));
+    // font
+    fontCB = new QFontComboBox(this);
+    fontCB->setCurrentFont(QFont(cfg->getBibleTextFontFamily()));
+
+    fontSizeCB = new QComboBox(this);
+    QStringList fontSizesStringList;
+    QList<int> fontSizes = QFontDatabase::standardSizes();
+    for (int i = 0; i < fontSizes.size(); i++) {
+        fontSizesStringList << QString::number(fontSizes[i]);
+    }
+    fontSizeCB->addItems(fontSizesStringList);
+    fontSizeCB->setCurrentText(QString::number((int)cfg->getBibleTextFontSize()));
 
     colorLayout->addRow(tr("Selected verse background"), selectedVerseBGBtn);
     colorLayout->addRow(tr("Project background"), projectDlgBGBtn);
     colorLayout->addRow(tr("Project foreground"), projectDlgFGBtn);
+    colorLayout->addRow(tr("Bible Text Font"), fontCB);
+    colorLayout->addRow(tr("Bible Text Font size"), fontSizeCB);
     colorGroup->setLayout(colorLayout);
+    connect(selectedVerseBGBtn, SIGNAL(clicked(bool)), this, SLOT(SVBGBtnClicked()));
+    connect(projectDlgBGBtn, SIGNAL(clicked(bool)), this, SLOT(prjBGBtnClicked()));
+    connect(projectDlgFGBtn, SIGNAL(clicked(bool)), this, SLOT(prjFGBtnClicked()));
+    connect(fontCB, SIGNAL(currentFontChanged(QFont)), this, SLOT(btFontFamilyChanged(QFont)));
+    connect(fontSizeCB, SIGNAL(currentIndexChanged(QString)), this, SLOT(btFontSizeChanged(QString)));
 
     QGroupBox *updateGroup = new QGroupBox(tr("Update"));
     QCheckBox *autoUpdateCheckBox = new QCheckBox(tr("Auto update"));
@@ -134,5 +155,15 @@ void BibleReaderConfigGeneralPage::autoCheckBoxClicked(bool checked)
     } else {
         configurator->setIsAutoUpdate(false);
     }
+}
+
+void BibleReaderConfigGeneralPage::btFontFamilyChanged(QFont f)
+{
+    configurator->setBibleTextFontFamily(f.family());
+}
+
+void BibleReaderConfigGeneralPage::btFontSizeChanged(QString size)
+{
+    configurator->setBibleTextFontSize(size.toDouble());
 }
 

@@ -50,7 +50,9 @@ private:/* vars */
     /* bible highlight text format */
     QColor bgColor;
     QColor fgColor;
-    QFont font;
+    // bible text font and size
+    QString btFontFamily;
+    double btFontSize;
 
     QTextCursor *cursor;
 
@@ -61,7 +63,7 @@ private:/* vars */
 private:/* functions */
     void highlight(int verse, const QColor &color);
 
-    void addVerse(QTextCursor *cursor, QString verseText);
+    void addVerse(QTextCursor *cursor, QString verseText, QFont f);
     QTextBlock getTextBlockByVerse(int verse);
     QString convertSNForDict(QString oldSN);
 
@@ -70,9 +72,13 @@ private slots:
     void projectVerse();
     void copyVerseTo();
     void changeSelectedVerseBGColor(QColor nc);
+    void changeBibleTextFontFamily(QString family);
+    void changeBibleTextFontSize(double size);
 
     // show strong number dict in dict win
     void showStrongNumberDict(QUrl url);
+    void searchBible();
+    void printBibleText();
 };
 
 #endif // BIBLETEXTBROWSER_H

@@ -8,6 +8,8 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QRegExp>
+#include <QPrinter>
+#include <QPrintDialog>
 #include "biblereaderprojectdialog.h"
 #include "bibletextblockdata.h"
 // for logging
@@ -18,8 +20,15 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
     QTextBrowser(parent)
 {
     brCore = brc;
+    btFontFamily = brCore->getConfigurator()->getBibleTextFontFamily();
+    btFontSize = brCore->getConfigurator()->getBibleTextFontSize();
+
     connect(brCore->getConfigurator(), SIGNAL(selectedVerseBGChanged(QColor)),
             this, SLOT(changeSelectedVerseBGColor(QColor)));
+    connect(brCore->getConfigurator(), SIGNAL(bibleTextFontFamilyChanged(QString)),
+            this, SLOT(changeBibleTextFontFamily(QString)));
+    connect(brCore->getConfigurator(), SIGNAL(bibleTextFontSizeChanged(double)),
+            this, SLOT(changeBibleTextFontSize(double)));
 
     preVerseId = 1;
 
@@ -28,7 +37,7 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
 
     cursor = NULL;
 #ifdef Q_OS_WIN
-    setFontFamily(QString("Microsoft YaHei"));
+    setFontFamily(btFontFamily);
 #endif
     setMouseTracking(true);
     setContentsMargins(2, 2, 2, 2);
@@ -120,7 +129,7 @@ void BibleTextBrowser::wheelEvent(QWheelEvent *e)
 }
 
 void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
-    QMenu *menu = createStandardContextMenu();
+    QMenu *menu = createStandardContextMenu(e->pos());
 
     QTextCursor cursor = cursorForPosition(e->pos());
     QTextBlock block = cursor.block();
@@ -138,9 +147,6 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
             brCore->setCurrentVerseNumber(d->getVerse());
         }
         QAction *copyCurrentVerse = menu->addAction(tr("Copy this verse"));
-        QAction *compareCurrentVerse = menu->addAction(tr("Compare this verse"));
-        QAction *projectCurrentVerse = menu->addAction(tr("Project this verse"));
-
         // add sub menu
         QMenu *copyTo = new QMenu(tr("Copy verses from current verse to..."), menu);
         BibleChapter bc = brCore->getChapter(bibleVersion, d->getBook(), d->getChapter());
@@ -149,8 +155,23 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
             tmp->setData(QVariant(i));
             connect(tmp, SIGNAL(triggered(bool)), this, SLOT(copyVerseTo()));
         }
-
         menu->addMenu(copyTo);
+        QAction *compareCurrentVerse = menu->addAction(tr("Compare this verse"));
+        QAction *projectCurrentVerse = menu->addAction(tr("Project this verse"));
+
+        if (this->textCursor().hasSelection()) {
+            QString q = this->textCursor().selectedText();
+            QString menuTxt = tr("Search \"%1\"");
+            QAction *searchText = menu->addAction(menuTxt.arg(q));
+            searchText->setData(q);
+            connect(searchText, SIGNAL(triggered(bool)), this, SLOT(searchBible()));
+        }
+
+        //add print function
+        QAction *printAct = menu->addAction(tr("Print..."));
+        connect(printAct, SIGNAL(triggered(bool)), this, SLOT(printBibleText()));
+
+
         connect(copyCurrentVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
         connect(compareCurrentVerse, SIGNAL(triggered()), brCore, SLOT(fireCmpCurVerse()));
         connect(projectCurrentVerse, SIGNAL(triggered()), this, SLOT(projectVerse()));
@@ -230,8 +251,8 @@ bool BibleTextBrowser::showCurrentChapter()
 
     // add book name and chapter number
     fmt.setForeground(QColor("green"));
-    fmt.setFontPointSize(14.0);
-    fmt.setFontFamily(QString("Microsoft YaHei"));
+    fmt.setFontPointSize(btFontSize+6.0);
+    fmt.setFontFamily(btFontFamily);
     cursor->insertText(chapter.getBook().getLongName(), fmt);
     cursor->insertText(QString(" "), fmt);
     cursor->insertText(QString::number(chapter.getChapter()), fmt);
@@ -245,11 +266,14 @@ bool BibleTextBrowser::showCurrentChapter()
         cursor->insertBlock();
         bfmt.setAlignment(Qt::AlignLeft);
         cursor->setBlockFormat(bfmt);
-        fmt.setForeground(QColor("black"));
-        fmt.setFontPointSize(12.0);
+        // verse number format
+        fmt.setForeground(QColor("blue"));
+        fmt.setFontPointSize(btFontSize);
+        fmt.setFontFamily(btFontFamily);
         cursor->insertText(QString("%1:%2 ").arg(QString::number(chapterId),
                                                 QString::number(verses[i].getVerse())), fmt);
-        addVerse(cursor, verses[i].getVerseText());
+        // verse format
+        addVerse(cursor, verses[i].getVerseText(), fmt.font());
         BibleTextBlockData *d = new BibleTextBlockData(
                     bv, bookId, chapterId, verses[i].getVerse());
         cursor->block().setUserData(d);
@@ -270,13 +294,15 @@ void BibleTextBrowser::highlight(int verse, const QColor &color)
     if (block.isValid()) {
         QTextCursor *tmpCursor = new QTextCursor(block);
         // change block format (will set the color background)
-        QTextBlockFormat blockFormat = tmpCursor->blockFormat();
-        blockFormat.setBackground(color);
-        blockFormat.setNonBreakableLines(true);
-        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+        QTextBlockFormat format = tmpCursor->blockFormat();
+        format.setBackground(color);
 
-        tmpCursor->setBlockFormat(blockFormat);
+        tmpCursor->setBlockFormat(format);
+        tmpCursor->movePosition(QTextCursor::EndOfBlock);
+        tmpCursor->movePosition(QTextCursor::NextBlock);
+        tmpCursor->position();
         setTextCursor(*tmpCursor);
+        ensureCursorVisible();
 
         delete tmpCursor;
     }
@@ -297,13 +323,13 @@ void BibleTextBrowser::highlight(int verse, const QColor &color)
 
 }
 
-void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText)
+void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText, QFont f)
 {
     QTextCharFormat supFmt;
 
     supFmt.setForeground(QColor("blue"));
     supFmt.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    supFmt.setFontPointSize(14.0);
+    supFmt.setFontPointSize(btFontSize);
 
     // convert strong number for dict usage
     QStringList SNs = verseText.split(QRegExp("[<>]"), QString::SkipEmptyParts);
@@ -325,7 +351,8 @@ void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText)
         verseText.replace("&lt;", "<a href='br://dict/snchs'><sup>&lt;");
         verseText.replace("&gt;", "&gt;</sup></a>");
         */
-        verseText.prepend("<p style='font-size: 12pt; font-family: Microsoft YaHei'>");
+        verseText.prepend(QString("<p style='font-family:%1; font-size:%2pt'>").arg(
+                              f.family(), QString::number(f.pointSizeF())) );
         verseText.append("</p>");
     }
 
@@ -341,7 +368,6 @@ QTextBlock BibleTextBrowser::getTextBlockByVerse(int verse)
             return it;
         }
     }
-
     return QTextBlock();
 }
 
@@ -406,6 +432,18 @@ void BibleTextBrowser::changeSelectedVerseBGColor(QColor nc)
     highlight(preVerseId, bgColor);
 }
 
+void BibleTextBrowser::changeBibleTextFontFamily(QString family)
+{
+    btFontFamily = family;
+    showCurrentChapter();
+}
+
+void BibleTextBrowser::changeBibleTextFontSize(double size)
+{
+    btFontSize = size;
+    showCurrentChapter();
+}
+
 void BibleTextBrowser::showStrongNumberDict(QUrl url)
 {
     LOG_INFO() << "Strong Number Clicked:";
@@ -419,5 +457,26 @@ void BibleTextBrowser::showStrongNumberDict(QUrl url)
         brCore->fireShowDictItem(dictItemInfo[0].toUpper(), dictItemInfo[1]);
     }
 
+}
+
+void BibleTextBrowser::searchBible()
+{
+    QAction *m = qobject_cast<QAction *>(sender());
+
+    brCore->fireSearchRequest(m->data().toString());
+}
+
+void BibleTextBrowser::printBibleText()
+{
+    QPrinter printer;
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    dialog->setWindowTitle(tr("Print Document"));
+    if (this->textCursor().hasSelection())
+       dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
+    if (dialog->exec() != QDialog::Accepted)
+       return;
+
+    this->print(&printer);
 }
 

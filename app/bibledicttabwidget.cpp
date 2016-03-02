@@ -42,6 +42,7 @@ void BibleDictTabWidget::showDictItem(QString dictName, QString itemName)
 {
     for (int i = 0; i < dicts.size(); i++) {
         if (dicts[i].getName() == dictName) {
+            setCurrentIndex(i);
             dictWidgets[i]->showExplaination(itemName);
             break;
         }

@@ -86,8 +86,7 @@ void BibleCommentaryWidget::createWidgets()
 
     connect(section, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
             this, SLOT(changeChapterCmt(QTreeWidgetItem*,QTreeWidgetItem*)));
-    content = new QTextEdit(this);
-    content->setReadOnly(true);
+    content = new QTextBrowser(this);
     content->setHtml(brCore->getChapterCmt(
                          cmtName,
                          curBookNum,

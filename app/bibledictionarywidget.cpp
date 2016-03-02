@@ -122,6 +122,7 @@ void BibleDictionaryWidget::showExplaination(QString itemName)
     int index;
     if ((index = dictWordsCombo->findText(itemName)) != -1) {
         dictWordsCombo->setCurrentIndex(index);
+        dictWordsList->setCurrentRow(index);
         QString explaination = wordsList.value(itemName);
         dictShowExplaination->setText(
                     explaination.replace(QString("\\r\\n"), QString("\n")));

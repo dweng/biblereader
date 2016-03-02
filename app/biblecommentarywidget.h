@@ -18,7 +18,7 @@
 #include <QWidget>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QSplitter>
 #include "biblereadercore.h"
 

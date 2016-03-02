@@ -1,7 +1,7 @@
 #include "biblereaderconfigurator.h"
 #include <QFile>
 #include <QApplication>
-
+#include <QFontDatabase>
 BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     QObject(parent)
 {
@@ -24,6 +24,10 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
         settings->setValue("/text/selectedVerseBG", "#7dde96");
         settings->setValue("/text/projectDlgBG", "#000000");
         settings->setValue("/text/projectDlgFG", "#ffffff");
+
+        settings->setValue("/text/bibleTextFontFamily",
+                           QFontDatabase::systemFont(QFontDatabase::GeneralFont).family());
+        settings->setValue("/text/bibleTextFontSize", 14.0);
 
         // app
         settings->setValue("/app/autoupdate", true);
@@ -50,6 +54,8 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     selectedVerseBG = QColor(settings->value("/text/selectedVerseBG").toString());
     projectDlgBG = QColor(settings->value("/text/projectDlgBG").toString());
     projectDlgFG = QColor(settings->value("/text/projectDlgFG").toString());
+    bibleTextFontFamily = settings->value("/text/bibleTextFontFamily").toString();
+    bibleTextFontSize = settings->value("/text/bibleTextFontSize").toDouble();
     isAutoUpdate = settings->value("/app/autoupdate").toBool();
 }
 
@@ -70,7 +76,8 @@ BibleReaderConfigurator::~BibleReaderConfigurator()
         settings->setValue("/text/selectedVerseBG", selectedVerseBG.name());
         settings->setValue("/text/projectDlgBG", projectDlgBG.name());
         settings->setValue("/text/projectDlgFG", projectDlgFG.name());
-
+        settings->setValue("/text/bibleTextFontFamily", bibleTextFontFamily);
+        settings->setValue("/text/bibleTextFontSize", bibleTextFontSize);
         // app setting
         settings->setValue("/app/autoupdate", isAutoUpdate);
 
@@ -211,6 +218,34 @@ bool BibleReaderConfigurator::getIsAutoUpdate() const
 void BibleReaderConfigurator::setIsAutoUpdate(bool value)
 {
     isAutoUpdate = value;
+}
+
+QString BibleReaderConfigurator::getBibleTextFontFamily() const
+{
+    return bibleTextFontFamily;
+}
+
+void BibleReaderConfigurator::setBibleTextFontFamily(const QString &value)
+{
+    if (bibleTextFontFamily != value) {
+        bibleTextFontFamily = value;
+        emit bibleTextFontFamilyChanged(value);
+    }
+
+}
+
+double BibleReaderConfigurator::getBibleTextFontSize() const
+{
+    return bibleTextFontSize;
+}
+
+void BibleReaderConfigurator::setBibleTextFontSize(double value)
+{
+    if (bibleTextFontSize != value) {
+        bibleTextFontSize = value;
+        emit bibleTextFontSizeChanged(value);
+    }
+
 }
 
 

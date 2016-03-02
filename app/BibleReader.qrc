@@ -5,6 +5,27 @@
         <file>assets/images/arrow_left.png</file>
         <file>assets/images/arrow_right.png</file>
         <file>assets/images/splash.png</file>
+        <file>assets/images/arrow_down.png</file>
+        <file>assets/images/arrow_up.png</file>
+        <file>assets/images/arrow_redo.png</file>
+        <file>assets/images/arrow_undo.png</file>
+        <file>assets/images/book_next.png</file>
+        <file>assets/images/book_previous.png</file>
+        <file>assets/images/arrow_refresh.png</file>
+        <file>assets/images/emoticon_smile.png</file>
+        <file>assets/images/help.png</file>
+        <file>assets/images/package.png</file>
+        <file>assets/images/wrench.png</file>
+        <file>assets/images/page_copy.png</file>
+        <file>assets/images/book.png</file>
+        <file>assets/images/book_open.png</file>
+        <file>assets/images/find.png</file>
+        <file>assets/images/page.png</file>
+        <file>assets/images/page_go.png</file>
+        <file>assets/images/cancel.png</file>
+        <file>assets/images/television.png</file>
+        <file>assets/images/zoom_in.png</file>
+        <file>assets/images/zoom_out.png</file>
     </qresource>
     <qresource prefix="/data">
         <file>assets/data/description.txt</file>

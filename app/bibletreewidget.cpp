@@ -13,6 +13,7 @@
  * code.
  *
  */
+#include <QMouseEvent>
 #include "bibletreewidget.h"
 #include "biblebook.h"
 #include "Logger.h"
@@ -36,6 +37,9 @@ BibleTreeWidget::BibleTreeWidget(BibleReaderCore *brc, QWidget *parent) :
     this->setColumnHidden(2, true);
     this->setColumnHidden(3, true);
     LOG_INFO() << "bible tree widget inited.";
+
+    connect(this, SIGNAL(expanded(QModelIndex)), this, SLOT(changeIcon(QModelIndex)));
+    connect(this, SIGNAL(collapsed(QModelIndex)), this, SLOT(changeIcon(QModelIndex)));
 }
 
 BibleTreeWidget::~BibleTreeWidget()
@@ -52,6 +56,11 @@ void BibleTreeWidget::rebuildBibleTreeData()
     this->addTopLevelItems(bookItems);
     this->setColumnHidden(1, true);
     LOG_INFO() << "Rebuilt bible tree data";
+}
+
+void BibleTreeWidget::mousePressEvent(QMouseEvent *event)
+{
+    QTreeWidget::mousePressEvent(event);
 }
 
 void BibleTreeWidget::onBibleVersionChanged(QString version)
@@ -72,6 +81,7 @@ void BibleTreeWidget::buildBibleTreeData()
         BibleBook book = books.value(i);
         // book item
         QTreeWidgetItem *bookItem = new QTreeWidgetItem();
+        bookItem->setIcon(0, QIcon(QString(":/img/assets/images/book.png")));
         bookItem->setData(0, Qt::DisplayRole, book.getShortName());
         bookItem->setData(1, Qt::DisplayRole, book.getBookNumber());
         // for default, show chapter 1 text of each book of Bible
@@ -82,6 +92,7 @@ void BibleTreeWidget::buildBibleTreeData()
         for(int j=0;j<chapters.count();j++)
         {
             QTreeWidgetItem *chapterItem = new QTreeWidgetItem(bookItem);
+            chapterItem->setIcon(0, QIcon(QString(":/img/assets/images/page.png")));
             chapterItem->setData(0, Qt::DisplayRole, j+1);
             chapterItem->setData(1, Qt::DisplayRole, book.getBookNumber());
             chapterItem->setData(2, Qt::DisplayRole, j+1);
@@ -112,5 +123,15 @@ void BibleTreeWidget::destroyBookItems()
 
     bookItems.clear();
     LOG_INFO() << "Book items destroyed.";
+}
+
+void BibleTreeWidget::changeIcon(QModelIndex index)
+{
+    QTreeWidgetItem *item = itemFromIndex(index);
+    if (item->isExpanded()) {
+        item->setIcon(0, QIcon(QString(":/img/assets/images/book_open.png")));
+    } else {
+        item->setIcon(0, QIcon(QString(":/img/assets/images/book.png")));
+    }
 }
 

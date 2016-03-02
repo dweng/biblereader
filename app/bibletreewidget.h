@@ -43,6 +43,9 @@ public:
      */
     void rebuildBibleTreeData();
 
+protected:
+    void mousePressEvent(QMouseEvent *event);
+
 signals:
 
 public slots:
@@ -68,6 +71,9 @@ private:
      * @brief destroy book items
      */
     void destroyBookItems();
+
+private slots:
+    void changeIcon(QModelIndex index);
 };
 
 #endif // BIBLETREEWIDGET_H

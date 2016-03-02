@@ -34,6 +34,7 @@ BibleSearchWidget::BibleSearchWidget(BibleReaderCore *brc, QWidget *parent) :
     searchRangeAdvStart = NULL;
 
     brCore = brc;
+    connect(brc, SIGNAL(searchRequest(QString)), this, SLOT(searchText(QString)));
     createWidgets();
     doLayout();
 }
@@ -61,6 +62,12 @@ bool BibleSearchWidget::navToChapter(QTreeWidgetItem* current, int column)
     }
 
     return true;
+}
+
+void BibleSearchWidget::searchText(QString q)
+{
+    searchInput->setCurrentText(q);
+    searchBtn->click();
 }
 
 
@@ -96,6 +103,7 @@ void BibleSearchWidget::createWidgets()
             this, SLOT(getSearchResult()));
 
     searchBtn = new QPushButton(tr("Search"), this);
+    searchBtn->setIcon(QIcon(QString(":/img/assets/images/find.png")));
     connect(searchBtn, SIGNAL(clicked()), this, SLOT(getSearchResult()));
 
     searchRangeBox = new QGroupBox(tr("Search range"), this);

@@ -27,6 +27,7 @@
 #include "biblereaderconfigurator.h"
 #include "biblecommentarydao.h"
 #include "biblereaderversion.h"
+#include "biblereaderresourcemanager.h"
 
 /**
  * @brief
@@ -285,7 +286,7 @@ public:
     int getCurrentVerseNumber() const;
     void setCurrentVerseNumber(int value);
 
-    int setCurrentBCV(int b, int c, int v);
+    int setCurrentBCV(int b, int c, int v, int operation = 0);
 
     QString getExplaination(QString dict, QString word);
 
@@ -303,6 +304,8 @@ public:
     bool addCommentary(QString &name, QString &path);
     QString getChapterCmt(QString cn, int book, int chapter);
     BibleReaderVersion *getVersion() const;
+
+    BibleReaderResourceManager *getResManager() const;
 
 signals:
     /**
@@ -332,6 +335,22 @@ signals:
      */
     void showDictItem(QString dictName, QString itemName);
 
+    /**
+     * @brief navToLastHistoryItem
+     */
+    void navToLastHistoryItem();
+
+    /**
+     * @brief navToFirstHistoryItem
+     */
+    void navToFirstHistoryItem();
+
+    /**
+     * @brief searchRequest
+     * @param q
+     */
+    void searchRequest(QString q);
+
 public slots:
     /**
      * @brief navigate to next chapter
@@ -355,6 +374,21 @@ public slots:
      * @param itemName
      */
     void fireShowDictItem(QString dictName, QString itemName);
+
+    /**
+     * @brief navBackHistory
+     */
+    void navBackHistory();
+
+    /**
+     * @brief navForwordHistory
+     */
+    void navForwordHistory();
+
+    /**
+     * @brief fireSearchRequest
+     */
+    void fireSearchRequest(QString q);
 
 private:
     /**
@@ -456,6 +490,18 @@ private:
      * @brief handle bible reader version information
      */
     BibleReaderVersion *version;
+
+    /**
+     * @brief history
+     * store the verses we read.
+     */
+    QList<BibleVersePos> history;
+
+    /**
+     * @brief this resource manager will handle all operations
+     * for manage bibles, commentarys, dicts, etc.,
+     */
+    BibleReaderResourceManager *resManager;
 
 private:/* Helper functions*/
     int getBookID(QString bookName);

@@ -24,6 +24,10 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
 {
     LOG_DEBUG("constructor");
     version = new BibleReaderVersion(0, 0, 3);
+    resManager = new BibleReaderResourceManager(this);
+    // test
+    resManager->addResourceUrl("default", "http://biblereader.cn/brresources.php");
+    resManager->refreshAll();
 
     currentBookNumber = 0;
     currentChapterNumber = 0;
@@ -50,6 +54,9 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     currentBookNumber = configurator->getLastBook();
     currentChapterNumber = configurator->getLastChapter();
     currentVerseNumber = configurator->getLastVerse();
+
+    // store first verse history
+    history.push_back(BibleVersePos(currentBookNumber, currentChapterNumber, currentVerseNumber));
 }
 
 BibleReaderCore::~BibleReaderCore()
@@ -65,6 +72,7 @@ BibleReaderCore::~BibleReaderCore()
 
     delete configurator;
     delete version;
+    delete resManager;
 }
 
 BibleVerse BibleReaderCore::getVerse(QString book, int chapter, int verse)
@@ -177,7 +185,9 @@ void BibleReaderCore::navNextChapter()
             }
         }
     }
-    emit currentVerseChanged(currentBookNumber, currentChapterNumber, 1);
+    currentVerseNumber = 1;
+    history.push_back(BibleVersePos(currentBookNumber, currentChapterNumber, currentVerseNumber));
+    emit currentVerseChanged(currentBookNumber, currentChapterNumber, currentVerseNumber);
 }
 
 void BibleReaderCore::navPrevChapter()
@@ -205,8 +215,9 @@ void BibleReaderCore::navPrevChapter()
             }
         }
     }
-
-    emit currentVerseChanged(currentBookNumber, currentChapterNumber, 1);
+    currentVerseNumber = 1;
+    history.push_back(BibleVersePos(currentBookNumber, currentChapterNumber, currentVerseNumber));
+    emit currentVerseChanged(currentBookNumber, currentChapterNumber, currentVerseNumber);
 }
 
 void BibleReaderCore::fireCmpCurVerse()
@@ -217,6 +228,58 @@ void BibleReaderCore::fireCmpCurVerse()
 void BibleReaderCore::fireShowDictItem(QString dictName, QString itemName)
 {
     emit showDictItem(dictName, itemName);
+}
+
+void BibleReaderCore::navBackHistory()
+{
+    int cur = 0;
+    for (int i = 0; i < history.size(); i++) {
+        if (history[i].getBookNumber() == currentBookNumber &&
+                history[i].getChapterNumber() == currentChapterNumber &&
+                history[i].getVerseNumber() == currentVerseNumber) {
+            cur = i;
+            break;
+        }
+    }
+
+    if (cur == 0) {
+        emit navToFirstHistoryItem();
+    } else {
+        setCurrentBCV(history[cur-1].getBookNumber(),
+                history[cur-1].getChapterNumber(),
+                history[cur-1].getVerseNumber(), 1);
+    }
+}
+
+void BibleReaderCore::navForwordHistory()
+{
+    int cur = history.size()-1;
+    for (int i = 0; i < history.size(); i++) {
+        if (history[i].getBookNumber() == currentBookNumber &&
+                history[i].getChapterNumber() == currentChapterNumber &&
+                history[i].getVerseNumber() == currentVerseNumber) {
+            cur = i;
+            break;
+        }
+    }
+
+    if (cur == history.size()-1) {
+        emit navToLastHistoryItem();
+    } else {
+        setCurrentBCV(history[cur+1].getBookNumber(),
+                history[cur+1].getChapterNumber(),
+                history[cur+1].getVerseNumber(), 1);
+    }
+}
+
+void BibleReaderCore::fireSearchRequest(QString q)
+{
+    emit searchRequest(q);
+}
+
+BibleReaderResourceManager *BibleReaderCore::getResManager() const
+{
+    return resManager;
 }
 
 BibleReaderVersion *BibleReaderCore::getVersion() const
@@ -288,12 +351,23 @@ void BibleReaderCore::setCurrentVerseNumber(int value)
     currentVerseNumber = value;
 }
 
-int BibleReaderCore::setCurrentBCV(int b, int c, int v)
+/**
+ * @brief BibleReaderCore::setCurrentBCV
+ * @param b
+ * @param c
+ * @param v
+ * @param operation 0 default, 1 history navigation
+ * @return
+ */
+int BibleReaderCore::setCurrentBCV(int b, int c, int v, int operation)
 {
     setCurrentBookNumber(b);
     setCurrentChapterNumber(c);
     setCurrentVerseNumber(v);
-
+    // history navigation, not store to history list
+    if (operation == 0) {
+        history.push_back(BibleVersePos(b, c, v));
+    }
     emit currentVerseChanged(b, c, v);
     return 1;
 }

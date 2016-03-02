@@ -70,10 +70,18 @@ public:
     bool getIsAutoUpdate() const;
     void setIsAutoUpdate(bool value);
 
+    QString getBibleTextFontFamily() const;
+    void setBibleTextFontFamily(const QString &value);
+
+    double getBibleTextFontSize() const;
+    void setBibleTextFontSize(double value);
+
 signals:
     void selectedVerseBGChanged(QColor newColor);
     void projectDlgBGChanged(QColor newColor);
     void projectDlgFGChanged(QColor newColor);
+    void bibleTextFontFamilyChanged(QString family);
+    void bibleTextFontSizeChanged(double size);
 
 public slots:
 
@@ -158,6 +166,18 @@ private:
      * auto update
      */
     bool isAutoUpdate;
+
+    /**
+     * @brief bibleTextFontFamily
+     * bible text font
+     */
+    QString bibleTextFontFamily;
+
+    /**
+     * @brief bibleTextFontSize
+     * bible text font size
+     */
+    double bibleTextFontSize;
 
 };
 

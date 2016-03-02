@@ -17,7 +17,7 @@ message(Settings: $$[QT_INSTALL_SETTINGS])
 message(Examples: $$[QT_INSTALL_EXAMPLES])
 message(Demonstrations: $$[QT_INSTALL_DEMOS])
 
-QT       += core gui sql xml network
+QT       += core gui sql xml network printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -67,7 +67,10 @@ SOURCES += main.cpp\
     biblereaderhtmldelegate.cpp \
     biblereaderconfigdlg.cpp \
     biblereaderconfiggeneralpage.cpp \
-    biblereaderversion.cpp
+    biblereaderversion.cpp \
+    biblereaderresourcemanager.cpp \
+    biblereaderdownloader.cpp \
+    biblereaderresourcemanagerdlg.cpp
 
 HEADERS  += biblereadercore.h \
     biblechapter.h \
@@ -102,7 +105,10 @@ HEADERS  += biblereadercore.h \
     biblereaderhtmldelegate.h \
     biblereaderconfigdlg.h \
     biblereaderconfiggeneralpage.h \
-    biblereaderversion.h
+    biblereaderversion.h \
+    biblereaderresourcemanager.h \
+    biblereaderdownloader.h \
+    biblereaderresourcemanagerdlg.h
 
 OTHER_FILES += \
     bar-descriptor.xml \

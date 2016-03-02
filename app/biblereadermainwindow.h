@@ -30,6 +30,7 @@
 #include "biblecommentarytabwidget.h"
 #include "biblereaderprojectdialog.h"
 #include "biblereaderconfigdlg.h"
+#include "biblereaderresourcemanagerdlg.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -132,16 +133,27 @@ private:
      */
     BibleReaderConfigDlg *brConfigDlg;
 
+    /**
+     * @brief resource manager dialog
+     */
+    BibleReaderResourceManagerDlg *brMgrDlg;
+
     // toolbar actions
     QAction *navToNextChapterAction;
     QAction *navToPrevChapterAction;
+    QAction *navToHistoryBack;
+    QAction *navToHistoryForword;
+    QAction *btZoomInAction;
+    QAction *btZoomOutAction;
+    QAction *copyCurVerseAction;
+    QAction *goVerseAction;
 
     // File menu actions
     QAction *exitAppAction;
     QAction *projectVersesAction;
 
     // Edit menu actions
-    QAction *copyAction;
+    // QAction *copyAction;
 
     // Tool menu actions
     QAction *configAction;
@@ -156,6 +168,7 @@ private:
     // menus
     QMenu *fileMenu;
     QMenu *editMenu;
+    QMenu *viewMenu;
     QMenu *helpMenu;
     QMenu *toolMenu;
     QMenuBar *mainMenuBar;
@@ -166,10 +179,6 @@ private:
      */
     QStatusBar *statusBar;
 
-    /**
-     * @brief dict show explaination window
-     */
-    QTextEdit *dictShowExplaination;
 signals:
     void chapterChanged(int book, int chapter, int verse);
 
@@ -178,6 +187,10 @@ private slots:
     void onChapterChanged(int book, int chapter, int verse);
     void navToNextChapter();
     void navToPrevChapter();
+    void navToBackHistory();
+    void navToForwordHistory();
+    void btZoomIn();
+    void btZoomOut();
 
     // menu actions slots
     void quitBibleReader();
@@ -193,6 +206,9 @@ private slots:
     // show donate dialog
     void showDonationDlg();
 
+    // show resource manager dilaog
+    void showResMgrDlg();
+
     // copy current verse
     void copyCurrentVerse();
 
@@ -200,6 +216,33 @@ private slots:
     void showCurrentVerseInfo();
 
 
+private:
+    // create all widgets
+    void createWidgets();
+
+    // create global toolbar
+    void createGlobalToolbar();
+
+    // create main centre widget
+    void createCentralWidget();
+
+    // create bible tree dockable widget
+    void createBibleTreeDockWidget();
+
+    // create bible search dock widget
+    void createBSDockWidget();
+
+    // create bible comentary dock widget
+    void createBCDockWidget();
+
+    // create dict dock widget
+    void createDictDockWidget();
+
+    // create menus
+    void createTopMenus();
+
+    // create status bar
+    void createStatusBar();
 };
 
 #endif // MAINWINDOW_H
