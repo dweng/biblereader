@@ -15,6 +15,7 @@
 #include "biblereaderapp.h"
 #include <QTextCodec>
 #include <QTimer>
+#include <QDir>
 // for logging
 #include "Logger.h"
 #include "FileAppender.h"
@@ -36,16 +37,20 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     qApp->processEvents();
 
     // logging
-    QString appDirPath = QApplication::applicationDirPath();
-    FileAppender* fileAppender = new FileAppender(appDirPath + "/debug.log");
+    QDir dir(QApplication::applicationDirPath());
+#ifdef Q_OS_OSX || Q_OS_MACX || Q_OS_MAC || Q_OS_MAC64
+    dir.cdUp();
+    dir.cd("Resources");
+#endif
+    FileAppender* fileAppender = new FileAppender(dir.absolutePath() + "/debug.log");
     fileAppender->setFormat("[%{time}{yyyy-MM-ddTHH:mm:ss.zzz}] [%{type:-7}] <%{Function}> %{message}\n");
     logger->registerAppender(fileAppender);
     LOG_INFO("Bible Reader started!");
 
     LOG_INFO() << "Loading translations...";
     splash->showMessage(tr("Loading translations..."), Qt::AlignBottom|Qt::AlignLeft, Qt::blue);
-    LOG_INFO() << "Loading ZH_cn:" << translator.load(appDirPath + "/translations/ZH_cn.qm");
-    LOG_INFO() << "Loading Qt ZH_cn:" << qtTranslator.load(appDirPath + "/translations/qt_zh_CN.qm");
+    LOG_INFO() << "Loading ZH_cn:" << translator.load(dir.absolutePath() + "/translations/ZH_cn.qm");
+    LOG_INFO() << "Loading Qt ZH_cn:" << qtTranslator.load(dir.absolutePath() + "/translations/qt_zh_CN.qm");
     installTranslator(&translator);
     installTranslator(&qtTranslator);
 

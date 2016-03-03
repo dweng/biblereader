@@ -125,5 +125,10 @@ DEPENDPATH += $$PWD/../lib/
 
 RESOURCES += \
     BibleReader.qrc
-
+win32 {
 RC_FILE = BibleReader.rc
+}
+
+macx {
+ICON = $$PWD/assets/images/biblereader.icns
+}

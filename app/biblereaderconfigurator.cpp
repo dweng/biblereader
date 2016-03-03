@@ -1,18 +1,24 @@
 #include "biblereaderconfigurator.h"
 #include <QFile>
+#include <QDir>
 #include <QApplication>
 #include <QFontDatabase>
 BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     QObject(parent)
 {
     settings = NULL;
-    settingsFile = QApplication::applicationDirPath() + "/biblereader.ini";
+    QDir dir(QApplication::applicationDirPath());
+#ifdef Q_OS_OSX || Q_OS_MACX || Q_OS_MAC || Q_OS_MAC64
+    dir.cdUp();
+    dir.cd("Resources");
+#endif
+    settingsFile = dir.absolutePath() + "/biblereader.ini";
     if (!QFile(settingsFile).exists()) {
         // create default settings
         settings = new QSettings(settingsFile, QSettings::IniFormat);
-        settings->setValue("/base/biblePathBase", QApplication::applicationDirPath() + "/bibles/");
-        settings->setValue("/base/dictPathBase", QApplication::applicationDirPath() + "/dicts/");
-        settings->setValue("/base/bcPathBase", QApplication::applicationDirPath() + "/commentarys/");
+        settings->setValue("/base/biblePathBase", dir.absolutePath() + "/bibles/");
+        settings->setValue("/base/dictPathBase", dir.absolutePath() + "/dicts/");
+        settings->setValue("/base/bcPathBase", dir.absolutePath() + "/commentarys/");
         settings->setValue("/base/defaultBibleVersion", "LZZ");
         settings->setValue("/base/defaultDict", "SNCHS");
         settings->setValue("/base/defaultCommentary", "DDESJZS");
