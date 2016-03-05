@@ -147,6 +147,7 @@ private:
     QAction *btZoomOutAction;
     QAction *copyCurVerseAction;
     QAction *goVerseAction;
+    QAction *printBTAction;
 
     // File menu actions
     QAction *exitAppAction;
@@ -191,6 +192,7 @@ private slots:
     void navToForwordHistory();
     void btZoomIn();
     void btZoomOut();
+    void btPrint();
 
     // menu actions slots
     void quitBibleReader();

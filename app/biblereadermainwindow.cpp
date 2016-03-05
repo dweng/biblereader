@@ -344,6 +344,12 @@ void BibleReaderMainWindow::createCentralWidget()
     goVerseAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
     txtBrowserToolBar->addAction(goVerseAction);
 
+    txtBrowserToolBar->addSeparator();
+    printBTAction = new QAction(QIcon(QString(":/img/assets/images/printer.png")), tr("Print current chapter"), this);
+    printBTAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_P));
+    txtBrowserToolBar->addAction(printBTAction);
+    connect(printBTAction, SIGNAL(triggered(bool)), this, SLOT(btPrint()));
+
     /*
     QLineEdit *verseJumper = new QLineEdit(this);
     verseJumper->setMaximumWidth(40);
@@ -505,4 +511,10 @@ void BibleReaderMainWindow::btZoomOut()
     double size = bibleReaderCore->getConfigurator()->getBibleTextFontSize();
     if (size >= 8)
         bibleReaderCore->getConfigurator()->setBibleTextFontSize(size - 2.0);
+}
+
+void BibleReaderMainWindow::btPrint()
+{
+    BibleTextBrowser *btBrowser = qobject_cast<BibleTextBrowser *>(btTabWidget->currentWidget());
+    btBrowser->printBibleText();
 }

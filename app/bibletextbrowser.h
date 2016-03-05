@@ -33,6 +33,7 @@ public:
 
 public slots:
     bool showCurrentChapter();
+    void printBibleText();
 
 protected:
     bool event(QEvent *event);
@@ -78,7 +79,6 @@ private slots:
     // show strong number dict in dict win
     void showStrongNumberDict(QUrl url);
     void searchBible();
-    void printBibleText();
 };
 
 #endif // BIBLETEXTBROWSER_H
