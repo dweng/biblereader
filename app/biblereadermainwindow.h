@@ -193,6 +193,7 @@ private slots:
     void btZoomIn();
     void btZoomOut();
     void btPrint();
+    void btGoVerse();
 
     // menu actions slots
     void quitBibleReader();
@@ -216,6 +217,8 @@ private slots:
 
     // show current verse information in status bar.
     void showCurrentVerseInfo();
+
+    void setHistoryNavActionsEnabled(int which);
 
 
 private:
@@ -245,6 +248,9 @@ private:
 
     // create status bar
     void createStatusBar();
+
+    // create bible go menu
+    QMenu* buildBibleTreeMenu();
 };
 
 #endif // MAINWINDOW_H

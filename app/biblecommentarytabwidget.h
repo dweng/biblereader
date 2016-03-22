@@ -15,6 +15,9 @@ public:
     BibleCommentaryTabWidget(BibleReaderCore *brc, QWidget *parent = 0);
     ~BibleCommentaryTabWidget();
 
+private slots:
+    void updateCurrentCommentary(int index);
+
 private:
     QList<BibleCommentaryWidget *> bcWidgets;
     BibleReaderCore *brCore;

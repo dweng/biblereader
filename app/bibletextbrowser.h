@@ -64,7 +64,7 @@ private:/* vars */
 private:/* functions */
     void highlight(int verse, const QColor &color);
 
-    void addVerse(QTextCursor *cursor, QString verseText, QFont f);
+    void addVerse(QTextCursor *cursor, BibleVerse verse, QFont f);
     QTextBlock getTextBlockByVerse(int verse);
     QString convertSNForDict(QString oldSN);
 
@@ -77,7 +77,7 @@ private slots:
     void changeBibleTextFontSize(double size);
 
     // show strong number dict in dict win
-    void showStrongNumberDict(QUrl url);
+    void navTo(QUrl brUrl);
     void searchBible();
 };
 

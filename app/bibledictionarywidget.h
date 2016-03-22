@@ -16,7 +16,7 @@
 #define BIBLEDICTIONARYWIDGET_H
 
 #include <QWidget>
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QListWidget>
 #include <QComboBox>
 #include <QSplitter>
@@ -75,7 +75,7 @@ private:
     /**
      * @brief Show word explaination area.
      */
-    QTextEdit *dictShowExplaination;
+    QTextBrowser *dictShowExplaination;
 
     /**
      * @brief Dictionary words combo box

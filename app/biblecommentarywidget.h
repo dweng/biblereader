@@ -21,6 +21,7 @@
 #include <QTextBrowser>
 #include <QSplitter>
 #include "biblereadercore.h"
+#include "biblecommentarybrowser.h"
 
 /**
  * @brief The BibleCommentaryWidget class
@@ -38,6 +39,9 @@ public:
     QString getCmtTitle() const;
     void setCmtTitle(const QString &value);
 
+    QString getCmtName() const;
+    void setCmtName(const QString &value);
+
 signals:
 
 public slots:
@@ -54,7 +58,7 @@ private:
     /**
      * @brief commentary content
      */
-    QTextEdit *content;
+    BibleCommentaryBrowser *content;
 
     /**
      * @brief Splitter widget for dictionary widget

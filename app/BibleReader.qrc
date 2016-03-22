@@ -27,6 +27,8 @@
         <file>assets/images/zoom_in.png</file>
         <file>assets/images/zoom_out.png</file>
         <file>assets/images/printer.png</file>
+        <file>assets/images/report.png</file>
+        <file>assets/images/dictionary.png</file>
     </qresource>
     <qresource prefix="/data">
         <file>assets/data/description.txt</file>

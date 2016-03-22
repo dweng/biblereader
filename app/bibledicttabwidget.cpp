@@ -13,7 +13,11 @@ BibleDictTabWidget::BibleDictTabWidget(BibleReaderCore *brc, QWidget *parent)
                                           dicts[i].getName(),
                                           this);
         dictWidgets.push_back(dictWidget);
-        addTab(dictWidget, dicts[i].getFullname());
+        addTab(dictWidget, QIcon(QString(":/img/assets/images/dictionary.png")), dicts[i].getFullname());
+    }
+
+    for (int i = 0; i < tabBar()->count(); i++) {
+        tabBar()->setTabTextColor(i, QColor("blue"));
     }
 
     for (int i = 0; i < dicts.size(); i++) {

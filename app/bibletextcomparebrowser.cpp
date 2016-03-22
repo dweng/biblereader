@@ -22,6 +22,9 @@ BibleTextCompareBrowser::BibleTextCompareBrowser(BibleReaderCore *brc, QWidget *
     QTextEdit(parent)
 {
     brCore = brc;
+
+    btFontFamily = brc->getConfigurator()->getBibleTextFontFamily();
+    btFontSize = brc->getConfigurator()->getBibleTextFontSize();
 }
 
 BibleTextCompareBrowser::~BibleTextCompareBrowser()
@@ -47,8 +50,8 @@ void BibleTextCompareBrowser::showComparedBibleText()
     QTextBlockFormat bfmt;
     QTextTableFormat tfmt;
     fmt.setForeground(QColor("green"));
-    fmt.setFontPointSize(16.0);
-    fmt.setFontFamily(QString("Microsoft YaHei"));
+    fmt.setFontPointSize(btFontSize + 6.0);
+    fmt.setFontFamily(btFontFamily);
     cursor->insertText(tr("Compare verse "), fmt);
     cursor->insertText(QString("["), fmt);
     cursor->insertText(currentBookName, fmt);
@@ -69,7 +72,7 @@ void BibleTextCompareBrowser::showComparedBibleText()
         BibleVerse verse = brCore->getVerse(bibleVersion,
                         currentBook, currentChapter, currentVerse
                     );
-        fmt.setFontPointSize(12.0);
+        fmt.setFontPointSize(btFontSize);
         fmt.setForeground(QColor("black"));
         // bible version
         QTextTableCell tc = cmpTable->cellAt(i, 0);
@@ -86,7 +89,8 @@ void BibleTextCompareBrowser::showComparedBibleText()
         verseText.replace("&lt;", "<sup style='color:blue; font-size: 20px; font-family: Courier New, Arial;'>&lt;");
         verseText.replace("&gt;", "&gt;</sup>");
 
-        verseText.prepend("<span style='font-size: 12pt; font-family: Microsoft YaHei'>");
+        verseText.prepend
+                ("<span style='font-size: "+QString::number(btFontSize)+"pt; font-family: "+btFontFamily+"'>");
         verseText.append("</span>");
         tmp.insertHtml(verseText);
 

@@ -40,8 +40,7 @@ BibleDictionaryWidget::~BibleDictionaryWidget()
 
 void BibleDictionaryWidget::createWidgets()
 {
-    dictShowExplaination = new QTextEdit(this);
-    dictShowExplaination->setReadOnly(true);
+    dictShowExplaination = new QTextBrowser(this);
 
     dictWordsCombo = new QComboBox(this);
     dictWordsCombo->setEditable(true);

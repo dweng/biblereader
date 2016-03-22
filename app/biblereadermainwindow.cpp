@@ -255,6 +255,25 @@ void BibleReaderMainWindow::showCurrentVerseInfo()
     statusBar->showMessage(info.getFullname().append(" ").append(verse.getVerseHeader()));
 }
 
+void BibleReaderMainWindow::setHistoryNavActionsEnabled(int which)
+{
+    switch (which) {
+    case 0:
+        navToHistoryBack->setDisabled(true);
+        navToHistoryForword->setEnabled(true);
+        break;
+
+    case -1:
+        navToHistoryBack->setDisabled(false);
+        navToHistoryForword->setEnabled(false);
+        break;
+    default:
+        navToHistoryBack->setEnabled(true);
+        navToHistoryForword->setEnabled(true);
+        break;
+    }
+}
+
 void BibleReaderMainWindow::createWidgets()
 {
     // create global toolbar
@@ -316,11 +335,16 @@ void BibleReaderMainWindow::createCentralWidget()
     navToHistoryBack->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Up));
     txtBrowserToolBar->addAction(navToHistoryBack);
     connect(navToHistoryBack, SIGNAL(triggered(bool)), this, SLOT(navToBackHistory()));
+    navToHistoryBack->setDisabled(true);
 
     navToHistoryForword = new QAction(QIcon(QString(":/img/assets/images/arrow_right.png")), tr("Forword"), this);
     navToHistoryForword->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Down));
     txtBrowserToolBar->addAction(navToHistoryForword);
+    navToHistoryForword->setDisabled(true);
     connect(navToHistoryForword, SIGNAL(triggered(bool)), this, SLOT(navToForwordHistory()));
+
+    connect(bibleReaderCore,
+            SIGNAL(navToHistoryItem(int)), this, SLOT(setHistoryNavActionsEnabled(int)));
 
     btZoomInAction = new QAction(QIcon(QString(":/img/assets/images/zoom_in.png")), tr("Zoom in"), this);
     btZoomInAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
@@ -332,17 +356,17 @@ void BibleReaderMainWindow::createCentralWidget()
     txtBrowserToolBar->addAction(btZoomOutAction);
     connect(btZoomOutAction, SIGNAL(triggered(bool)), this, SLOT(btZoomOut()));
 
+    goVerseAction = new QAction(QIcon(QString(":/img/assets/images/page_go.png")), tr("Jump directly"), this);
+    goVerseAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
+    QMenu *m = buildBibleTreeMenu();
+    goVerseAction->setMenu(m);
+    txtBrowserToolBar->addAction(goVerseAction);
     txtBrowserToolBar->addSeparator();
 
     copyCurVerseAction = new QAction(QIcon(QString(":/img/assets/images/page_copy.png")), tr("Copy current verse"), this);
     copyCurVerseAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
     txtBrowserToolBar->addAction(copyCurVerseAction);
     connect(copyCurVerseAction, SIGNAL(triggered(bool)), this, SLOT(copyCurrentVerse()));
-
-    txtBrowserToolBar->addSeparator();
-    goVerseAction = new QAction(QIcon(QString(":/img/assets/images/page_go.png")), tr("Jump directly"), this);
-    goVerseAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
-    txtBrowserToolBar->addAction(goVerseAction);
 
     txtBrowserToolBar->addSeparator();
     printBTAction = new QAction(QIcon(QString(":/img/assets/images/printer.png")), tr("Print current chapter"), this);
@@ -371,7 +395,8 @@ void BibleReaderMainWindow::createBibleTreeDockWidget()
 {
     bibleTreeDockWidget = new QDockWidget(tr("Bible Tree"),this);
     bibleTreeDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    bibleTreeDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    bibleTreeDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
+                                         | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, bibleTreeDockWidget);
     // bible tree
     bibleTreeWidget = new BibleTreeWidget(bibleReaderCore, this);
@@ -389,7 +414,8 @@ void BibleReaderMainWindow::createBSDockWidget()
 {
     bibleSearchDockWidget = new QDockWidget(tr("Bible Search"),this);
     bibleSearchDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    bibleSearchDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    bibleSearchDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
+                                           | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, bibleSearchDockWidget);
     bibleSearchWidget = new BibleSearchWidget(bibleReaderCore, this);
     connect(bibleSearchWidget, SIGNAL(goToVerse(QString,int,int,int)), btTabWidget,
@@ -403,7 +429,8 @@ void BibleReaderMainWindow::createBCDockWidget()
 {
     commentaryDockWidget = new QDockWidget(tr("Commentary"), this);
     commentaryDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    commentaryDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+    commentaryDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
+                                          | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
     addDockWidget(Qt::BottomDockWidgetArea, commentaryDockWidget);
     bcTabWidget = new BibleCommentaryTabWidget(bibleReaderCore, this);
     commentaryDockWidget->setWidget(bcTabWidget);
@@ -413,7 +440,8 @@ void BibleReaderMainWindow::createDictDockWidget()
 {
     dictDockWidget = new QDockWidget(tr("Dictionary Window"),this);
     dictDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    dictDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+    dictDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
+                                    | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
     bdTabWidget = new BibleDictTabWidget(bibleReaderCore, this);
     dictDockWidget->setWidget(bdTabWidget);
     addDockWidget(Qt::BottomDockWidgetArea, dictDockWidget);
@@ -444,8 +472,14 @@ void BibleReaderMainWindow::createTopMenus()
 
     // add action to view menu
     mainMenuBar->addMenu(viewMenu);
+    viewMenu->addAction(navToHistoryBack);
+    viewMenu->addAction(navToHistoryForword);
+    viewMenu->addAction(navToPrevChapterAction);
+    viewMenu->addAction(navToNextChapterAction);
     viewMenu->addAction(btZoomInAction);
     viewMenu->addAction(btZoomOutAction);
+    viewMenu->addAction(goVerseAction);
+
 
     // add actions to Tool menu
     mainMenuBar->addMenu(toolMenu);
@@ -477,6 +511,59 @@ void BibleReaderMainWindow::createStatusBar()
             this, SLOT(showCurrentVerseInfo()));
     connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)),
             this, SLOT(showCurrentVerseInfo()));
+}
+
+QMenu *BibleReaderMainWindow::buildBibleTreeMenu()
+{
+    LOG_DEBUG("Building Bible menu data...");
+
+    QMenu *jumpGoMenu = new QMenu(this);
+
+    // get all bible books
+    QList<BibleBook> books = bibleReaderCore->getAllBooks();
+    QString qss = "";
+    for(int i=0;i<books.count();i++)
+    {
+        BibleBook book = books.value(i);
+
+        QMenu *bookMenu = new QMenu(book.getLongName(), jumpGoMenu);
+        bookMenu->setIcon(QIcon(QString(":/img/assets/images/book.png")));
+        jumpGoMenu->addMenu(bookMenu);
+        int bookNumber = book.getBookNumber();
+        if (bookNumber >= 1 && bookNumber <= 5) {
+            /*
+            QPalette palette;
+            palette.setColor(QPalette::Foreground, Qt::red);
+            bookMenu->setPalette(palette);
+            */
+        } else if (bookNumber > 5 && bookNumber <= 17) {
+        }
+        // get all chapters for one book
+        QList<int> chapters = bibleReaderCore->getChaptersCountOfOneBook(book.getBookNumber());
+        for(int j=0;j<chapters.count();j++)
+        {
+            QMenu *chapterMenu = new QMenu(QString::number(j+1), bookMenu);
+            bookMenu->addMenu(chapterMenu);
+            int versesCount = chapters.value(j);
+            // add verses to chapter
+            for (int k=0; k<versesCount;k++)
+            {
+                QAction *verseAction = new QAction(QString::number(k+1), chapterMenu);
+                QList<QVariant> d;
+                d.push_back(book.getBookNumber());
+                d.push_back(j+1);
+                d.push_back(k+1);
+                verseAction->setData(d);
+                connect(verseAction, SIGNAL(triggered(bool)), this, SLOT(btGoVerse()));
+                chapterMenu->addAction(verseAction);
+            }
+        }
+
+    }
+    //jumpGoMenu->setStyleSheet(qss);
+    LOG_DEBUG("Built Bible menu data");
+    return jumpGoMenu;
+
 }
 
 void BibleReaderMainWindow::navToNextChapter()
@@ -517,4 +604,13 @@ void BibleReaderMainWindow::btPrint()
 {
     BibleTextBrowser *btBrowser = qobject_cast<BibleTextBrowser *>(btTabWidget->currentWidget());
     btBrowser->printBibleText();
+}
+
+void BibleReaderMainWindow::btGoVerse()
+{
+    QAction *act = qobject_cast<QAction *>(sender());
+
+    QList<QVariant> params = act->data().toList();
+
+    bibleReaderCore->setCurrentBCV(params[0].toInt(), params[1].toInt(), params[2].toInt());
 }

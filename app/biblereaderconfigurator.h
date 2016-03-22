@@ -76,6 +76,9 @@ public:
     double getBibleTextFontSize() const;
     void setBibleTextFontSize(double value);
 
+    QString getBxPathBase() const;
+    void setBxPathBase(const QString &value);
+
 signals:
     void selectedVerseBGChanged(QColor newColor);
     void projectDlgBGChanged(QColor newColor);
@@ -101,6 +104,12 @@ private:
      * @brief bible commentary path base
      */
     QString bcPathBase;
+
+    /**
+     * @brief bxPathBase
+     * bible cross reference path base
+     */
+    QString bxPathBase;
 
     /**
      * @brief default dictionary

@@ -1,0 +1,12 @@
+目录
+书的内容
+
+两张表：
+1. 目录表
+2. 书的内容表
+
+1. 目录表：
+id parentid title
+
+2. 书的内容表：
+id muluid content

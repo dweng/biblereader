@@ -70,7 +70,11 @@ SOURCES += main.cpp\
     biblereaderversion.cpp \
     biblereaderresourcemanager.cpp \
     biblereaderdownloader.cpp \
-    biblereaderresourcemanagerdlg.cpp
+    biblereaderresourcemanagerdlg.cpp \
+    biblecommentarybrowser.cpp \
+    biblereadertooltip.cpp \
+    biblexrefsdao.cpp \
+    bibleversexref.cpp
 
 HEADERS  += biblereadercore.h \
     biblechapter.h \
@@ -108,10 +112,13 @@ HEADERS  += biblereadercore.h \
     biblereaderversion.h \
     biblereaderresourcemanager.h \
     biblereaderdownloader.h \
-    biblereaderresourcemanagerdlg.h
+    biblereaderresourcemanagerdlg.h \
+    biblecommentarybrowser.h \
+    biblereadertooltip.h \
+    biblexrefsdao.h \
+    bibleversexref.h
 
 OTHER_FILES += \
-    bar-descriptor.xml \
     convert.py \
     BibleReader.rc
 
@@ -132,3 +139,7 @@ RC_FILE = BibleReader.rc
 macx {
 ICON = $$PWD/assets/images/biblereader.icns
 }
+
+DISTFILES += \
+    ebook.ddl.txt \
+    translations/ZH_cn.ts

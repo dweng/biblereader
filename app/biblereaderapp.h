@@ -47,6 +47,10 @@ private:
     bool initBibleReaderCore();
     bool deinitBibleReaderCore();
 
+protected:
+    bool notify(QObject *obj, QEvent *e);
+    bool eventFilter(QObject *obj, QEvent *e);
+
 private:
     QTranslator translator;
     QTranslator qtTranslator;
