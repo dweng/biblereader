@@ -13,8 +13,8 @@
         <transparent>false</transparent>
     </initialWindow>
     <env var="QML2_IMPORT_PATH" value="app/native/imports"/>
-    <env var="QT_PLUGIN_PATH" value="app/native/plugins"/>
-    <env var="LD_LIBRARY_PATH" value="app/native/lib"/>
+    <env var="QT_PLUGIN_PATH" value="/usr/lib/qt4/plugins:$QT_PLUGIN_PATH"/>
+    <env var="LD_LIBRARY_PATH" value="/usr/lib/qt4/lib:$LD_LIBRARY_PATH"/>
     <arg>-platform</arg>
     <arg>qnx</arg>
     <action system="true">run_native</action>
@@ -40,4 +40,5 @@
     -->
     <authorId>dweng</authorId>
     <buildId>1.0.0</buildId>
+    <env var="QML_IMPORT_PATH" value="/usr/lib/qt4/imports:$QML_IMPORT_PATH"/>
 </qnx>
