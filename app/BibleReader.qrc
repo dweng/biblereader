@@ -26,7 +26,13 @@
         <file>assets/images/television.png</file>
         <file>assets/images/zoom_in.png</file>
         <file>assets/images/zoom_out.png</file>
+<<<<<<< HEAD
         <file>assets/images/biblereader.icns</file>
+=======
+        <file>assets/images/printer.png</file>
+        <file>assets/images/report.png</file>
+        <file>assets/images/dictionary.png</file>
+>>>>>>> 4ee4d018bcb27d8d650c0669617746feb89f5d9d
     </qresource>
     <qresource prefix="/data">
         <file>assets/data/description.txt</file>

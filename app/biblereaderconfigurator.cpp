@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QApplication>
 #include <QFontDatabase>
+#include "Logger.h"
 BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     QObject(parent)
 {
@@ -19,6 +20,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
         settings->setValue("/base/biblePathBase", dir.absolutePath() + "/bibles/");
         settings->setValue("/base/dictPathBase", dir.absolutePath() + "/dicts/");
         settings->setValue("/base/bcPathBase", dir.absolutePath() + "/commentarys/");
+        settings->setValue("/base/bxPathBase", dir.absolutePath() + "/xrefs/");
         settings->setValue("/base/defaultBibleVersion", "LZZ");
         settings->setValue("/base/defaultDict", "SNCHS");
         settings->setValue("/base/defaultCommentary", "DDESJZS");
@@ -32,7 +34,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
         settings->setValue("/text/projectDlgFG", "#ffffff");
 
         settings->setValue("/text/bibleTextFontFamily",
-                           QFontDatabase::systemFont(QFontDatabase::GeneralFont).family());
+                           QFontDatabase::systemFont(QFontDatabase::TitleFont).family());
         settings->setValue("/text/bibleTextFontSize", 14.0);
 
         // app
@@ -44,6 +46,8 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     biblePathBase = settings->value("/base/biblePathBase").toString();
     dictPathBase = settings->value("/base/dictPathBase").toString();
     bcPathBase = settings->value("/base/bcPathBase").toString();
+    bxPathBase = settings->value("/base/bxPathBase").toString();
+    LOG_INFO() << bxPathBase;
     defaultBibleVersion = settings->value("/base/defaultBibleVersion").toString();
     defaultDict = settings->value("/base/defaultDict").toString();
     defaultCommentary = settings->value("/base/defaultCommentary").toString();
@@ -71,6 +75,7 @@ BibleReaderConfigurator::~BibleReaderConfigurator()
         settings->setValue("/base/biblePathBase", biblePathBase);
         settings->setValue("/base/dictPathBase", dictPathBase);
         settings->setValue("/base/bcPathBase", bcPathBase);
+        settings->setValue("/base/bxPathBase", bxPathBase);
         settings->setValue("/base/defaultBibleVersion", defaultBibleVersion);
         settings->setValue("/base/defaultDict", defaultDict);
         settings->setValue("/base/defaultCommentary", defaultCommentary);
@@ -252,6 +257,16 @@ void BibleReaderConfigurator::setBibleTextFontSize(double value)
         emit bibleTextFontSizeChanged(value);
     }
 
+}
+
+QString BibleReaderConfigurator::getBxPathBase() const
+{
+    return bxPathBase;
+}
+
+void BibleReaderConfigurator::setBxPathBase(const QString &value)
+{
+    bxPathBase = value;
 }
 
 

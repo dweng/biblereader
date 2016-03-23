@@ -12,15 +12,21 @@ BibleCommentaryTabWidget::BibleCommentaryTabWidget(BibleReaderCore *brc,
         BibleCommentaryWidget *newCmtWidget = new
                 BibleCommentaryWidget(brc, tempinfo.getShortname(), this);
         bcWidgets.push_back(newCmtWidget);
-        addTab(newCmtWidget, tempinfo.getFullname());
+        addTab(newCmtWidget, QIcon(QString(":/img/assets/images/report.png")),tempinfo.getFullname());
+    }
+
+    for (int i = 0; i < tabBar()->count(); i++) {
+        tabBar()->setTabTextColor(i, QColor("green"));
     }
 
     for (int i = 0; i < allcmts.size(); i++) {
-        if (allcmts[i].getName() == brc->getCurrentCommentary()) {
+        if (allcmts[i].getShortname() == brc->getCurrentCommentary()) {
             setCurrentIndex(i);
             break;
         }
     }
+
+    connect(this, SIGNAL(currentChanged(int)), this, SLOT(updateCurrentCommentary(int)));
 }
 
 BibleCommentaryTabWidget::~BibleCommentaryTabWidget()
@@ -28,6 +34,13 @@ BibleCommentaryTabWidget::~BibleCommentaryTabWidget()
     if (!bcWidgets.empty()) {
         bcWidgets.clear();
     }
+}
+
+void BibleCommentaryTabWidget::updateCurrentCommentary(int index)
+{
+    QString cmmtname = bcWidgets[index]->getCmtName();
+    brCore->setCurrentCommentary(cmmtname);
+    brCore->getConfigurator()->setDefaultCommentary(cmmtname);
 }
 
 

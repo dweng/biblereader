@@ -38,7 +38,7 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
 
     // logging
     QDir dir(QApplication::applicationDirPath());
-#ifdef Q_OS_OSX || Q_OS_MACX || Q_OS_MAC || Q_OS_MAC64
+#ifdef Q_OS_OSX
     dir.cdUp();
     dir.cd("Resources");
 #endif
@@ -90,4 +90,27 @@ bool BibleReaderApp::deinitBibleReaderCore()
     delete brCore;
     LOG_DEBUG("Bible Reader Core deinited.");
     return true;
+}
+
+bool BibleReaderApp::notify(QObject *obj, QEvent *e)
+{
+    return QApplication::notify(obj,e);
+}
+
+bool BibleReaderApp::eventFilter(QObject *obj, QEvent *e)
+{
+    /*
+    switch (e->type()) {
+    case QEvent::KeyPress:
+            if (obj->objectName() == "tipContent") {
+                obj->event(e);
+            }
+        break;
+
+    default:
+        break;
+    }
+    */
+
+    QApplication::eventFilter(obj, e);
 }

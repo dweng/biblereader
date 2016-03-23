@@ -3,7 +3,8 @@
 
 #include <QString>
 #include <QStringList>
-
+#include <QList>
+#include "bibleversexref.h"
 class BibleVerse
 {
 public:
@@ -31,6 +32,9 @@ public:
     void setBookName(const QString &value);
 
     QString getVerseHeader();
+    void addXref(BibleVerseXref xref);
+
+    QList<BibleVerseXref> getXrefs() const;
 
 private:
     int bookNumber;
@@ -40,6 +44,9 @@ private:
 
     QString verseText;
     QString bibleVersion;
+
+    // xrefs
+    QList<BibleVerseXref> xrefs;
 };
 
 #endif // BIBLEVERSE_H

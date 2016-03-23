@@ -3,6 +3,7 @@
 
 BibleVerse::BibleVerse()
 {
+    xrefs.clear();
 }
 
 BibleVerse::~BibleVerse()
@@ -77,6 +78,16 @@ void BibleVerse::setBookName(const QString &value)
 QString BibleVerse::getVerseHeader()
 {
     return QString("%1 %2:%3").arg(bookName, QString::number(chapter), QString::number(verse));
+}
+
+void BibleVerse::addXref(BibleVerseXref xref)
+{
+    xrefs.push_back(xref);
+}
+
+QList<BibleVerseXref> BibleVerse::getXrefs() const
+{
+    return xrefs;
 }
 
 

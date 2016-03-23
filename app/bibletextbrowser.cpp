@@ -12,6 +12,7 @@
 #include <QPrintDialog>
 #include "biblereaderprojectdialog.h"
 #include "bibletextblockdata.h"
+#include "bibleversexref.h"
 // for logging
 #include "Logger.h"
 #include "ConsoleAppender.h"
@@ -48,7 +49,7 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
     // disable open link
     setOpenLinks(false);
 
-    connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(showStrongNumberDict(QUrl)));
+    connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(navTo(QUrl)));
 }
 
 BibleTextBrowser::~BibleTextBrowser()
@@ -60,39 +61,62 @@ BibleTextBrowser::~BibleTextBrowser()
 
 bool BibleTextBrowser::event(QEvent *event)
 {
-    /*
-    if (event->type() == QEvent::ToolTip)
-    {
-        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
-        QTextCursor cursor = cursorForPosition(helpEvent->pos());
-        cursor.select(QTextCursor::WordUnderCursor);
-        if (!cursor.selectedText().isEmpty())
-            QToolTip::showText(helpEvent->globalPos(), cursor.selectedText());
-        else
-            QToolTip::hideText();
-        return true;
-    }*/
-
     return QTextBrowser::event(event);
 }
 
 void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
 {
-    QTextCursor cursor = cursorForPosition(e->pos());
-    cursor.select(QTextCursor::WordUnderCursor);
-    if (!cursor.selectedText().isEmpty()) {
-        QString text = cursor.selectedText();
-        if (text.startsWith("H") || text.startsWith("G")) {
-            //QString sn = convertSNForDict(text);
-            QToolTip::showText(e->globalPos(),
-                               brCore->getExplaination(
-                                   QString("SNCHS"), text).replace("\\r\\n", "\r\n"));
-        }
+    QString url = anchorAt(e->pos());
+    if (!url.isEmpty()) {
+        QUrl brUrl = QUrl(url);
+        if (brUrl.scheme() == "br") {
+            if (brUrl.host() == "bible") {
+                QStringList verseInfo = brUrl.path().split('/', QString::SkipEmptyParts);
+                if (verseInfo.size() == 3) {
+                    QString verseText = brCore->getVerse(
+                                verseInfo[0].toInt(),
+                                verseInfo[1].toInt(),
+                                verseInfo[2].toInt()
+                                ).text();
+                    QToolTip::showText(e->globalPos(), verseText, this, rect(), 100000);
 
+                } else if (verseInfo.size() == 6) {
+                    BibleVersePos start = BibleVersePos(
+                                verseInfo[0].toInt(),
+                                verseInfo[1].toInt(),
+                                verseInfo[2].toInt()
+                                );
+                    BibleVersePos end = BibleVersePos(
+                                verseInfo[3].toInt(),
+                                verseInfo[4].toInt(),
+                                verseInfo[5].toInt()
+                                );
+                    QString versesText = brCore->getVerses(start, end);
+                    QToolTip::showText(e->globalPos(), versesText, this, rect(), 100000);
+
+                } else {
+                    // do nothing
+                    ;
+                }
+            } else if (brUrl.host() == "dict"){
+                LOG_INFO() << brUrl.path();
+                QString dictPath = brUrl.path();
+                QStringList dictItemInfo = dictPath.split('/', QString::SkipEmptyParts);
+                QString dict = dictItemInfo[0].toUpper();
+                QString text = dictItemInfo[1].toUpper();
+                if (dict == "SNCHS") {
+                    if (text.startsWith("H") || text.startsWith("G")) {
+                        QToolTip::showText(e->globalPos(),
+                                           brCore->getExplaination(
+                                           QString("SNCHS"), text).replace("\\r\\n", "\r\n"),
+                                           this, rect(), 100000);
+                    }
+                }
+            }
+        }
     } else {
         QToolTip::hideText();
     }
-
     QTextBrowser::mouseMoveEvent(e);
 }
 
@@ -245,6 +269,20 @@ bool BibleTextBrowser::showCurrentChapter()
                     brCore->getCurrentChapterNumber()
                 );
     QList<BibleVerse> verses = chapter.getVersesList();
+    QList<BibleVerseXref> xrefs = brCore->getXrefsByChapter(brCore->getCurrentBookNumber(),
+                                                            brCore->getCurrentChapterNumber());
+
+    for (int i = 0; i < verses.size(); i++) {
+        for (int j = 0; j < xrefs.size(); j++) {
+            if (xrefs[j].getFbi() == verses[i].getBookNumber() &&
+                    xrefs[j].getFci() == verses[i].getChapter() &&
+                    xrefs[j].getFvi() == verses[i].getVerse()) {
+                verses[i].addXref(xrefs[j]);
+            }
+        }
+        LOG_INFO() << "xrefs: " << verses[i].getXrefs().size();
+    }
+
     int chapterId = chapter.getChapter();
     int bookId = chapter.getBook().getBookNumber();
     QString bv = chapter.getBibleVersion();
@@ -273,17 +311,14 @@ bool BibleTextBrowser::showCurrentChapter()
         cursor->insertText(QString("%1:%2 ").arg(QString::number(chapterId),
                                                 QString::number(verses[i].getVerse())), fmt);
         // verse format
-        addVerse(cursor, verses[i].getVerseText(), fmt.font());
+        addVerse(cursor, verses[i], fmt.font());
         BibleTextBlockData *d = new BibleTextBlockData(
                     bv, bookId, chapterId, verses[i].getVerse());
         cursor->block().setUserData(d);
     }
 
-    setReadOnly(true);
     highlight(brCore->getCurrentVerseNumber(), bgColor);
-    if (brCore->getCurrentVerseNumber() != 1) {
-        preVerseId = brCore->getCurrentVerseNumber();
-    }
+    preVerseId = brCore->getCurrentVerseNumber();
 
     return true;
 }
@@ -298,11 +333,12 @@ void BibleTextBrowser::highlight(int verse, const QColor &color)
         format.setBackground(color);
 
         tmpCursor->setBlockFormat(format);
-        tmpCursor->movePosition(QTextCursor::EndOfBlock);
-        tmpCursor->movePosition(QTextCursor::NextBlock);
-        tmpCursor->position();
+        // move 3 times to make sure the cursor visible
+        for (int i = 0; i < 2; i++) {
+            tmpCursor->movePosition(QTextCursor::EndOfBlock);
+            tmpCursor->movePosition(QTextCursor::NextBlock);
+        }
         setTextCursor(*tmpCursor);
-        ensureCursorVisible();
 
         delete tmpCursor;
     }
@@ -323,7 +359,7 @@ void BibleTextBrowser::highlight(int verse, const QColor &color)
 
 }
 
-void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText, QFont f)
+void BibleTextBrowser::addVerse(QTextCursor *cursor, BibleVerse verse, QFont f)
 {
     QTextCharFormat supFmt;
 
@@ -332,6 +368,8 @@ void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText, QFont f)
     supFmt.setFontPointSize(btFontSize);
 
     // convert strong number for dict usage
+    QString wholeVerseString = "";
+    QString verseText = verse.getVerseText();
     QStringList SNs = verseText.split(QRegExp("[<>]"), QString::SkipEmptyParts);
     if (!SNs.isEmpty()) {
         for (int i = 0; i < SNs.size(); i++) {
@@ -351,12 +389,38 @@ void BibleTextBrowser::addVerse(QTextCursor *cursor, QString verseText, QFont f)
         verseText.replace("&lt;", "<a href='br://dict/snchs'><sup>&lt;");
         verseText.replace("&gt;", "&gt;</sup></a>");
         */
-        verseText.prepend(QString("<p style='font-family:%1; font-size:%2pt'>").arg(
-                              f.family(), QString::number(f.pointSizeF())) );
-        verseText.append("</p>");
     }
 
-    cursor->insertHtml(verseText);
+    wholeVerseString = verseText;
+    QList<BibleVerseXref> xrefs = verse.getXrefs();
+    QString xrefStr = "";
+    int tbi, tci, tvi, tspan;
+    QString tbname, tmp;
+    for (int i = 0; i < xrefs.size(); i++) {
+        tbi = xrefs[i].getTbi();
+        tci = xrefs[i].getTci();
+        tvi = xrefs[i].getTvi();
+        tspan = xrefs[i].getTspan();
+        tbname = xrefs[i].getTbname();
+        tmp = "";
+        if (xrefs[i].getTspan() > 0) {
+            tmp.sprintf
+                    ("<sub><a href=\"br://bible/%d/%d/%d/%d/%d/%d\">%s %d:%d-%d;</a> </sub>",
+                     tbi, tci, tvi, tbi, tci, tvi+tspan, tbname.toStdString().c_str(), tci, tvi, tvi+tspan);
+            xrefStr += tmp;
+        } else {
+            tmp.sprintf
+                    ("<sub><a href=\"br://bible/%d/%d/%d\">%s %d:%d;</a> </sub>",
+                     tbi, tci, tvi, tbname.toStdString().c_str(), tci, tvi);
+            xrefStr += tmp;
+        }
+    }
+    LOG_INFO() << verse.getVerse() <<":"<< xrefStr;
+    wholeVerseString += xrefStr;
+    wholeVerseString.prepend(QString("<p style='font-family:%1; font-size:%2pt'>").arg(
+                          f.family(), QString::number(f.pointSizeF())) );
+    wholeVerseString.append("</p>");
+    cursor->insertHtml(wholeVerseString);
 }
 
 QTextBlock BibleTextBrowser::getTextBlockByVerse(int verse)
@@ -444,17 +508,20 @@ void BibleTextBrowser::changeBibleTextFontSize(double size)
     showCurrentChapter();
 }
 
-void BibleTextBrowser::showStrongNumberDict(QUrl url)
+void BibleTextBrowser::navTo(QUrl brUrl)
 {
-    LOG_INFO() << "Strong Number Clicked:";
-    // br://dict/[dict name]/[item name]
-    QString dictPath = url.path();
-    LOG_INFO() << dictPath;
-
-    if (url.scheme() == "br") {
-        QStringList dictItemInfo = dictPath.split('/', QString::SkipEmptyParts);
-        LOG_INFO() << dictItemInfo;
-        brCore->fireShowDictItem(dictItemInfo[0].toUpper(), dictItemInfo[1]);
+    if (brUrl.scheme() == "br") {
+        if (brUrl.host() == "bible") {
+            QStringList verseInfo = brUrl.path().split('/', QString::SkipEmptyParts);
+            brCore->setCurrentBCV(
+                        verseInfo[0].toInt(),
+                        verseInfo[1].toInt(),
+                        verseInfo[2].toInt());
+        } else if (brUrl.host() == "dict") {
+            QString dictPath = brUrl.path();
+            QStringList dictItemInfo = dictPath.split('/', QString::SkipEmptyParts);
+            brCore->fireShowDictItem(dictItemInfo[0].toUpper(), dictItemInfo[1]);
+        }
     }
 
 }

@@ -18,10 +18,14 @@
 
 #include <QObject>
 #include <QString>
+#include <QMap>
+#include <QList>
 
 #include "bibleversepos.h"
+#include "bibleversexref.h"
 #include "bibletextdao.h"
 #include "bibledictdao.h"
+#include "biblexrefsdao.h"
 #include "bibleinfo.h"
 #include "bibledictinfo.h"
 #include "biblereaderconfigurator.h"
@@ -251,6 +255,12 @@ public:
     QList<BibleCommentaryInfo> getAllCommentarys();
 
     /**
+     * @brief getAllXrefs
+     * @return a string list contains all xrefs
+     */
+    QList<QString> getAllXrefs();
+
+    /**
      * @brief get all words and explainations of current dictionary
      */
     QMap<QString, QString> getAllWordsAndExplainationsOfCurrentDict();
@@ -302,10 +312,19 @@ public:
     void setBcPathBase(const QString &value);
 
     bool addCommentary(QString &name, QString &path);
+    bool addXref(QString &name, QString &path);
     QString getChapterCmt(QString cn, int book, int chapter);
     BibleReaderVersion *getVersion() const;
 
     BibleReaderResourceManager *getResManager() const;
+
+    QList<BibleVersePos> getHistory() const;
+
+    int getHistoryPos() const;
+    void setHistoryPos(int value);
+
+    QList<BibleVerseXref> getXrefsByChapter(int book, int chapter);
+    QList<BibleVerseXref> getXrefsByVerse(int book, int chapter, int verse);
 
 signals:
     /**
@@ -336,14 +355,9 @@ signals:
     void showDictItem(QString dictName, QString itemName);
 
     /**
-     * @brief navToLastHistoryItem
+     * @brief navToHistoryItem
      */
-    void navToLastHistoryItem();
-
-    /**
-     * @brief navToFirstHistoryItem
-     */
-    void navToFirstHistoryItem();
+    void navToHistoryItem(int which);
 
     /**
      * @brief searchRequest
@@ -452,6 +466,11 @@ private:
     QMap<QString, BibleCommentaryDAO*> allBCDAOs;
 
     /**
+     * @brief <xrefs name, xrefs DAO>
+     */
+    QMap<QString, BibleXRefsDAO*> allBXDAOs;
+
+    /**
      * @brief bibles store path
      */
     QString biblePathBase;
@@ -482,6 +501,16 @@ private:
     QList<BibleCommentaryInfo> allCmts;
 
     /**
+     * @brief bxPathBase
+     */
+    QString bxPathBase;
+
+    /**
+     * @brief allXrefs
+     */
+    QStringList allXrefs;
+
+    /**
      * @brief Bible Reader configurator instance
      */
     BibleReaderConfigurator *configurator;
@@ -496,6 +525,12 @@ private:
      * store the verses we read.
      */
     QList<BibleVersePos> history;
+
+    /**
+     * @brief historyPos
+     * store the history navigation postion
+     */
+    int historyPos;
 
     /**
      * @brief this resource manager will handle all operations

@@ -51,12 +51,18 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     getAllCommentarys();
     setCurrentCommentary(configurator->getDefaultCommentary());
 
+    // process xrefs
+    bxPathBase = configurator->getBxPathBase();
+    LOG_INFO() << bxPathBase;
+    getAllXrefs();
+
     currentBookNumber = configurator->getLastBook();
     currentChapterNumber = configurator->getLastChapter();
     currentVerseNumber = configurator->getLastVerse();
 
     // store first verse history
     history.push_back(BibleVersePos(currentBookNumber, currentChapterNumber, currentVerseNumber));
+    historyPos = 0;
 }
 
 BibleReaderCore::~BibleReaderCore()
@@ -65,6 +71,7 @@ BibleReaderCore::~BibleReaderCore()
     qDeleteAll(allBTDAOs);
     qDeleteAll(allBDDAOs);
     qDeleteAll(allBCDAOs);
+    qDeleteAll(allBXDAOs);
 
     configurator->setLastBook(currentBookNumber);
     configurator->setLastChapter(currentChapterNumber);
@@ -109,7 +116,7 @@ QString BibleReaderCore::getVerses(BibleVersePos start, BibleVersePos end)
     for (int i = 0; i < verses.size(); i++) {
         text.append(verses[i].text()).append("\n");
     }
-
+    LOG_INFO() << text;
     return text;
 }
 
@@ -186,8 +193,7 @@ void BibleReaderCore::navNextChapter()
         }
     }
     currentVerseNumber = 1;
-    history.push_back(BibleVersePos(currentBookNumber, currentChapterNumber, currentVerseNumber));
-    emit currentVerseChanged(currentBookNumber, currentChapterNumber, currentVerseNumber);
+    setCurrentBCV(currentBookNumber, currentChapterNumber, currentVerseNumber);
 }
 
 void BibleReaderCore::navPrevChapter()
@@ -216,8 +222,7 @@ void BibleReaderCore::navPrevChapter()
         }
     }
     currentVerseNumber = 1;
-    history.push_back(BibleVersePos(currentBookNumber, currentChapterNumber, currentVerseNumber));
-    emit currentVerseChanged(currentBookNumber, currentChapterNumber, currentVerseNumber);
+    setCurrentBCV(currentBookNumber, currentChapterNumber, currentVerseNumber);
 }
 
 void BibleReaderCore::fireCmpCurVerse()
@@ -232,49 +237,78 @@ void BibleReaderCore::fireShowDictItem(QString dictName, QString itemName)
 
 void BibleReaderCore::navBackHistory()
 {
-    int cur = 0;
-    for (int i = 0; i < history.size(); i++) {
-        if (history[i].getBookNumber() == currentBookNumber &&
-                history[i].getChapterNumber() == currentChapterNumber &&
-                history[i].getVerseNumber() == currentVerseNumber) {
-            cur = i;
-            break;
-        }
-    }
+    if (history.size() > 1) {
+        historyPos--;
+        setCurrentBCV(history[historyPos].getBookNumber(),
+                history[historyPos].getChapterNumber(),
+                history[historyPos].getVerseNumber(), 1);
 
-    if (cur == 0) {
-        emit navToFirstHistoryItem();
-    } else {
-        setCurrentBCV(history[cur-1].getBookNumber(),
-                history[cur-1].getChapterNumber(),
-                history[cur-1].getVerseNumber(), 1);
+        if (historyPos == 0) {
+            emit navToHistoryItem(0);
+        } else {
+            emit navToHistoryItem(historyPos);
+        }
     }
 }
 
 void BibleReaderCore::navForwordHistory()
 {
-    int cur = history.size()-1;
-    for (int i = 0; i < history.size(); i++) {
-        if (history[i].getBookNumber() == currentBookNumber &&
-                history[i].getChapterNumber() == currentChapterNumber &&
-                history[i].getVerseNumber() == currentVerseNumber) {
-            cur = i;
-            break;
-        }
-    }
+    if (history.size() > 1) {
+        historyPos++;
+        setCurrentBCV(history[historyPos].getBookNumber(),
+                history[historyPos].getChapterNumber(),
+                history[historyPos].getVerseNumber(), 1);
 
-    if (cur == history.size()-1) {
-        emit navToLastHistoryItem();
-    } else {
-        setCurrentBCV(history[cur+1].getBookNumber(),
-                history[cur+1].getChapterNumber(),
-                history[cur+1].getVerseNumber(), 1);
+        if (historyPos == history.size()-1) {
+            emit navToHistoryItem(-1);
+        } else {
+            emit navToHistoryItem(historyPos);
+        }
     }
 }
 
 void BibleReaderCore::fireSearchRequest(QString q)
 {
     emit searchRequest(q);
+}
+
+int BibleReaderCore::getHistoryPos() const
+{
+    return historyPos;
+}
+
+void BibleReaderCore::setHistoryPos(int value)
+{
+    historyPos = value;
+}
+
+QList<BibleVerseXref> BibleReaderCore::getXrefsByChapter(int book, int chapter)
+{
+    QList<BibleVerseXref> result;
+    result.clear();
+    for (int i = 0; i < allBXDAOs.values().size(); i++) {
+        QList<BibleVerseXref> tmp = allBXDAOs.values()[i]->getXrefsByChapter(book, chapter);
+        result += tmp;
+    }
+
+    return result;
+}
+
+QList<BibleVerseXref> BibleReaderCore::getXrefsByVerse(int book, int chapter, int verse)
+{
+    QList<BibleVerseXref> result;
+    result.clear();
+    for (int i = 0; i < allBXDAOs.values().size(); i++) {
+        QList<BibleVerseXref> tmp = allBXDAOs.values()[i]->getXrefsByVerse(book, chapter, verse);
+        result += tmp;
+    }
+
+    return result;
+}
+
+QList<BibleVersePos> BibleReaderCore::getHistory() const
+{
+    return history;
 }
 
 BibleReaderResourceManager *BibleReaderCore::getResManager() const
@@ -302,6 +336,17 @@ bool BibleReaderCore::addCommentary(QString &name, QString &path)
     if (!allBCDAOs.contains(name)) {
         BibleCommentaryDAO *bcDAO = new BibleCommentaryDAO(name, path);
         allBCDAOs.insert(name, bcDAO);
+    }
+
+    return true;
+}
+
+bool BibleReaderCore::addXref(QString &name, QString &path)
+{
+    LOG_INFO() << "add xref:" << name << ", " << path;
+    if (!allBXDAOs.contains(name)) {
+        BibleXRefsDAO *bxDAO = new BibleXRefsDAO(name, path);
+        allBXDAOs.insert(name, bxDAO);
     }
 
     return true;
@@ -367,6 +412,8 @@ int BibleReaderCore::setCurrentBCV(int b, int c, int v, int operation)
     // history navigation, not store to history list
     if (operation == 0) {
         history.push_back(BibleVersePos(b, c, v));
+        historyPos = history.size()-1;
+        emit navToHistoryItem(-1);
     }
     emit currentVerseChanged(b, c, v);
     return 1;
@@ -547,6 +594,33 @@ QList<BibleCommentaryInfo> BibleReaderCore::getAllCommentarys()
     }
 
     return allCmts;
+}
+
+QList<QString> BibleReaderCore::getAllXrefs()
+{
+    LOG_INFO() << "add xrefs in:" <<bxPathBase;
+    QString xref;
+    QString xrefDataPath;
+
+    if (allXrefs.empty()) {
+        QDir xrefPath = QDir(bxPathBase);
+        if (!xrefPath.exists()) {
+            return allXrefs;
+        }
+
+        xrefPath.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+        QFileInfoList xrefs = xrefPath.entryInfoList();
+
+        for (int i = 0; i < xrefs.count(); i++) {
+            xref = xrefs[i].fileName();
+            xrefDataPath = bxPathBase + xref;
+            addXref(xref, xrefDataPath);
+
+            allXrefs.push_back(xref);
+        }
+    }
+
+    return allXrefs;
 }
 
 QMap<QString, QString> BibleReaderCore::getAllWordsAndExplainationsOfCurrentDict()

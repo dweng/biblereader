@@ -33,6 +33,9 @@ protected:
 
 private:
     BibleReaderCore *brCore;
+    // bible text font and size
+    QString btFontFamily;
+    double btFontSize;
 };
 
 #endif // BIBLETEXTCOMPAREBROWSER_H

@@ -52,6 +52,16 @@ QString BibleCommentaryWidget::changeChapterCmt(QTreeWidgetItem *current,
     return changeChapterCmt(book, chapter, 1);
 }
 
+QString BibleCommentaryWidget::getCmtName() const
+{
+    return cmtName;
+}
+
+void BibleCommentaryWidget::setCmtName(const QString &value)
+{
+    cmtName = value;
+}
+
 QString BibleCommentaryWidget::getCmtTitle() const
 {
     return cmtTitle;
@@ -86,7 +96,7 @@ void BibleCommentaryWidget::createWidgets()
 
     connect(section, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
             this, SLOT(changeChapterCmt(QTreeWidgetItem*,QTreeWidgetItem*)));
-    content = new QTextBrowser(this);
+    content = new BibleCommentaryBrowser(brCore ,this);
     content->setHtml(brCore->getChapterCmt(
                          cmtName,
                          curBookNum,
