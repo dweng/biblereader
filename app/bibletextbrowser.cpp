@@ -61,19 +61,6 @@ BibleTextBrowser::~BibleTextBrowser()
 
 bool BibleTextBrowser::event(QEvent *event)
 {
-    /*
-    if (event->type() == QEvent::ToolTip)
-    {
-        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
-        QTextCursor cursor = cursorForPosition(helpEvent->pos());
-        cursor.select(QTextCursor::WordUnderCursor);
-        if (!cursor.selectedText().isEmpty())
-            QToolTip::showText(helpEvent->globalPos(), cursor.selectedText());
-        else
-            QToolTip::hideText();
-        return true;
-    }*/
-
     return QTextBrowser::event(event);
 }
 
@@ -91,7 +78,7 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
                                 verseInfo[1].toInt(),
                                 verseInfo[2].toInt()
                                 ).text();
-                    QToolTip::showText(e->globalPos(), verseText);
+                    QToolTip::showText(e->globalPos(), verseText, this, rect(), 100000);
 
                 } else if (verseInfo.size() == 6) {
                     BibleVersePos start = BibleVersePos(
@@ -105,22 +92,24 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
                                 verseInfo[5].toInt()
                                 );
                     QString versesText = brCore->getVerses(start, end);
-                    QToolTip::showText(e->globalPos(), versesText);
+                    QToolTip::showText(e->globalPos(), versesText, this, rect(), 100000);
 
                 } else {
                     // do nothing
                     ;
                 }
             } else if (brUrl.host() == "dict"){
+                LOG_INFO() << brUrl.path();
                 QString dictPath = brUrl.path();
                 QStringList dictItemInfo = dictPath.split('/', QString::SkipEmptyParts);
-                QString dict = dictItemInfo[0];
-                QString text = dictItemInfo[1];
+                QString dict = dictItemInfo[0].toUpper();
+                QString text = dictItemInfo[1].toUpper();
                 if (dict == "SNCHS") {
                     if (text.startsWith("H") || text.startsWith("G")) {
                         QToolTip::showText(e->globalPos(),
                                            brCore->getExplaination(
-                                           QString("SNCHS"), text).replace("\\r\\n", "\r\n"));
+                                           QString("SNCHS"), text).replace("\\r\\n", "\r\n"),
+                                           this, rect(), 100000);
                     }
                 }
             }
@@ -289,9 +278,9 @@ bool BibleTextBrowser::showCurrentChapter()
                     xrefs[j].getFci() == verses[i].getChapter() &&
                     xrefs[j].getFvi() == verses[i].getVerse()) {
                 verses[i].addXref(xrefs[j]);
-                xrefs.removeAt(j);
             }
         }
+        LOG_INFO() << "xrefs: " << verses[i].getXrefs().size();
     }
 
     int chapterId = chapter.getChapter();
@@ -426,6 +415,7 @@ void BibleTextBrowser::addVerse(QTextCursor *cursor, BibleVerse verse, QFont f)
             xrefStr += tmp;
         }
     }
+    LOG_INFO() << verse.getVerse() <<":"<< xrefStr;
     wholeVerseString += xrefStr;
     wholeVerseString.prepend(QString("<p style='font-family:%1; font-size:%2pt'>").arg(
                           f.family(), QString::number(f.pointSizeF())) );

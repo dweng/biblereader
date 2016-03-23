@@ -309,6 +309,7 @@ void BibleReaderMainWindow::createGlobalToolbar()
     configAction = toolBar->addAction(QIcon(QString(":/img/assets/images/wrench.png")),tr("Configure"));
     connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showCfgDlg()));
     resourceManagerAction = toolBar->addAction(QIcon(QString(":/img/assets/images/package.png")),tr("Resources manager"));
+    resourceManagerAction->setEnabled(false);
     connect(resourceManagerAction, SIGNAL(triggered(bool)), this, SLOT(showResMgrDlg()));
     toolBar->show();
 
@@ -394,7 +395,9 @@ void BibleReaderMainWindow::createCentralWidget()
 void BibleReaderMainWindow::createBibleTreeDockWidget()
 {
     bibleTreeDockWidget = new QDockWidget(tr("Bible Tree"),this);
-    bibleTreeDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    bibleTreeDockWidget->setFeatures(QDockWidget::DockWidgetMovable |
+                                     QDockWidget::DockWidgetClosable|
+                                     QDockWidget::DockWidgetFloatable);
     bibleTreeDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
                                          | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, bibleTreeDockWidget);
@@ -413,7 +416,9 @@ void BibleReaderMainWindow::createBibleTreeDockWidget()
 void BibleReaderMainWindow::createBSDockWidget()
 {
     bibleSearchDockWidget = new QDockWidget(tr("Bible Search"),this);
-    bibleSearchDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    bibleSearchDockWidget->setFeatures(QDockWidget::DockWidgetMovable |
+                                       QDockWidget::DockWidgetClosable|
+                                       QDockWidget::DockWidgetFloatable);
     bibleSearchDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
                                            | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, bibleSearchDockWidget);
@@ -428,7 +433,9 @@ void BibleReaderMainWindow::createBSDockWidget()
 void BibleReaderMainWindow::createBCDockWidget()
 {
     commentaryDockWidget = new QDockWidget(tr("Commentary"), this);
-    commentaryDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    commentaryDockWidget->setFeatures(QDockWidget::DockWidgetMovable |
+                                      QDockWidget::DockWidgetClosable|
+                                      QDockWidget::DockWidgetFloatable);
     commentaryDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
                                           | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
     addDockWidget(Qt::BottomDockWidgetArea, commentaryDockWidget);
@@ -439,7 +446,9 @@ void BibleReaderMainWindow::createBCDockWidget()
 void BibleReaderMainWindow::createDictDockWidget()
 {
     dictDockWidget = new QDockWidget(tr("Dictionary Window"),this);
-    dictDockWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    dictDockWidget->setFeatures(QDockWidget::DockWidgetMovable |
+                                QDockWidget::DockWidgetClosable|
+                                QDockWidget::DockWidgetFloatable);
     dictDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
                                     | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
     bdTabWidget = new BibleDictTabWidget(bibleReaderCore, this);
@@ -461,6 +470,7 @@ void BibleReaderMainWindow::createTopMenus()
     // add actions to File menu
     mainMenuBar->addMenu(fileMenu);
     projectVersesAction = fileMenu->addAction(QIcon(QString(":/img/assets/images/television.png")),tr("Project Verses"));
+    projectVersesAction->setEnabled(false);
     connect(projectVersesAction, SIGNAL(triggered()), this, SLOT(projectVerses()));
     exitAppAction = fileMenu->addAction(QIcon(QString(":/img/assets/images/cancel.png")), tr("Exit"));
     exitAppAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_X));
