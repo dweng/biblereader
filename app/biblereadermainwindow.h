@@ -170,6 +170,7 @@ private:
     QMenu *fileMenu;
     QMenu *editMenu;
     QMenu *viewMenu;
+    QMenu *windowMenu;
     QMenu *helpMenu;
     QMenu *toolMenu;
     QMenuBar *mainMenuBar;
@@ -219,6 +220,10 @@ private slots:
     void showCurrentVerseInfo();
 
     void setHistoryNavActionsEnabled(int which);
+
+    void windowMenuTrigger();
+
+    void toggleDockWidget(bool toggled);
 
 
 private:

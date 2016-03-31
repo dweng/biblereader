@@ -53,6 +53,7 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     : QMainWindow(parent)
 {
     LOG_DEBUG("constructor");
+    setObjectName("mainwindow");
     brConfigDlg = NULL;
     brProjectDlg = NULL;
 
@@ -274,6 +275,65 @@ void BibleReaderMainWindow::setHistoryNavActionsEnabled(int which)
     }
 }
 
+void BibleReaderMainWindow::windowMenuTrigger()
+{
+    windowMenu->clear();
+    QList<QDockWidget *> allDockWidgets = findChildren<QDockWidget*>();
+    //LOG_INFO() << allDockWidgets.size();
+    QList<QAction *> windowActionList;
+    for (int i = 0; i < allDockWidgets.size(); i++) {
+        QAction *tmp = new QAction(allDockWidgets[i]->windowTitle(), windowMenu);
+        Qt::Key win = Qt::Key_0;
+        switch (i) {
+        case 0:
+            win = Qt::Key_0;
+            break;
+        case 1:
+            win = Qt::Key_1;
+            break;
+        case 2:
+            win = Qt::Key_2;
+            break;
+        case 3:
+            win = Qt::Key_3;
+            break;
+        case 4:
+            win = Qt::Key_4;
+            break;
+        default:
+            break;
+        }
+        tmp->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + win));
+        tmp->setCheckable(true);
+        if (allDockWidgets[i]->isHidden()) {
+            tmp->setChecked(false);
+        } else {
+            tmp->setChecked(true);
+        }
+        connect(tmp, SIGNAL(toggled(bool)), this, SLOT(toggleDockWidget(bool)));
+        windowActionList.append(tmp);
+
+    }
+    windowMenu->addActions(windowActionList);
+}
+
+void BibleReaderMainWindow::toggleDockWidget(bool toggled)
+{
+    QAction *act = qobject_cast<QAction*>(sender());
+    QList<QDockWidget *> allDockWidgets = findChildren<QDockWidget*>();
+
+    for (int i = 0; i < allDockWidgets.size(); i++) {
+        if (act->text() == allDockWidgets[i]->windowTitle()) {
+            if (toggled) {
+                allDockWidgets[i]->setVisible(true);
+            } else {
+                allDockWidgets[i]->setVisible(false);
+            }
+            break;
+        }
+    }
+}
+
 void BibleReaderMainWindow::createWidgets()
 {
     // create global toolbar
@@ -465,6 +525,7 @@ void BibleReaderMainWindow::createTopMenus()
     editMenu = new QMenu(tr("Edit(&E)"), mainMenuBar);
     viewMenu = new QMenu(tr("View(&V)"), mainMenuBar);
     toolMenu = new QMenu(tr("Tools(&T)"), mainMenuBar);
+    windowMenu = new QMenu(tr("Window(&W)"), mainMenuBar);
     helpMenu = new QMenu(tr("Help(&H)"), mainMenuBar);
 
     // add actions to File menu
@@ -495,6 +556,10 @@ void BibleReaderMainWindow::createTopMenus()
     mainMenuBar->addMenu(toolMenu);
     toolMenu->addAction(configAction);
     toolMenu->addAction(resourceManagerAction);
+
+    // add actions to Window Menu
+    mainMenuBar->addMenu(windowMenu);
+    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuTrigger()));
 
     // add actions to Help menu
     mainMenuBar->addMenu(helpMenu);
@@ -540,13 +605,12 @@ QMenu *BibleReaderMainWindow::buildBibleTreeMenu()
         bookMenu->setIcon(QIcon(QString(":/img/assets/images/book.png")));
         jumpGoMenu->addMenu(bookMenu);
         int bookNumber = book.getBookNumber();
-        if (bookNumber >= 1 && bookNumber <= 5) {
-            /*
-            QPalette palette;
-            palette.setColor(QPalette::Foreground, Qt::red);
-            bookMenu->setPalette(palette);
-            */
-        } else if (bookNumber > 5 && bookNumber <= 17) {
+        QFont f = bookMenu->menuAction()->font();
+        if (bookNumber % 2 == 0) {
+            f.setBold(true);
+            bookMenu->menuAction()->setFont(f);
+        } else {
+            // do nothing, normal
         }
         // get all chapters for one book
         QList<int> chapters = bibleReaderCore->getChaptersCountOfOneBook(book.getBookNumber());
