@@ -3,6 +3,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "Logger.h"
 
 BibleReaderDownloader::BibleReaderDownloader(QString &key, QUrl &url, QObject *parent) :
     QObject(parent), url(url), key(key)
@@ -43,9 +44,6 @@ void BibleReaderDownloader::replyFinished(QNetworkReply *reply)
 
         if (error.error == QJsonParseError::NoError) {
             if (doc.isObject()) {
-                // get resource json object
-                qDebug() << doc.toJson();
-
                 QJsonObject object = doc.object();
                 QJsonArray resArray = object.value("BRResource").toArray();
 
@@ -64,7 +62,7 @@ void BibleReaderDownloader::replyFinished(QNetworkReply *reply)
                 }
             }
         } else {
-            qDebug() << replyString;
+            LOG_INFO() << replyString;
         }
     }
     reply->deleteLater();

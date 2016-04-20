@@ -9,7 +9,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
 {
     settings = NULL;
     QDir dir(QApplication::applicationDirPath());
-#ifdef Q_OS_OSX || Q_OS_MACX || Q_OS_MAC || Q_OS_MAC64
+#ifdef Q_OS_OSX
     dir.cdUp();
     dir.cd("Resources");
 #endif
