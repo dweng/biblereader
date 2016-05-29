@@ -69,6 +69,7 @@ private:/* functions */
     QString convertSNForDict(QString oldSN);
 
 private slots:
+    bool copyCurVerseHeader();
     bool copyCurVerse();
     void projectVerse();
     void copyVerseTo();

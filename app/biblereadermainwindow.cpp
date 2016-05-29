@@ -371,6 +371,10 @@ void BibleReaderMainWindow::createGlobalToolbar()
     resourceManagerAction = toolBar->addAction(QIcon(QString(":/img/assets/images/package.png")),tr("Resources manager"));
     resourceManagerAction->setEnabled(false);
     connect(resourceManagerAction, SIGNAL(triggered(bool)), this, SLOT(showResMgrDlg()));
+
+    // add layout tool buttons
+    buildLayoutActions();
+
     toolBar->show();
 
     this->addToolBar(toolBar);
@@ -637,6 +641,12 @@ QMenu *BibleReaderMainWindow::buildBibleTreeMenu()
     //jumpGoMenu->setStyleSheet(qss);
     LOG_DEBUG("Built Bible menu data");
     return jumpGoMenu;
+
+}
+
+void BibleReaderMainWindow::buildLayoutActions()
+{
+    QString layoutPath = bibleReaderCore->getConfigurator()->getLayoutPath();
 
 }
 

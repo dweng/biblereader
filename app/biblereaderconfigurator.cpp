@@ -17,6 +17,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     if (!QFile(settingsFile).exists()) {
         // create default settings
         settings = new QSettings(settingsFile, QSettings::IniFormat);
+        settings->setValue("/base/layoutPath", dir.absolutePath() + "/layouts/");
         settings->setValue("/base/biblePathBase", dir.absolutePath() + "/bibles/");
         settings->setValue("/base/dictPathBase", dir.absolutePath() + "/dicts/");
         settings->setValue("/base/bcPathBase", dir.absolutePath() + "/commentarys/");
@@ -43,6 +44,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     if (!settings)
         settings = new QSettings(settingsFile, QSettings::IniFormat);
 
+    layoutPath = settings->value("/base/layoutPath").toString();
     biblePathBase = settings->value("/base/biblePathBase").toString();
     dictPathBase = settings->value("/base/dictPathBase").toString();
     bcPathBase = settings->value("/base/bcPathBase").toString();
@@ -72,6 +74,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
 BibleReaderConfigurator::~BibleReaderConfigurator()
 {
     if (settings) {
+        settings->setValue("/base/layoutPath", layoutPath);
         settings->setValue("/base/biblePathBase", biblePathBase);
         settings->setValue("/base/dictPathBase", dictPathBase);
         settings->setValue("/base/bcPathBase", bcPathBase);
@@ -267,6 +270,16 @@ QString BibleReaderConfigurator::getBxPathBase() const
 void BibleReaderConfigurator::setBxPathBase(const QString &value)
 {
     bxPathBase = value;
+}
+
+QString BibleReaderConfigurator::getLayoutPath() const
+{
+    return layoutPath;
+}
+
+void BibleReaderConfigurator::setLayoutPath(const QString &value)
+{
+    layoutPath = value;
 }
 
 

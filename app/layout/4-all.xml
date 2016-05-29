@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <name>4-所有窗口</name>
+    <shortname>4-all</shortname>
+    <settings>
+        <bibletree show="true" area="right"></bibletree>
+        <biblesearch show="true" area="left"></biblesearch>
+        <bibledict show="true" area="bottom"></bibledict>
+        <biblecommentary show="true" area="bottom"></biblecommentary>
+    </settings>
+</layout>

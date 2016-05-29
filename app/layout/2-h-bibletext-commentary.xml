@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <name>2-横排-单独圣经文本窗口+注释窗口</name>
+    <shortname>2-h-bibletext-commentary</shortname>
+    <settings>
+        <bibletree show="false"></bibletree>
+        <biblesearch show="false"></biblesearch>
+        <bibledict show="false"></bibledict>
+        <biblecommentary show="true" area="right"></biblecommentary>
+    </settings>
+</layout>

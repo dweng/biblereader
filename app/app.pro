@@ -74,7 +74,8 @@ SOURCES += main.cpp\
     biblecommentarybrowser.cpp \
     biblereadertooltip.cpp \
     biblexrefsdao.cpp \
-    bibleversexref.cpp
+    bibleversexref.cpp \
+    biblereaderlayout.cpp
 
 HEADERS  += biblereadercore.h \
     biblechapter.h \
@@ -116,7 +117,8 @@ HEADERS  += biblereadercore.h \
     biblecommentarybrowser.h \
     biblereadertooltip.h \
     biblexrefsdao.h \
-    bibleversexref.h
+    bibleversexref.h \
+    biblereaderlayout.h
 
 OTHER_FILES += \
     convert.py \
@@ -142,4 +144,5 @@ ICON = $$PWD/assets/images/biblereader.icns
 
 DISTFILES += \
     ebook.ddl.txt \
-    translations/ZH_cn.ts
+    translations/ZH_cn.ts \
+    layout/*.xml

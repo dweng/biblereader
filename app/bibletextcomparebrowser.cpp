@@ -19,7 +19,7 @@
 #include <QTextTableCell>
 
 BibleTextCompareBrowser::BibleTextCompareBrowser(BibleReaderCore *brc, QWidget *parent):
-    QTextEdit(parent)
+    QTextBrowser(parent)
 {
     brCore = brc;
 

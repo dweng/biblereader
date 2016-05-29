@@ -211,6 +211,8 @@ void BibleSearchWidget::getSearchResult()
         result = brCore->search(q, scope);
     }
 
+    q = q.replace("<", "&lt;");
+    q = q.replace(">", "&gt;");
     QTreeWidgetItem *root = new QTreeWidgetItem();
     root->setData(0, Qt::DisplayRole, QString("[%1:%2]").arg(q, QString::number(result.count())));
     QString searchTip = tr("Searched version:<font color=\"blue\">%1</font><br />Query string:<font color=\"blue\">%2</font>");
@@ -219,13 +221,16 @@ void BibleSearchWidget::getSearchResult()
         BibleVerse b = result[i];
 
         QTreeWidgetItem *item = new QTreeWidgetItem(root);
-        QString verse = QString("<font color=\"green\">%1 %2:%3</font>").arg(b.getBookName(),
+        QString verse = QString("<font color=\"green\">[%1 %2:%3]</font>").arg(b.getBookName(),
                   QString::number(b.getChapter()),
                   QString::number(b.getVerse()));
         // apply verse text shower to QLabel
 
         item->setData(0, Qt::DisplayRole, verse);
-        QString hilightText =  b.getVerseText().replace(q, QString("<font color=\"red\">"+q+"</font>"));
+        QString verseText = b.getVerseText();
+        verseText = verseText.replace("<", "&lt;");
+        verseText = verseText.replace(">", "&gt;");
+        QString hilightText =  verseText.replace(q, QString("<font color=\"red\">"+q+"</font>"));
         item->setData(1, Qt::DisplayRole, hilightText);
         item->setData(2, Qt::DisplayRole, b.getBibleVersion());
         item->setData(3, Qt::DisplayRole, b.getBookNumber());

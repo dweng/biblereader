@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <name>1-单独圣经文本窗口</name>
+    <shortname>1-bibletext</shortname>
+    <settings>
+        <bibletree show="false"></bibletree>
+        <biblesearch show="false"></biblesearch>
+        <bibledict show="false"></bibledict>
+        <biblecommentary show="false"></biblecommentary>
+    </settings>
+</layout>

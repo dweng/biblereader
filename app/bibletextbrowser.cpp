@@ -171,6 +171,8 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
             brCore->setCurrentVerseNumber(d->getVerse());
         }
         QAction *copyCurrentVerse = menu->addAction(tr("Copy this verse"));
+        QAction *copyCurrentVerseHeader = menu->addAction(tr("Copy this verse header"));
+
         // add sub menu
         QMenu *copyTo = new QMenu(tr("Copy verses from current verse to..."), menu);
         BibleChapter bc = brCore->getChapter(bibleVersion, d->getBook(), d->getChapter());
@@ -197,6 +199,7 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
 
 
         connect(copyCurrentVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
+        connect(copyCurrentVerseHeader, SIGNAL(triggered()), this, SLOT(copyCurVerseHeader()));
         connect(compareCurrentVerse, SIGNAL(triggered()), brCore, SLOT(fireCmpCurVerse()));
         connect(projectCurrentVerse, SIGNAL(triggered()), this, SLOT(projectVerse()));
     }
@@ -446,6 +449,18 @@ QString BibleTextBrowser::convertSNForDict(QString oldSN)
     }
 
     return sn;
+}
+
+bool BibleTextBrowser::copyCurVerseHeader()
+{
+    QClipboard *cb = QApplication::clipboard();
+    BibleVerse verse = brCore->getVerse(
+                brCore->getCurrentVersion(),
+                brCore->getCurrentBookNumber(),
+                brCore->getCurrentChapterNumber(),
+                brCore->getCurrentVerseNumber());
+    cb->setText(verse.header(), QClipboard::Clipboard);
+    return true;
 }
 
 bool BibleTextBrowser::copyCurVerse()

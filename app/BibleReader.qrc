@@ -30,6 +30,8 @@
         <file>assets/images/printer.png</file>
         <file>assets/images/report.png</file>
         <file>assets/images/dictionary.png</file>
+        <file>assets/images/application_split.png</file>
+        <file>assets/images/application_tile_horizontal.png</file>
     </qresource>
     <qresource prefix="/data">
         <file>assets/data/description.txt</file>

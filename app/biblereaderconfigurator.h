@@ -79,6 +79,9 @@ public:
     QString getBxPathBase() const;
     void setBxPathBase(const QString &value);
 
+    QString getLayoutPath() const;
+    void setLayoutPath(const QString &value);
+
 signals:
     void selectedVerseBGChanged(QColor newColor);
     void projectDlgBGChanged(QColor newColor);
@@ -89,6 +92,12 @@ signals:
 public slots:
 
 private:
+    /**
+     * @brief layoutPath
+     * the directory which store layout settings
+     */
+    QString layoutPath;
+
     /**
      * @brief biblePathBase
      * this path is point to where bibles stored

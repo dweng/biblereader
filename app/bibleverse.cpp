@@ -65,6 +65,15 @@ QString BibleVerse::text()
                      verse,
                      verseText.toStdString().c_str());
 }
+
+QString BibleVerse::header()
+{
+    QString t = "";
+    return t.sprintf("[%s %i:%i]",
+                     bookName.toStdString().c_str(),
+                     chapter,
+                     verse);
+}
 QString BibleVerse::getBookName() const
 {
     return bookName;

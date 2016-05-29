@@ -175,6 +175,9 @@ private:
     QMenu *toolMenu;
     QMenuBar *mainMenuBar;
 
+    // layout actions
+    QList<QAction *> layoutActions;
+
 
     /**
      * @brief status bar.
@@ -256,6 +259,9 @@ private:
 
     // create bible go menu
     QMenu* buildBibleTreeMenu();
+
+    // scan layouts settings and create actions
+    void buildLayoutActions();
 };
 
 #endif // MAINWINDOW_H

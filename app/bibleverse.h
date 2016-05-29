@@ -27,6 +27,7 @@ public:
     void setBookNumber(int value);
 
     QString text();
+    QString header();
 
     QString getBookName() const;
     void setBookName(const QString &value);
