@@ -433,6 +433,11 @@ void BibleReaderMainWindow::createCentralWidget()
     txtBrowserToolBar->addAction(copyCurVerseAction);
     connect(copyCurVerseAction, SIGNAL(triggered(bool)), this, SLOT(copyCurrentVerse()));
 
+    compareVerseAction = new QAction(QIcon(QString(":/img/assets/images/compare.png")), tr("Compare current verse"), this);
+    compareVerseAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_P));
+    txtBrowserToolBar->addAction(compareVerseAction);
+    connect(compareVerseAction, SIGNAL(triggered(bool)), bibleReaderCore, SLOT(fireCmpCurVerse()));
+
     txtBrowserToolBar->addSeparator();
     printBTAction = new QAction(QIcon(QString(":/img/assets/images/printer.png")), tr("Print current chapter"), this);
     printBTAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_P));
@@ -553,6 +558,7 @@ void BibleReaderMainWindow::createTopMenus()
     viewMenu->addAction(navToNextChapterAction);
     viewMenu->addAction(btZoomInAction);
     viewMenu->addAction(btZoomOutAction);
+    viewMenu->addAction(compareVerseAction);
     viewMenu->addAction(goVerseAction);
 
 

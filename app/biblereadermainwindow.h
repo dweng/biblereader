@@ -146,6 +146,7 @@ private:
     QAction *btZoomInAction;
     QAction *btZoomOutAction;
     QAction *copyCurVerseAction;
+    QAction *compareVerseAction;
     QAction *goVerseAction;
     QAction *printBTAction;
 
