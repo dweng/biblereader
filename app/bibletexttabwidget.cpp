@@ -21,6 +21,10 @@
 BibleTextTabWidget::BibleTextTabWidget(BibleReaderCore *brc, QWidget *parent) :
     QTabWidget(parent)
 {
+    QString tabBarStyle = "QTabBar::tab {min-width:50px;color: black;border: 1px solid;border-top-left-radius: 5px;border-top-right-radius: 10px;padding:5px;}	\
+                               QTabBar::tab:!selected {margin-top: 5px;} \
+                               QTabBar::tab:selected {color: blue;}";
+    //setStyleSheet(tabBarStyle);
     brCore = brc;
     compareBrowser = new BibleTextCompareBrowser(brCore, this);
     connect(brCore, SIGNAL(currentVerseChanged(int,int,int)), compareBrowser,

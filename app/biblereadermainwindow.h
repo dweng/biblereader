@@ -149,6 +149,7 @@ private:
     QAction *compareVerseAction;
     QAction *goVerseAction;
     QAction *printBTAction;
+    QComboBox *selectBibleList;
 
     // File menu actions
     QAction *exitAppAction;

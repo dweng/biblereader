@@ -456,6 +456,16 @@ void BibleReaderMainWindow::createCentralWidget()
     centralLayout->setSpacing(0);
     centralLayout->addWidget(txtBrowserToolBar);
     centralLayout->addWidget(btTabWidget);
+    // TOOLBAR bible select
+    txtBrowserToolBar->addSeparator();
+    selectBibleList = new QComboBox(this);
+    for (int i = 0; i < btTabWidget->count(); i++) {
+        selectBibleList->addItem(btTabWidget->tabText(i));
+    }
+    selectBibleList->setCurrentText(btTabWidget->tabText(btTabWidget->currentIndex()));
+    connect(selectBibleList, SIGNAL(currentIndexChanged(int)), btTabWidget, SLOT(setCurrentIndex(int)));
+    connect(btTabWidget, SIGNAL(currentChanged(int)), selectBibleList, SLOT(setCurrentIndex(int)));
+    txtBrowserToolBar->addWidget(selectBibleList);
 
     central->setLayout(centralLayout);
     this->setCentralWidget(central);
