@@ -42,6 +42,7 @@ protected:
     void wheelEvent(QWheelEvent *e);
     void contextMenuEvent(QContextMenuEvent *e);
     void keyPressEvent(QKeyEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 private:/* vars */
     int preVerseId;
@@ -71,6 +72,7 @@ private:/* functions */
 private slots:
     bool copyCurVerseHeader();
     bool copyCurVerse();
+    bool copyCurVerseLongHeader();
     void projectVerse();
     void copyVerseTo();
     void changeSelectedVerseBGColor(QColor nc);

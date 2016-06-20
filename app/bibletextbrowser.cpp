@@ -122,6 +122,9 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
 
 void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
 {
+    // block anchorClicked signal
+    //blockSignals(true);
+
     QTextCursor cursor = cursorForPosition(e->pos());
     QTextBlock block = cursor.block();
     BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
@@ -140,8 +143,10 @@ void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
             //block.layout()->lineAt(0).setLineWidth(this->width());
         }
     }
-
     QTextBrowser::mousePressEvent(e);
+
+    // reset signal
+    //blockSignals(false);
 }
 
 void BibleTextBrowser::wheelEvent(QWheelEvent *e)
@@ -172,6 +177,7 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
         }
         QAction *copyCurrentVerse = menu->addAction(tr("Copy this verse"));
         QAction *copyCurrentVerseHeader = menu->addAction(tr("Copy this verse header"));
+        QAction *copyCurrentVerseLongHeader = menu->addAction(tr("Copy this verse with long book name"));
 
         // add sub menu
         QMenu *copyTo = new QMenu(tr("Copy verses from current verse to..."), menu);
@@ -200,6 +206,7 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
 
         connect(copyCurrentVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
         connect(copyCurrentVerseHeader, SIGNAL(triggered()), this, SLOT(copyCurVerseHeader()));
+        connect(copyCurrentVerseLongHeader, SIGNAL(triggered(bool)), this, SLOT(copyCurVerseLongHeader()));
         connect(compareCurrentVerse, SIGNAL(triggered()), brCore, SLOT(fireCmpCurVerse()));
         connect(projectCurrentVerse, SIGNAL(triggered()), this, SLOT(projectVerse()));
     }
@@ -245,6 +252,11 @@ void BibleTextBrowser::keyPressEvent(QKeyEvent *e)
     }
 
     //QTextEdit::keyPressEvent(e);
+}
+
+void BibleTextBrowser::mouseReleaseEvent(QMouseEvent *e)
+{
+    QTextBrowser::mouseReleaseEvent(e);
 }
 
 
@@ -472,6 +484,19 @@ bool BibleTextBrowser::copyCurVerse()
                 brCore->getCurrentChapterNumber(),
                 brCore->getCurrentVerseNumber());
     cb->setText(verse.text(), QClipboard::Clipboard);
+
+    return true;
+}
+
+bool BibleTextBrowser::copyCurVerseLongHeader()
+{
+    QClipboard *cb = QApplication::clipboard();
+    BibleVerse verse = brCore->getVerse(
+                brCore->getCurrentVersion(),
+                brCore->getCurrentBookNumber(),
+                brCore->getCurrentChapterNumber(),
+                brCore->getCurrentVerseNumber());
+    cb->setText(verse.textLongHeader(), QClipboard::Clipboard);
 
     return true;
 }

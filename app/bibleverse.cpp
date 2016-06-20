@@ -74,6 +74,16 @@ QString BibleVerse::header()
                      chapter,
                      verse);
 }
+
+QString BibleVerse::textLongHeader()
+{
+    QString t = "";
+    return t.sprintf("[%s %i:%i] %s",
+                     bookNameLong.toStdString().c_str(),
+                     chapter,
+                     verse,
+                     verseText.toStdString().c_str());
+}
 QString BibleVerse::getBookName() const
 {
     return bookName;
@@ -97,6 +107,16 @@ void BibleVerse::addXref(BibleVerseXref xref)
 QList<BibleVerseXref> BibleVerse::getXrefs() const
 {
     return xrefs;
+}
+
+QString BibleVerse::getBookNameLong() const
+{
+    return bookNameLong;
+}
+
+void BibleVerse::setBookNameLong(const QString &value)
+{
+    bookNameLong = value;
 }
 
 

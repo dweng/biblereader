@@ -16,6 +16,8 @@
 #include <QTextCodec>
 #include <QTimer>
 #include <QDir>
+#include <QFile>
+
 // for logging
 #include "Logger.h"
 #include "FileAppender.h"
@@ -57,10 +59,11 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     // init biblereadercore
     splash->showMessage(tr("Loading modules..."), Qt::AlignBottom|Qt::AlignLeft, Qt::white);
     initBibleReaderCore();
+    //setTheme(":qdarkstyle/style.qss");
 
     // Initialize objects
     w = new BibleReaderMainWindow(brCore);
-    //w->show();
+    w->show();
 
     QTimer::singleShot(2000, splash, SLOT(close()));
     splash->finish(w);
@@ -90,6 +93,18 @@ bool BibleReaderApp::deinitBibleReaderCore()
     delete brCore;
     LOG_DEBUG("Bible Reader Core deinited.");
     return true;
+}
+
+void BibleReaderApp::setTheme(QString theme)
+{
+    QString themeCSS = "";
+    QFile themeFile(theme);
+    if (themeFile.open(QIODevice::ReadOnly|QIODevice::Text)) {
+        themeCSS = themeFile.readAll();
+        themeFile.close();
+    }
+
+    setStyleSheet(themeCSS);
 }
 
 bool BibleReaderApp::notify(QObject *obj, QEvent *e)

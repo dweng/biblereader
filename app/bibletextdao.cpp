@@ -52,6 +52,7 @@ BibleVerse BibleTextDAO::getOneVerse(int book, int chapter, int verse)
         bookId = query->value(0).toInt();
         bv.setBookNumber(bookId);
         bv.setBookName(getBookByID(bookId).getShortName());
+        bv.setBookNameLong(getBookByID(bookId).getLongName());
         bv.setChapter(query->value(1).toInt());
         bv.setVerse(query->value(2).toInt());
         bv.setVerseText(query->value(3).toString());
@@ -93,6 +94,7 @@ QList<BibleVerse> BibleTextDAO::getVerses(BibleVersePos start, BibleVersePos end
                     bookId = query->value(0).toInt();
                     bv.setBookNumber(bookId);
                     bv.setBookName(getBookByID(bookId).getShortName());
+                    bv.setBookNameLong(getBookByID(bookId).getLongName());
                     bv.setChapter(query->value(1).toInt());
                     bv.setVerse(query->value(2).toInt());
                     bv.setVerseText(query->value(3).toString());
@@ -113,6 +115,7 @@ QList<BibleVerse> BibleTextDAO::getVerses(BibleVersePos start, BibleVersePos end
                 bookId = query->value(0).toInt();
                 bv.setBookNumber(bookId);
                 bv.setBookName(getBookByID(bookId).getShortName());
+                bv.setBookNameLong(getBookByID(bookId).getLongName());
                 bv.setChapter(query->value(1).toInt());
                 bv.setVerse(query->value(2).toInt());
                 bv.setVerseText(query->value(3).toString());
@@ -204,6 +207,7 @@ QList<BibleVerse> BibleTextDAO::search(QString q,
         bv.setVerse(query->value(2).toInt());
         bv.setVerseText(query->value(3).toString());
         bv.setBookName(getBookNameByID(query->value(0).toInt()));
+        bv.setBookNameLong(getBookByID(query->value(0).toInt()).getLongName());
         bv.setBibleVersion(this->bibleVersion);
 
         result.push_back(bv);

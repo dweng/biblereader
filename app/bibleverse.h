@@ -28,6 +28,7 @@ public:
 
     QString text();
     QString header();
+    QString textLongHeader();
 
     QString getBookName() const;
     void setBookName(const QString &value);
@@ -37,9 +38,13 @@ public:
 
     QList<BibleVerseXref> getXrefs() const;
 
+    QString getBookNameLong() const;
+    void setBookNameLong(const QString &value);
+
 private:
     int bookNumber;
     QString bookName;
+    QString bookNameLong;
     int chapter;
     int verse;
 

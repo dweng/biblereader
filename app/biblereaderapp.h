@@ -46,6 +46,7 @@ public slots:
 private:
     bool initBibleReaderCore();
     bool deinitBibleReaderCore();
+    void setTheme(QString theme);
 
 protected:
     bool notify(QObject *obj, QEvent *e);
