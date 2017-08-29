@@ -560,47 +560,47 @@ Query string:%2</source>
 <context>
     <name>BibleTextBrowser</name>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="173"/>
+        <location filename="../bibletextbrowser.cpp" line="178"/>
         <source>Copy this verse</source>
         <translation>复制该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="174"/>
+        <location filename="../bibletextbrowser.cpp" line="179"/>
         <source>Copy this verse header</source>
         <translation>复制当前经节头</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="175"/>
+        <location filename="../bibletextbrowser.cpp" line="180"/>
         <source>Copy this verse with long book name</source>
         <translation>复制该节经文（书卷全名）</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="186"/>
+        <location filename="../bibletextbrowser.cpp" line="191"/>
         <source>Compare this verse</source>
         <translation>比较该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="187"/>
+        <location filename="../bibletextbrowser.cpp" line="192"/>
         <source>Project this verse</source>
         <translation>投影该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="191"/>
+        <location filename="../bibletextbrowser.cpp" line="196"/>
         <source>Search &quot;%1&quot;</source>
         <translation>搜索“%1”</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="178"/>
+        <location filename="../bibletextbrowser.cpp" line="183"/>
         <source>Copy verses from current verse to...</source>
         <translation>复制经文从当前经文到...</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="198"/>
+        <location filename="../bibletextbrowser.cpp" line="203"/>
         <source>Print...</source>
         <translation>打印...</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="571"/>
+        <location filename="../bibletextbrowser.cpp" line="581"/>
         <source>Print Document</source>
         <translation>打印文档</translation>
     </message>

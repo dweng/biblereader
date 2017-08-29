@@ -133,8 +133,7 @@ INCLUDEPATH += $$PWD/../cutelogger/include/
 DEPENDPATH += $$PWD/../lib/
 
 RESOURCES += \
-    BibleReader.qrc \
-    qdarkstyle/style.qrc
+    BibleReader.qrc
 win32 {
 RC_FILE = BibleReader.rc
 }
