@@ -123,30 +123,31 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
 void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
 {
     // block anchorClicked signal
-    //blockSignals(true);
+//    blockSignals(true);
 
-    QTextCursor cursor = cursorForPosition(e->pos());
-    QTextBlock block = cursor.block();
-    BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
-    if (d && d->getVerse() != 0) {
-        if (d->getVerse() != preVerseId ) {
-            // de hilight previous verse
-            highlight(preVerseId, QColor("white"));
-            // high light current verse
-            highlight(d->getVerse(), bgColor);
-            preVerseId = d->getVerse();
+//    QTextCursor cursor = cursorForPosition(e->pos());
+//    QTextBlock block = cursor.block();
+//    BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
+//    if (d && d->getVerse() != 0) {
+//        if (d->getVerse() != preVerseId ) {
+//            // de hilight previous verse
+//            highlight(preVerseId, QColor("white"));
+//            // high light current verse
+//            highlight(d->getVerse(), bgColor);
+//            preVerseId = d->getVerse();
 
-            brCore->setCurrentBCV(d->getBook(),
-                                  d->getChapter(),
-                                  d->getVerse());
+//            brCore->setCurrentBCV(d->getBook(),
+//                                  d->getChapter(),
+//                                  d->getVerse());
 
-            //block.layout()->lineAt(0).setLineWidth(this->width());
-        }
-    }
-    QTextBrowser::mousePressEvent(e);
+//            //block.layout()->lineAt(0).setLineWidth(this->width());
+//        }
+//    }
+//    // reset signal
+//    blockSignals(false);
+    return QTextBrowser::mousePressEvent(e);
 
-    // reset signal
-    //blockSignals(false);
+
 }
 
 void BibleTextBrowser::wheelEvent(QWheelEvent *e)
