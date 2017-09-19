@@ -122,7 +122,8 @@ HEADERS  += biblereadercore.h \
 
 OTHER_FILES += \
     convert.py \
-    BibleReader.rc
+    BibleReader.rc \
+    br.nsi
 
 TRANSLATIONS += \
     translations/ZH_cn.ts
@@ -133,7 +134,8 @@ INCLUDEPATH += $$PWD/../cutelogger/include/
 DEPENDPATH += $$PWD/../lib/
 
 RESOURCES += \
-    BibleReader.qrc
+    BibleReader.qrc \
+    styles/qdarkstyle/style.qrc
 win32 {
 RC_FILE = BibleReader.rc
 }

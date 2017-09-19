@@ -33,6 +33,7 @@ protected:
 private slots:
     bool copyCurVerse();
     void removeCurResult();
+    void removeAllResults();
 
 protected:
     //void mousePressEvent(QMouseEvent *event);

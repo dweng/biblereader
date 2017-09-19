@@ -414,6 +414,11 @@
         <source>Remove current result</source>
         <translation>移除当前结果</translation>
     </message>
+    <message>
+        <location filename="../biblesearchresultwidget.cpp" line="61"/>
+        <source>Remove all results</source>
+        <translation>删除所有结果</translation>
+    </message>
 </context>
 <context>
     <name>BibleSearchWidget</name>
@@ -560,47 +565,47 @@ Query string:%2</source>
 <context>
     <name>BibleTextBrowser</name>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="178"/>
+        <location filename="../bibletextbrowser.cpp" line="181"/>
         <source>Copy this verse</source>
         <translation>复制该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="179"/>
+        <location filename="../bibletextbrowser.cpp" line="182"/>
         <source>Copy this verse header</source>
         <translation>复制当前经节头</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="180"/>
+        <location filename="../bibletextbrowser.cpp" line="183"/>
         <source>Copy this verse with long book name</source>
         <translation>复制该节经文（书卷全名）</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="191"/>
+        <location filename="../bibletextbrowser.cpp" line="194"/>
         <source>Compare this verse</source>
         <translation>比较该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="192"/>
+        <location filename="../bibletextbrowser.cpp" line="195"/>
         <source>Project this verse</source>
         <translation>投影该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="196"/>
+        <location filename="../bibletextbrowser.cpp" line="199"/>
         <source>Search &quot;%1&quot;</source>
         <translation>搜索“%1”</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="183"/>
+        <location filename="../bibletextbrowser.cpp" line="186"/>
         <source>Copy verses from current verse to...</source>
         <translation>复制经文从当前经文到...</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="203"/>
+        <location filename="../bibletextbrowser.cpp" line="206"/>
         <source>Print...</source>
         <translation>打印...</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="581"/>
+        <location filename="../bibletextbrowser.cpp" line="584"/>
         <source>Print Document</source>
         <translation>打印文档</translation>
     </message>

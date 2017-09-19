@@ -253,7 +253,7 @@ void BibleReaderMainWindow::showCurrentVerseInfo()
                                                  bibleReaderCore->getCurrentChapterNumber(),
                                                  bibleReaderCore->getCurrentVerseNumber());
 
-    statusBar->showMessage(info.getFullname().append(" ").append(verse.getVerseHeader()));
+    statusBar->showMessage(QString("[") + info.getFullname().append("] ").append(verse.getVerseHeader()));
 }
 
 void BibleReaderMainWindow::setHistoryNavActionsEnabled(int which)
@@ -366,10 +366,11 @@ void BibleReaderMainWindow::createGlobalToolbar()
 {
     // set global toolbar
     toolBar = new QToolBar(tr("Bible Navigator"), this);
+    toolBar->setMovable(false);
     configAction = toolBar->addAction(QIcon(QString(":/img/assets/images/wrench.png")),tr("Configure"));
     connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showCfgDlg()));
     resourceManagerAction = toolBar->addAction(QIcon(QString(":/img/assets/images/package.png")),tr("Resources manager"));
-    resourceManagerAction->setEnabled(false);
+    //resourceManagerAction->setEnabled(false);
     connect(resourceManagerAction, SIGNAL(triggered(bool)), this, SLOT(showResMgrDlg()));
 
     // add layout tool buttons
@@ -479,7 +480,7 @@ void BibleReaderMainWindow::createBibleTreeDockWidget()
                                      QDockWidget::DockWidgetFloatable);
     bibleTreeDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea
                                          | Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea);
-    addDockWidget(Qt::RightDockWidgetArea, bibleTreeDockWidget);
+    addDockWidget(Qt::LeftDockWidgetArea , bibleTreeDockWidget);
     // bible tree
     bibleTreeWidget = new BibleTreeWidget(bibleReaderCore, this);
     bibleTreeDockWidget->setWidget(bibleTreeWidget);

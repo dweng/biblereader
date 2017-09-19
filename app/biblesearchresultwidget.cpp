@@ -58,7 +58,8 @@ void BibleSearchResultWidget::contextMenuEvent(QContextMenuEvent *event)
 
         QAction *removeCurResultAct = menu->addAction(tr("Remove current result"));
         connect(removeCurResultAct, SIGNAL(triggered(bool)), this, SLOT(removeCurResult()));
-
+        QAction *removeAllResultsAct = menu->addAction(tr("Remove all results"));
+        connect(removeAllResultsAct, SIGNAL(triggered(bool)), this, SLOT(removeAllResults()));
         menu->exec(event->globalPos());
         delete menu;
 
@@ -103,4 +104,9 @@ void BibleSearchResultWidget::removeCurResult()
         takeTopLevelItem(current.row());
     }
 
+}
+
+void BibleSearchResultWidget::removeAllResults()
+{
+    clear();
 }

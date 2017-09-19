@@ -8,6 +8,7 @@
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\Bible Reader\BibleReader.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
+!define /date PRODUCT_TIME %Y%m%d%H%M%S
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -25,7 +26,7 @@
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "G:\work\Bible-Reader\app\assets\data\copyright.txt"
+!insertmacro MUI_PAGE_LICENSE "E:\work\Bible-Reader\app\assets\data\copyright.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
@@ -46,7 +47,7 @@
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${PRODUCT_NAME}-${PRODUCT_VERSION}-setup.exe"
+OutFile "..\output\${PRODUCT_NAME}-${PRODUCT_VERSION}-setup-${PRODUCT_TIME}.exe"
 InstallDir "$PROGRAMFILES\Bible Reader"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -57,11 +58,12 @@ Function .onInit
 FunctionEnd
 
 Section "MainSection" SEC01
+  SectionIn RO
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File /r /x biblereader.ini /x debug.log ".\bin\release\*"
+  File /r /x biblereader.ini /x debug.log "E:\work\Bible-Reader\bin\release\*"
   CreateDirectory "$SMPROGRAMS\Bible Reader"
-  CreateShortCut "$SMPROGRAMS\Bible Reader\Bible Reader.lnk" "$INSTDIR\AppMainExe.exe"
+  CreateShortCut "$SMPROGRAMS\Bible Reader\Bible Reader.lnk" "$INSTDIR\BibleReader.exe"
   CreateShortCut "$DESKTOP\Bible Reader.lnk" "$INSTDIR\BibleReader.exe"
 SectionEnd
 

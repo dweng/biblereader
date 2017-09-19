@@ -35,7 +35,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
         settings->setValue("/text/projectDlgFG", "#ffffff");
 
         settings->setValue("/text/bibleTextFontFamily",
-                           QFontDatabase::systemFont(QFontDatabase::TitleFont).family());
+                           QFontDatabase::systemFont(QFontDatabase::TitleFont));
         settings->setValue("/text/bibleTextFontSize", 14.0);
 
         // app

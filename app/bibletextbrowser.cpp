@@ -49,6 +49,9 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
     // disable open link
     setOpenLinks(false);
 
+    // remove default menus
+
+
     connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(navTo(QUrl)));
 }
 
@@ -122,44 +125,42 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
 
 void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
 {
-    // block anchorClicked signal
-//    blockSignals(true);
-
 //    QTextCursor cursor = cursorForPosition(e->pos());
 //    QTextBlock block = cursor.block();
-//    BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
-//    if (d && d->getVerse() != 0) {
-//        if (d->getVerse() != preVerseId ) {
-//            // de hilight previous verse
-//            highlight(preVerseId, QColor("white"));
-//            // high light current verse
-//            highlight(d->getVerse(), bgColor);
-//            preVerseId = d->getVerse();
 
-//            brCore->setCurrentBCV(d->getBook(),
-//                                  d->getChapter(),
-//                                  d->getVerse());
+//    // check has href or not
+//    if (block.charFormat().anchorHref().isEmpty()) {
 
-//            //block.layout()->lineAt(0).setLineWidth(this->width());
+//        BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
+//        if (d && d->getVerse() != 0) {
+//            if (d->getVerse() != preVerseId ) {
+//                // de hilight previous verse
+//                highlight(preVerseId, QColor("white"));
+//                // high light current verse
+//                highlight(d->getVerse(), bgColor);
+//                preVerseId = d->getVerse();
+
+//                brCore->setCurrentBCV(d->getBook(),
+//                                      d->getChapter(),
+//                                      d->getVerse());
+
+//                //block.layout()->lineAt(0).setLineWidth(this->width());
+//            }
 //        }
 //    }
-//    // reset signal
-//    blockSignals(false);
-    return QTextBrowser::mousePressEvent(e);
-
+    QTextBrowser::mousePressEvent(e);
 
 }
 
 void BibleTextBrowser::wheelEvent(QWheelEvent *e)
 {
-    int numDegrees = e->delta() / 8;
-    int numSteps = numDegrees / 15;
+    QPoint ad = e->angleDelta();
 
     QTextBrowser::wheelEvent(e);
 }
 
 void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
-    QMenu *menu = createStandardContextMenu(e->pos());
+    QMenu *menu = new QMenu();//createStandardContextMenu(e->pos());
 
     QTextCursor cursor = cursorForPosition(e->pos());
     QTextBlock block = cursor.block();
