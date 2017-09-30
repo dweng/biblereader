@@ -129,6 +129,16 @@ void BibleReaderMainWindow::onChapterChanged(int book, int chapter, int verse)
     bibleReaderCore->setCurrentBCV(book, chapter, verse);
 }
 
+void BibleReaderMainWindow::navToNextBook()
+{
+    bibleReaderCore->navNextBook();
+}
+
+void BibleReaderMainWindow::navToPrevBook()
+{
+    bibleReaderCore->navPrevBook();
+}
+
 void BibleReaderMainWindow::quitBibleReader()
 {
     QApplication::exit();
@@ -387,12 +397,23 @@ void BibleReaderMainWindow::createCentralWidget()
     QVBoxLayout *centralLayout = new QVBoxLayout(central);
     QToolBar *txtBrowserToolBar = new QToolBar(central);
     txtBrowserToolBar->setOrientation(Qt::Horizontal);
-    navToPrevChapterAction = new QAction(QIcon(QString(":/img/assets/images/book_previous.png")), tr("previous chapter"),this);
+
+    navToPrevBookAction = new QAction(QIcon(QString(":/img/assets/images/book_previous.png")), tr("previous book"),this);
+    navToPrevBookAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
+    txtBrowserToolBar->addAction(navToPrevBookAction);
+    connect(navToPrevBookAction, SIGNAL(triggered(bool)), this, SLOT(navToPrevBook()));
+
+    navToNextBookAction = new QAction(QIcon(QString(":/img/assets/images/book_next.png")),tr("next book"),this);
+    navToNextBookAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+    txtBrowserToolBar->addAction(navToNextBookAction);
+    connect(navToNextBookAction, SIGNAL(triggered(bool)), this, SLOT(navToNextBook()));
+
+    navToPrevChapterAction = new QAction(QIcon(QString(":/img/assets/images/arrow_up.png")), tr("previous chapter"),this);
     navToPrevChapterAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Left));
     txtBrowserToolBar->addAction(navToPrevChapterAction);
     connect(navToPrevChapterAction, SIGNAL(triggered()), this, SLOT(navToPrevChapter()));
 
-    navToNextChapterAction = new QAction(QIcon(QString(":/img/assets/images/book_next.png")),tr("next chapter"),this);
+    navToNextChapterAction = new QAction(QIcon(QString(":/img/assets/images/arrow_down.png")),tr("next chapter"),this);
     navToNextChapterAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Right));
     txtBrowserToolBar->addAction(navToNextChapterAction);
     connect(navToNextChapterAction, SIGNAL(triggered()), this, SLOT(navToNextChapter()));
@@ -445,6 +466,10 @@ void BibleReaderMainWindow::createCentralWidget()
     txtBrowserToolBar->addAction(printBTAction);
     connect(printBTAction, SIGNAL(triggered(bool)), this, SLOT(btPrint()));
 
+    showBibleInfoAction = new QAction(QIcon(QString(":/img/assets/images/information.png")), tr("Show current bible information"), this);
+    showBibleInfoAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_I));
+    txtBrowserToolBar->addAction(showBibleInfoAction);
+    connect(showBibleInfoAction, SIGNAL(triggered(bool)), this, SLOT(showBibleInfo()));
     /*
     QLineEdit *verseJumper = new QLineEdit(this);
     verseJumper->setMaximumWidth(40);
@@ -452,6 +477,8 @@ void BibleReaderMainWindow::createCentralWidget()
     */
 
     btTabWidget = new BibleTextTabWidget(bibleReaderCore, this);
+    // test
+    // btTabWidget->setCornerWidget(new QLineEdit(this));
     centralLayout->setContentsMargins(0, 0, 0, 0);
     centralLayout->setMargin(0);
     centralLayout->setSpacing(0);
@@ -617,12 +644,11 @@ QMenu *BibleReaderMainWindow::buildBibleTreeMenu()
 
     // get all bible books
     QList<BibleBook> books = bibleReaderCore->getAllBooks();
-    QString qss = "";
     for(int i=0;i<books.count();i++)
     {
         BibleBook book = books.value(i);
-
         QMenu *bookMenu = new QMenu(book.getLongName(), jumpGoMenu);
+        bookMenu->setProperty("bid", book.getBookNumber());
         bookMenu->setIcon(QIcon(QString(":/img/assets/images/book.png")));
         jumpGoMenu->addMenu(bookMenu);
         int bookNumber = book.getBookNumber();
@@ -714,4 +740,11 @@ void BibleReaderMainWindow::btGoVerse()
     QList<QVariant> params = act->data().toList();
 
     bibleReaderCore->setCurrentBCV(params[0].toInt(), params[1].toInt(), params[2].toInt());
+}
+
+void BibleReaderMainWindow::showBibleInfo()
+{
+    BibleInfo info = bibleReaderCore->getCurrentBibleInfo();
+
+    QMessageBox::information(this, tr("Bible Information"), info.getDescription() + "\n" + info.getCopyright(), QMessageBox::Ok);
 }

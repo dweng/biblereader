@@ -22,6 +22,7 @@
 #include <QSplitter>
 
 #include "biblereadercore.h"
+#include "bibledictbrowser.h"
 #include "Logger.h"
 
 /**
@@ -66,6 +67,13 @@ private:
      * @brief Destory widgets.
      */
     void destoryWidgets();
+
+    /**
+     * @brief compileExplaination
+     * @param exp QString
+     * @return compiled exp
+     */
+    QString compileExplaination(QString exp);
 private:
     /**
      * @brief bible reader core instance.
@@ -75,7 +83,7 @@ private:
     /**
      * @brief Show word explaination area.
      */
-    QTextBrowser *dictShowExplaination;
+    BibleDictBrowser *dictShowExplaination;
 
     /**
      * @brief Dictionary words combo box

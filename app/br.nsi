@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Bible Reader"
-!define PRODUCT_VERSION "0.0.3"
+!define PRODUCT_VERSION "0.0.4"
 !define PRODUCT_PUBLISHER "dweng123@gmail.com"
 !define PRODUCT_WEB_SITE "http://biblereader.cn"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\Bible Reader\BibleReader.exe"

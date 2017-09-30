@@ -367,6 +367,16 @@ signals:
 
 public slots:
     /**
+     * @brief navNextBook
+     */
+    void navNextBook();
+
+    /**
+     * @brief navPrevBook
+     */
+    void navPrevBook();
+
+    /**
      * @brief navigate to next chapter
      */
     void navNextChapter();

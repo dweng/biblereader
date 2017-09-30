@@ -32,6 +32,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
+    void paintEvent(QPaintEvent *event);
 private:
     void createWidgets();
     void destroyWidgets();

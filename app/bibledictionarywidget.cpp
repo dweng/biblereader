@@ -14,6 +14,8 @@
  */
 #include <QSplitter>
 #include <QGridLayout>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 #include "bibledictionarywidget.h"
 
 BibleDictionaryWidget::BibleDictionaryWidget(BibleReaderCore *brc, QString dn, QWidget *parent) :
@@ -40,7 +42,7 @@ BibleDictionaryWidget::~BibleDictionaryWidget()
 
 void BibleDictionaryWidget::createWidgets()
 {
-    dictShowExplaination = new QTextBrowser(this);
+    dictShowExplaination = new BibleDictBrowser(brCore, this);
 
     dictWordsCombo = new QComboBox(this);
     dictWordsCombo->setEditable(true);
@@ -77,6 +79,22 @@ void BibleDictionaryWidget::destoryWidgets()
     delete dictWordsCombo;
     delete dictWordsList;
 }
+
+QString BibleDictionaryWidget::compileExplaination(QString exp)
+{
+    QRegularExpression rx("\\d+:\\d+");
+    QRegularExpressionMatch match = rx.match(exp);
+    if (match.hasMatch()) {
+        for (int i=0; i <= match.lastCapturedIndex(); i++) {
+            QString refs = match.captured(i);
+
+            LOG_INFO() << refs;
+        }
+    }
+
+    return exp.replace(QString("\\r\\n"), QString("\n"));
+}
+
 QString BibleDictionaryWidget::getDictName() const
 {
     return dictName;
@@ -101,8 +119,7 @@ void BibleDictionaryWidget::showExplaination(QListWidgetItem* current,
     LOG_INFO() << "get explaination for:" << word;
     QString explaination = wordsList.value(word);
     LOG_INFO() << explaination;
-    dictShowExplaination->setText(
-                explaination.replace(QString("\\r\\n"), QString("\n")));
+    dictShowExplaination->setText(compileExplaination(explaination));
 }
 
 void BibleDictionaryWidget::showExplaination(int index)
@@ -112,8 +129,7 @@ void BibleDictionaryWidget::showExplaination(int index)
     LOG_INFO() << "get explaination for:" << word;
     QString explaination = wordsList.value(word);
     LOG_INFO() << explaination;
-    dictShowExplaination->setText(
-                explaination.replace(QString("\\r\\n"), QString("\n")));
+    dictShowExplaination->setText(compileExplaination(explaination));
 }
 
 void BibleDictionaryWidget::showExplaination(QString itemName)
@@ -123,7 +139,6 @@ void BibleDictionaryWidget::showExplaination(QString itemName)
         dictWordsCombo->setCurrentIndex(index);
         dictWordsList->setCurrentRow(index);
         QString explaination = wordsList.value(itemName);
-        dictShowExplaination->setText(
-                    explaination.replace(QString("\\r\\n"), QString("\n")));
+        dictShowExplaination->setText(compileExplaination(explaination));
     }
 }

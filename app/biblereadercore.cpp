@@ -306,6 +306,19 @@ QList<BibleVerseXref> BibleReaderCore::getXrefsByVerse(int book, int chapter, in
     return result;
 }
 
+void BibleReaderCore::navNextBook()
+{
+    if (currentBookNumber == 66) return;
+
+    setCurrentBCV(currentBookNumber+1, 1, 1);
+}
+
+void BibleReaderCore::navPrevBook()
+{
+    if (currentBookNumber == 1) return;
+    setCurrentBCV(currentBookNumber-1, 1, 1);
+}
+
 QList<BibleVersePos> BibleReaderCore::getHistory() const
 {
     return history;

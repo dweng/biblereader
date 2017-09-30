@@ -75,7 +75,8 @@ SOURCES += main.cpp\
     biblereadertooltip.cpp \
     biblexrefsdao.cpp \
     bibleversexref.cpp \
-    biblereaderlayout.cpp
+    biblereaderlayout.cpp \
+    bibledictbrowser.cpp
 
 HEADERS  += biblereadercore.h \
     biblechapter.h \
@@ -118,7 +119,8 @@ HEADERS  += biblereadercore.h \
     biblereadertooltip.h \
     biblexrefsdao.h \
     bibleversexref.h \
-    biblereaderlayout.h
+    biblereaderlayout.h \
+    bibledictbrowser.h
 
 OTHER_FILES += \
     convert.py \

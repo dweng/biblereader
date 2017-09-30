@@ -143,12 +143,15 @@ private:
     QAction *navToPrevChapterAction;
     QAction *navToHistoryBack;
     QAction *navToHistoryForword;
+    QAction *navToNextBookAction;
+    QAction *navToPrevBookAction;
     QAction *btZoomInAction;
     QAction *btZoomOutAction;
     QAction *copyCurVerseAction;
     QAction *compareVerseAction;
     QAction *goVerseAction;
     QAction *printBTAction;
+    QAction *showBibleInfoAction;
     QComboBox *selectBibleList;
 
     // File menu actions
@@ -192,6 +195,8 @@ signals:
 private slots:
     void onChapterVerseChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void onChapterChanged(int book, int chapter, int verse);
+    void navToNextBook();
+    void navToPrevBook();
     void navToNextChapter();
     void navToPrevChapter();
     void navToBackHistory();
@@ -200,6 +205,7 @@ private slots:
     void btZoomOut();
     void btPrint();
     void btGoVerse();
+    void showBibleInfo();
 
     // menu actions slots
     void quitBibleReader();

@@ -3,6 +3,9 @@
 #include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QBitmap>
+
 #include "biblereadertooltip.h"
 
 void BibleReaderToolTip::showText(QPoint pos, QString text, int mseconds)
@@ -73,6 +76,17 @@ void BibleReaderToolTip::keyReleaseEvent(QKeyEvent *e)
     QFrame::keyReleaseEvent(e);
 }
 
+void BibleReaderToolTip::paintEvent(QPaintEvent *event) {
+//    QBitmap bmap(size());
+//    QPainter p(&bmap);
+//    p.fillRect(rect(),Qt::white);
+//    p.setBrush(Qt::black);
+//    //p.drawRoundedRect(0,0,width() - 1,height() - 1,5,5);
+//    p.drawRoundRect(0, 0, width(), height(), 5, 5);
+//    setMask(bmap);
+    QWidget::paintEvent(event);
+}
+
 void BibleReaderToolTip::createWidgets()
 {
     setObjectName("container");
@@ -83,7 +97,7 @@ void BibleReaderToolTip::createWidgets()
     setStyleSheet("QWidget#container { border: 1px solid black; background: white;}");
     tipContentWidget = new QTextBrowser(this);
     tipContentWidget->setObjectName("tipContent");
-    tipContentWidget->setStyleSheet("QTextBrowser#tipContent {border: 0px}");
+    tipContentWidget->setStyleSheet("QTextBrowser#tipContent {border: 0px; background: white;}");
     helpInfoWidget = new QLabel(this);
     helpInfoWidget->setText(tr("Please press [shift] key to hold tip"));
     QVBoxLayout *layout = new QVBoxLayout(this);

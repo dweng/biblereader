@@ -82,7 +82,7 @@ void BibleTreeWidget::buildBibleTreeData()
         // book item
         QTreeWidgetItem *bookItem = new QTreeWidgetItem();
         bookItem->setIcon(0, QIcon(QString(":/img/assets/images/book.png")));
-        bookItem->setData(0, Qt::DisplayRole, book.getShortName());
+        bookItem->setData(0, Qt::DisplayRole, book.getShortName() + QString::number(book.getBookNumber()));
         bookItem->setData(1, Qt::DisplayRole, book.getBookNumber());
         // for default, show chapter 1 text of each book of Bible
         bookItem->setData(2, Qt::DisplayRole, 0);
