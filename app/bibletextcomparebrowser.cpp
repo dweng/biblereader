@@ -45,15 +45,15 @@ void BibleTextCompareBrowser::showComparedBibleText()
     // add head title
     setHtml("");
 
-    QString html = "<head></head><body><h2 style='text-align:center; color:green;'>";
+    QString html = "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"qrc:/others/assets/others/style.css\" /></head><body><h2>";
     html.append(currentBookName).append(" ").append(QString::number(currentChapter)).append("</h2>");
-    html.append("<table style='border-width: 1px; border-collapse: collapse;'><tr>");
+    html.append("<table><tr>");
 
     QList<BibleInfo> bibles = brCore->getAllBibleVersions();
     QList<BibleChapter> chapters;
     for (int i = 0; i < bibles.count(); i++) {
         // bible version
-        html.append("<td style='border-width: 1px; padding: 8px;border-style: solid; color:green; '>").append(bibles[i].getFullname()).append("</td>");
+        html.append("<th>").append(bibles[i].getFullname()).append("</th>");
         chapters.push_back(brCore->getChapter(bibles[i].getVersion(), currentBook, currentChapter));
     }
     html.append("</tr>");
@@ -62,7 +62,7 @@ void BibleTextCompareBrowser::showComparedBibleText()
         for (int i = 0; i < bibles.count(); i++) {
             QList<BibleVerse> verses = chapters[i].getVersesList();
 
-            html.append("<td style='border-width: 1px; padding: 8px;border-style: solid;'>");
+            html.append("<td>");
 
             BibleVerse verse = verses.value(j);
 

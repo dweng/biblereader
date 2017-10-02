@@ -33,11 +33,13 @@
         <file>assets/images/application_split.png</file>
         <file>assets/images/application_tile_horizontal.png</file>
         <file>assets/images/compare.png</file>
-        <file>C:/Users/xuchunhong/Downloads/aspjzy 16x16 图标 1000张/icons/information.png</file>
         <file>assets/images/information.png</file>
     </qresource>
     <qresource prefix="/data">
         <file>assets/data/description.txt</file>
         <file>assets/data/donation.txt</file>
+    </qresource>
+    <qresource prefix="/others">
+        <file>assets/others/style.css</file>
     </qresource>
 </RCC>

@@ -1,0 +1,23 @@
+table {
+    border-width: 1px;
+    border-collapse: collapse;
+}
+
+table td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+}
+
+table th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    color: blue;
+    font-weight: bold;
+}
+
+h2 {
+    text-align:center;
+    color:green;
+}

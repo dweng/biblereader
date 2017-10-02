@@ -149,4 +149,5 @@ ICON = $$PWD/assets/images/biblereader.icns
 DISTFILES += \
     ebook.ddl.txt \
     translations/ZH_cn.ts \
-    layout/*.xml
+    layout/*.xml \
+    assets/others/style.css

@@ -594,6 +594,8 @@ void BibleReaderMainWindow::createTopMenus()
     viewMenu->addAction(navToHistoryForword);
     viewMenu->addAction(navToPrevChapterAction);
     viewMenu->addAction(navToNextChapterAction);
+    viewMenu->addAction(navToPrevBookAction);
+    viewMenu->addAction(navToNextBookAction);
     viewMenu->addAction(btZoomInAction);
     viewMenu->addAction(btZoomOutAction);
     viewMenu->addAction(compareVerseAction);
