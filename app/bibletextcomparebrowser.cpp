@@ -45,8 +45,18 @@ void BibleTextCompareBrowser::showComparedBibleText()
     // add head title
     setHtml("");
 
-    QString html = "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"qrc:/others/assets/others/style.css\" /></head><body><h2>";
-    html.append(currentBookName).append(" ").append(QString::number(currentChapter)).append("</h2>");
+    QString html = "";
+    html.append("<head>");
+    html.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"qrc:/others/assets/others/bootstrap-3.3.7-dist/css/bootstrap.min.css\" />");
+    html.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"qrc:/others/assets/others/style.css\" />");
+    html.append("<script type=\"text/javascript\" src=\"qrc:/others/assets/others/jquery-3.2.1.min.js\"></script>");
+    html.append("<script type=\"text/javascript\" src=\"qrc:/others/assets/others/bootstrap-3.3.7-dist/js/bootstrap.min.js\"></script>");
+    html.append("<script type=\"text/javascript\" src=\"qrc:/others/assets/others/script.js\"></script>");
+    html.append("</head><body>");
+    html.append("<h2>").append(currentBookName).append(" ").append(QString::number(currentChapter)).append("</h2>");
+    html.append("<button type=\"button\" class=\"btn btn-default\" aria-label=\"Left Align\">");
+    html.append("<span class=\"glyphicon glyphicon-align-left\" aria-hidden=\"true\"></span>");
+    html.append("</button>");
     html.append("<table><tr>");
 
     QList<BibleInfo> bibles = brCore->getAllBibleVersions();

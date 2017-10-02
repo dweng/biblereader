@@ -41,5 +41,23 @@
     </qresource>
     <qresource prefix="/others">
         <file>assets/others/style.css</file>
+        <file>assets/others/jquery-3.2.1.min.js</file>
+        <file>assets/others/script.js</file>
+        <file>assets/others/bootstrap-3.3.7-dist/css/bootstrap.css</file>
+        <file>assets/others/bootstrap-3.3.7-dist/css/bootstrap.css.map</file>
+        <file>assets/others/bootstrap-3.3.7-dist/css/bootstrap.min.css</file>
+        <file>assets/others/bootstrap-3.3.7-dist/css/bootstrap.min.css.map</file>
+        <file>assets/others/bootstrap-3.3.7-dist/css/bootstrap-theme.css</file>
+        <file>assets/others/bootstrap-3.3.7-dist/css/bootstrap-theme.css.map</file>
+        <file>assets/others/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css</file>
+        <file>assets/others/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css.map</file>
+        <file>assets/others/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.eot</file>
+        <file>assets/others/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.svg</file>
+        <file>assets/others/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.ttf</file>
+        <file>assets/others/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.woff</file>
+        <file>assets/others/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.woff2</file>
+        <file>assets/others/bootstrap-3.3.7-dist/js/bootstrap.js</file>
+        <file>assets/others/bootstrap-3.3.7-dist/js/bootstrap.min.js</file>
+        <file>assets/others/bootstrap-3.3.7-dist/js/npm.js</file>
     </qresource>
 </RCC>

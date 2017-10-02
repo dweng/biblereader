@@ -150,4 +150,5 @@ DISTFILES += \
     ebook.ddl.txt \
     translations/ZH_cn.ts \
     layout/*.xml \
-    assets/others/style.css
+    assets/others/style.css \
+    assets/others/script.js
