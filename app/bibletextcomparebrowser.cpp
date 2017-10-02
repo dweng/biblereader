@@ -15,16 +15,16 @@
  */
 #include "bibletextcomparebrowser.h"
 #include "bibletextblockdata.h"
-#include <QTextTable>
-#include <QTextTableCell>
 
 BibleTextCompareBrowser::BibleTextCompareBrowser(BibleReaderCore *brc, QWidget *parent):
-    QTextBrowser(parent)
+    QWebView(parent)
 {
     brCore = brc;
 
     btFontFamily = brc->getConfigurator()->getBibleTextFontFamily();
     btFontSize = brc->getConfigurator()->getBibleTextFontSize();
+
+    //setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 BibleTextCompareBrowser::~BibleTextCompareBrowser()
@@ -35,94 +35,52 @@ BibleTextCompareBrowser::~BibleTextCompareBrowser()
 void BibleTextCompareBrowser::showComparedBibleText()
 {
     QString bibleVersion;
-    QString bibleFullName;
+    bibleVersion = brCore->getCurrentVersion();
     int currentBook = brCore->getCurrentBookNumber();
     int currentChapter = brCore->getCurrentChapterNumber();
     int currentVerse = brCore->getCurrentVerseNumber();
     QList<BibleBook> allBooks = brCore->getAllBooks();
     QString currentBookName = brCore->getCurrentBook(allBooks).getLongName();
-
+    BibleChapter chapter = brCore->getChapter(bibleVersion, currentBook, currentChapter);
     // add head title
-    clear();
+    setHtml("");
 
-    QTextCursor *cursor = new QTextCursor(this->document());
-    QTextCharFormat fmt;
-    QTextBlockFormat bfmt;
-    QTextTableFormat tfmt;
-    fmt.setForeground(QColor("green"));
-    fmt.setFontPointSize(btFontSize + 6.0);
-    fmt.setFontFamily(btFontFamily);
-    cursor->insertText(tr("Compare verse "), fmt);
-    cursor->insertText(QString("["), fmt);
-    cursor->insertText(currentBookName, fmt);
-    cursor->insertText(QString::number(currentChapter), fmt);
-    cursor->insertText(QString(":"), fmt);
-    cursor->insertText(QString::number(currentVerse), fmt);
-    cursor->insertText(QString("]"), fmt);
-    bfmt.setAlignment(Qt::AlignCenter);
-    cursor->setBlockFormat(bfmt);
+    QString html = "<head></head><body><h2 style='text-align:center; color:green;'>";
+    html.append(currentBookName).append(" ").append(QString::number(currentChapter)).append("</h2>");
+    html.append("<table style='border-width: 1px; border-collapse: collapse;'><tr>");
 
     QList<BibleInfo> bibles = brCore->getAllBibleVersions();
-    tfmt.setBorderStyle(QTextTableFormat::BorderStyle_Solid);
-    QTextTable *cmpTable = cursor->insertTable(bibles.count(), 2, tfmt);
+    QList<BibleChapter> chapters;
     for (int i = 0; i < bibles.count(); i++) {
-        bibleVersion = bibles[i].getVersion();
-        bibleFullName = bibles[i].getFullname();
-
-        BibleVerse verse = brCore->getVerse(bibleVersion,
-                        currentBook, currentChapter, currentVerse
-                    );
-        fmt.setFontPointSize(btFontSize);
-        fmt.setForeground(QColor("black"));
         // bible version
-        QTextTableCell tc = cmpTable->cellAt(i, 0);
-        QTextCursor tmp = tc.firstCursorPosition();
-        tmp.insertText(bibleFullName, fmt);
-        // verse text
-        tc = cmpTable->cellAt(i, 1);
-        tmp = tc.firstCursorPosition();
-
-        QString verseText = verse.text();
-        verseText.replace("<", "&lt;");
-        verseText.replace(">", "&gt;");
-
-        verseText.replace("&lt;", "<sup style='color:blue; font-size: 20px; font-family: Courier New, Arial;'>&lt;");
-        verseText.replace("&gt;", "&gt;</sup>");
-
-        verseText.prepend
-                ("<span style='font-size: "+QString::number(btFontSize)+"pt; font-family: "+btFontFamily+"'>");
-        verseText.append("</span>");
-        tmp.insertHtml(verseText);
-
-        BibleTextBlockData *d = new BibleTextBlockData(
-                    bibleVersion, currentBook, currentChapter, currentVerse);
-        cursor->block().setUserData(d);
+        html.append("<td style='border-width: 1px; padding: 8px;border-style: solid; color:green; '>").append(bibles[i].getFullname()).append("</td>");
+        chapters.push_back(brCore->getChapter(bibles[i].getVersion(), currentBook, currentChapter));
     }
-    /*
-    for (int i = 0; i < bibles.count(); i++) {
-        bibleVersion = bibles[i].getVersion();
+    html.append("</tr>");
+    for (int j = 0; j < chapter.getVersesCount(); j++) {
+        html.append("<tr>");
+        for (int i = 0; i < bibles.count(); i++) {
+            QList<BibleVerse> verses = chapters[i].getVersesList();
 
-        BibleVerse verse = brCore->getVerse(bibleVersion,
-                        currentBook, currentChapter, currentVerse
-                    );
+            html.append("<td style='border-width: 1px; padding: 8px;border-style: solid;'>");
 
-        cursor->insertBlock();
-        bfmt.setAlignment(Qt::AlignLeft);
-        bfmt.setTopMargin(3.0);
-        bfmt.setBottomMargin(3.0);
-        cursor->setBlockFormat(bfmt);
-        fmt.setForeground(QColor("black"));
-        fmt.setFontPointSize(14.0);
-        cursor->insertText(bibleVersion, fmt);
-        cursor->insertText(QString(" "), fmt);
-        cursor->insertText(verse.getBookName(), fmt);
-        cursor->insertText(QString(" "), fmt);
-        cursor->insertText(verse.text(), fmt);
-        BibleTextBlockData *d = new BibleTextBlockData(
-                    bibleVersion, currentBook, currentChapter, currentVerse);
-        cursor->block().setUserData(d);
+            BibleVerse verse = verses.value(j);
+
+            QString verseText = verse.text();
+            verseText.replace("<", "&lt;");
+            verseText.replace(">", "&gt;");
+
+            verseText.replace("&lt;", "<sup style='color:blue; font-size: 20px; font-family: Courier New, Arial;'>&lt;");
+            verseText.replace("&gt;", "&gt;</sup>");
+
+            verseText.prepend
+                    ("<span style='font-size: "+QString::number(btFontSize)+"pt; font-family: "+btFontFamily+"'>");
+            verseText.append("</span>");
+            html.append(verseText).append("</td>");
+        }
+        html.append("</tr>\n");
     }
-    */
 
-    setReadOnly(true);
+    chapters.clear();
+    setHtml(html.append("</table></body>"));
 }

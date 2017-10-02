@@ -16,10 +16,10 @@
 #ifndef BIBLETEXTCOMPAREBROWSER_H
 #define BIBLETEXTCOMPAREBROWSER_H
 
-#include <QTextBrowser>
+#include <QWebView>
 #include "biblereadercore.h"
 
-class BibleTextCompareBrowser : public QTextBrowser
+class BibleTextCompareBrowser : public QWebView
 {
     Q_OBJECT
 public:

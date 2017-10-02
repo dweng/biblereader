@@ -59,6 +59,8 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     // init biblereadercore
     splash->showMessage(tr("Loading modules..."), Qt::AlignBottom|Qt::AlignLeft, Qt::white);
     initBibleReaderCore();
+    setApplicationName("biblereader");
+    setApplicationVersion("0.0.4");
     //setTheme(":qdarkstyle/style.qss");
     //setStyleSheet("QMenu[bid=1]:item {color: red;}");
 

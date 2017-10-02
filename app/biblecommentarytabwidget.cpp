@@ -4,6 +4,8 @@ BibleCommentaryTabWidget::BibleCommentaryTabWidget(BibleReaderCore *brc,
                                                    QWidget *parent)
 :QTabWidget(parent)
 {
+    setUsesScrollButtons(true);
+    setElideMode(Qt::ElideNone);
     brCore = brc;
     QList<BibleCommentaryInfo> allcmts = brc->getAllCommentarys();
 
