@@ -29,6 +29,8 @@ public:
 public slots:
     void showComparedBibleText();
 
+private slots:
+    void addBrCoreToJS();
 protected:
 
 private:

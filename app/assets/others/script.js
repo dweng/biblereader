@@ -1,3 +1,8 @@
 $(document).ready(function(){
-  alert("Jquery works");
+    $('.nextbook').click(function() {
+        window.brcore.navNextBook();
+    });
+    $('.prevbook').click(function() {
+        window.brcore.navPrevBook();
+    });
 });

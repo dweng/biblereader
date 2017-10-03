@@ -13,6 +13,7 @@
  * code.
  *
  */
+#include <QWebFrame>
 #include "bibletextcomparebrowser.h"
 #include "bibletextblockdata.h"
 
@@ -25,6 +26,8 @@ BibleTextCompareBrowser::BibleTextCompareBrowser(BibleReaderCore *brc, QWidget *
     btFontSize = brc->getConfigurator()->getBibleTextFontSize();
 
     //setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    connect(this->page()->mainFrame(), SIGNAL( javaScriptWindowObjectCleared()),
+            this, SLOT(addBrCoreToJS()));
 }
 
 BibleTextCompareBrowser::~BibleTextCompareBrowser()
@@ -54,8 +57,11 @@ void BibleTextCompareBrowser::showComparedBibleText()
     html.append("<script type=\"text/javascript\" src=\"qrc:/others/assets/others/script.js\"></script>");
     html.append("</head><body>");
     html.append("<h2>").append(currentBookName).append(" ").append(QString::number(currentChapter)).append("</h2>");
-    html.append("<button type=\"button\" class=\"btn btn-default\" aria-label=\"Left Align\">");
-    html.append("<span class=\"glyphicon glyphicon-align-left\" aria-hidden=\"true\"></span>");
+    html.append("<button type=\"button\" class=\"btn btn-default prevbook\">");
+    html.append("<span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span> ");
+    html.append("</button>");
+    html.append("<button type=\"button\" class=\"btn btn-default nextbook\">");
+    html.append("<span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span> ");
     html.append("</button>");
     html.append("<table><tr>");
 
@@ -93,4 +99,9 @@ void BibleTextCompareBrowser::showComparedBibleText()
 
     chapters.clear();
     setHtml(html.append("</table></body>"));
+}
+
+void BibleTextCompareBrowser::addBrCoreToJS()
+{
+    this->page()->mainFrame()->addToJavaScriptWindowObject("brcore", brCore);
 }
