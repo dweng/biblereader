@@ -5,4 +5,11 @@ $(document).ready(function(){
     $('.prevbook').click(function() {
         window.brcore.navPrevBook();
     });
+
+    $('.nextchapter').click(function() {
+        window.brcore.navNextChapter();
+    });
+    $('.prevchapter').click(function() {
+        window.brcore.navPrevChapter();
+    });
 });

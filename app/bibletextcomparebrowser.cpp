@@ -57,28 +57,51 @@ void BibleTextCompareBrowser::showComparedBibleText()
     html.append("<script type=\"text/javascript\" src=\"qrc:/others/assets/others/script.js\"></script>");
     html.append("</head><body>");
     html.append("<h2>").append(currentBookName).append(" ").append(QString::number(currentChapter)).append("</h2>");
-    html.append("<button type=\"button\" class=\"btn btn-default prevbook\">");
-    html.append("<span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span> ");
+    html.append("<p><button type=\"button\" class=\"btn btn-lg btn-primary prevbook\">");
+    html.append("<span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span> 上一卷");
     html.append("</button>");
-    html.append("<button type=\"button\" class=\"btn btn-default nextbook\">");
-    html.append("<span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span> ");
+    html.append("<button type=\"button\" class=\"btn btn-lg btn-primary nextbook\">");
+    html.append("<span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span> 下一卷");
     html.append("</button>");
-    html.append("<table><tr>");
+    html.append("<button type=\"button\" class=\"btn btn-lg btn-success prevchapter\">");
+    html.append("<span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span> 上一章");
+    html.append("</button>");
+    html.append("<button type=\"button\" class=\"btn btn-lg btn-success nextchapter\">");
+    html.append("<span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span> 下一章");
+    html.append("</button></p>");
 
+    html.append("<p>");
     QList<BibleInfo> bibles = brCore->getAllBibleVersions();
+    for (int i = 0; i < bibles.count(); i++) {
+        html.append(
+                    QString("<button type=\"button\" class=\"btn btn-sm btn-success active bible\" value='%1'>").arg(bibles[i].getVersion())
+                    );
+        html.append(bibles[i].getFullname());
+        html.append("</button>");
+    }
+    html.append("</p>");
+    html.append("<div><table class='table table-bordered table-hover'><thead><tr>");
+
+
     QList<BibleChapter> chapters;
     for (int i = 0; i < bibles.count(); i++) {
         // bible version
-        html.append("<th>").append(bibles[i].getFullname()).append("</th>");
+        html.append(QString("<th nowrap=\"nowrap\" value='%1'>%2</th>").arg
+                    (bibles[i].getVersion(),
+                     bibles[i].getFullname()));
         chapters.push_back(brCore->getChapter(bibles[i].getVersion(), currentBook, currentChapter));
     }
-    html.append("</tr>");
+    html.append("</tr></thead><tbody>");
     for (int j = 0; j < chapter.getVersesCount(); j++) {
         html.append("<tr>");
         for (int i = 0; i < bibles.count(); i++) {
             QList<BibleVerse> verses = chapters[i].getVersesList();
 
-            html.append("<td>");
+            if (currentVerse == j+1) {
+                html.append(QString("<td class='success' value='%1'>").arg(bibles[i].getVersion()));
+            } else {
+                html.append(QString("<td value='%1'>").arg(bibles[i].getVersion()));
+            }
 
             BibleVerse verse = verses.value(j);
 
@@ -86,11 +109,10 @@ void BibleTextCompareBrowser::showComparedBibleText()
             verseText.replace("<", "&lt;");
             verseText.replace(">", "&gt;");
 
-            verseText.replace("&lt;", "<sup style='color:blue; font-size: 20px; font-family: Courier New, Arial;'>&lt;");
+            verseText.replace("&lt;", "<sup>&lt;");
             verseText.replace("&gt;", "&gt;</sup>");
 
-            verseText.prepend
-                    ("<span style='font-size: "+QString::number(btFontSize)+"pt; font-family: "+btFontFamily+"'>");
+            verseText.prepend("<span>");
             verseText.append("</span>");
             html.append(verseText).append("</td>");
         }
@@ -98,7 +120,7 @@ void BibleTextCompareBrowser::showComparedBibleText()
     }
 
     chapters.clear();
-    setHtml(html.append("</table></body>"));
+    setHtml(html.append("</tbody></table></div></body>"));
 }
 
 void BibleTextCompareBrowser::addBrCoreToJS()

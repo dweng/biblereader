@@ -1,3 +1,4 @@
+/*
 table {
     border-width: 1px;
     border-collapse: collapse;
@@ -16,8 +17,17 @@ table th {
     color: blue;
     font-weight: bold;
 }
-
+*/
 h2 {
     text-align:center;
     color:green;
+}
+
+p > .btn {
+    margin: 2px 5px;
+}
+
+table thead {
+    /*position: fixed;
+    background-color: silver;*/
 }
