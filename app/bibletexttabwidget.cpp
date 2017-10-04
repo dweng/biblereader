@@ -25,6 +25,8 @@ BibleTextTabWidget::BibleTextTabWidget(BibleReaderCore *brc, QWidget *parent) :
                                QTabBar::tab:!selected {margin-top: 5px;} \
                                QTabBar::tab:selected {color: blue;}";
     //setStyleSheet(tabBarStyle);
+    setElideMode(Qt::ElideNone);
+    setUsesScrollButtons(true);
     brCore = brc;
     compareBrowser = new BibleTextCompareBrowser(brCore, this);
     connect(brCore, SIGNAL(currentVerseChanged(int,int,int)), compareBrowser,

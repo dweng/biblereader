@@ -40,6 +40,10 @@
 
 #include <QDesktopServices>
 
+#ifdef Q_OSX
+#include <QtMacExtras/qmacfunctions.h>
+#endif
+
 #include "bibletreewidget.h"
 #include "bibledictionarywidget.h"
 #include "biblereaderaboutdlg.h"
@@ -66,7 +70,9 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
 
     // create all widgets and do layout
     createWidgets();
-
+#ifdef Q_OS_MAC
+    this->setUnifiedTitleAndToolBarOnMac(true);
+#endif
     // auto update
     if (bibleReaderCore->getConfigurator()->getIsAutoUpdate()) {
         checkNewVersion();

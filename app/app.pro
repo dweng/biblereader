@@ -19,6 +19,9 @@ message(Demonstrations: $$[QT_INSTALL_DEMOS])
 
 QT       += core gui sql xml network printsupport webkitwidgets
 
+macx {
+    QT += macextras
+}
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = BibleReader

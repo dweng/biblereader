@@ -277,27 +277,27 @@
         <translation>窗口(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="614"/>
+        <location filename="../biblereadermainwindow.cpp" line="616"/>
         <source>About [Bible Reader]...</source>
         <translation>关于【圣经研读】...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="617"/>
+        <location filename="../biblereadermainwindow.cpp" line="619"/>
         <source>Check Update...</source>
         <translation>检查更新...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="619"/>
+        <location filename="../biblereadermainwindow.cpp" line="621"/>
         <source>Show Help Content...</source>
         <translation>显示帮助内容...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="621"/>
+        <location filename="../biblereadermainwindow.cpp" line="623"/>
         <source>Donate [Bible Reader]...</source>
         <translation>捐助【圣经研读】...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="749"/>
+        <location filename="../biblereadermainwindow.cpp" line="751"/>
         <source>Bible Information</source>
         <translation>圣经信息</translation>
     </message>
@@ -633,15 +633,14 @@ Query string:%2</source>
 <context>
     <name>BibleTextCompareBrowser</name>
     <message>
-        <location filename="../bibletextcomparebrowser.cpp" line="55"/>
         <source>Compare verse </source>
-        <translation>比较经节</translation>
+        <translation type="vanished">比较经节</translation>
     </message>
 </context>
 <context>
     <name>BibleTextTabWidget</name>
     <message>
-        <location filename="../bibletexttabwidget.cpp" line="53"/>
+        <location filename="../bibletexttabwidget.cpp" line="55"/>
         <source>Parallel Bible Text Tab</source>
         <translation>经文对照</translation>
     </message>
