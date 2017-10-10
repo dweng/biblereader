@@ -63,8 +63,8 @@ Section "MainSection" SEC01
   SetOverwrite ifnewer
   File /r /x biblereader.ini /x debug.log "E:\work\Bible-Reader\bin\release\*"
   CreateDirectory "$SMPROGRAMS\Bible Reader"
-  CreateShortCut "$SMPROGRAMS\Bible Reader\Bible Reader.lnk" "$INSTDIR\BibleReader.exe"
-  CreateShortCut "$DESKTOP\Bible Reader.lnk" "$INSTDIR\BibleReader.exe"
+  CreateShortCut "$SMPROGRAMS\Bible Reader\圣经研读.lnk" "$INSTDIR\BibleReader.exe"
+  CreateShortCut "$DESKTOP\圣经研读.lnk" "$INSTDIR\BibleReader.exe"
 SectionEnd
 
 Section -AdditionalIcons
@@ -108,8 +108,8 @@ Section Uninstall
 
   Delete "$SMPROGRAMS\Bible Reader\Uninstall.lnk"
   Delete "$SMPROGRAMS\Bible Reader\Website.lnk"
-  Delete "$DESKTOP\Bible Reader.lnk"
-  Delete "$SMPROGRAMS\Bible Reader\Bible Reader.lnk"
+  Delete "$DESKTOP\圣经研读.lnk"
+  Delete "$SMPROGRAMS\Bible Reader\圣经研读.lnk"
 
   RMDir /r "$SMPROGRAMS\Bible Reader"
   RMDir /r "$INSTDIR"
