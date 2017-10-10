@@ -2,8 +2,9 @@
 #define BIBLEREADERABOUTDLG_H
 
 #include <QDialog>
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QString>
+#include <QUrl>
 
 class BibleReaderAboutDlg : public QDialog
 {
@@ -18,8 +19,10 @@ signals:
 
 public slots:
 
+private slots:
+    void openUrl(QUrl url);
 private:
-    QTextEdit *description;
+    QTextBrowser *description;
 };
 
 #endif // BIBLEREADERABOUTDLG_H

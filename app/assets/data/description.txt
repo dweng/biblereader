@@ -14,3 +14,4 @@ Bible Reader不做任何版权的声明，唯一一点声明：任何人不得�
 主页: <a href="http://biblereader.cn/">http://biblereader.cn/</a>
 <br />
 若有问题请联系 <a href="mailto:dweng123@gmail.com">dweng123@gmail.com</a>
+<br/><br/><strong>Version:</strong>
