@@ -320,6 +320,8 @@ bool BibleTextBrowser::showCurrentChapter()
     for (int i = 0; i < verses.count(); i++) {
         cursor->insertBlock();
         bfmt.setAlignment(Qt::AlignLeft);
+        bfmt.setTopMargin(5);
+        bfmt.setBottomMargin(5);
         cursor->setBlockFormat(bfmt);
         // verse number format
         fmt.setForeground(QColor("blue"));
