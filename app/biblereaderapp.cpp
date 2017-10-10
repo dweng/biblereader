@@ -65,16 +65,16 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     initBibleReaderCore();
 
     setApplicationName(tr("biblereader"));
-    setApplicationVersion("0.0.4");
+    setApplicationVersion("0.0.5");
     setApplicationDisplayName(tr("biblereader"));
     //setTheme(":qdarkstyle/style.qss");
     //setStyleSheet("QMenu[bid=1]:item {color: red;}");
 
     // Initialize objects
     w = new BibleReaderMainWindow(brCore);
-    //w->show();
+    w->show();
 
-    QTimer::singleShot(5000, splash, SLOT(close()));
+    //QTimer::singleShot(5000, splash, SLOT(close()));
     splash->finish(w);
 }
 

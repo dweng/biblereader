@@ -64,9 +64,9 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     bibleReaderCore = brc;
 
     //Set main window
-    this->setMinimumSize(640, 480);
+    this->setMinimumSize(860, 640);
+    this->setWindowState(Qt::WindowMaximized);
     this->setWindowTitle(tr("Bible Reader"));
-    this->showMaximized();
 
     // create all widgets and do layout
     createWidgets();
