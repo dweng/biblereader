@@ -78,7 +78,8 @@ SOURCES += main.cpp\
     biblexrefsdao.cpp \
     bibleversexref.cpp \
     biblereaderlayout.cpp \
-    bibledictbrowser.cpp
+    bibledictbrowser.cpp \
+    biblereaderdownloader.cpp
 
 HEADERS  += biblereadercore.h \
     biblechapter.h \

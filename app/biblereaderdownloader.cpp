@@ -102,3 +102,5 @@ QString BibleReaderDownloader::type2str(ResourceType type)
     return typeStr;
 }
 
+
+
