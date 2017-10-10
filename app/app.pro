@@ -72,7 +72,6 @@ SOURCES += main.cpp\
     biblereaderconfiggeneralpage.cpp \
     biblereaderversion.cpp \
     biblereaderresourcemanager.cpp \
-    biblereaderdownloader.cpp \
     biblereaderresourcemanagerdlg.cpp \
     biblecommentarybrowser.cpp \
     biblereadertooltip.cpp \

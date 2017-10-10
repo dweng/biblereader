@@ -23,7 +23,7 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     QObject(parent)
 {
     LOG_DEBUG("constructor");
-    version = new BibleReaderVersion(0, 0, 4);
+    version = new BibleReaderVersion(0, 0, 5);
     resManager = new BibleReaderResourceManager(this);
     // test
     resManager->addResourceUrl("default", "http://biblereader.cn/brresources.php");
