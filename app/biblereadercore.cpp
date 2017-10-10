@@ -23,7 +23,7 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     QObject(parent)
 {
     LOG_DEBUG("constructor");
-    version = new BibleReaderVersion(0, 0, 3);
+    version = new BibleReaderVersion(0, 0, 4);
     resManager = new BibleReaderResourceManager(this);
     // test
     resManager->addResourceUrl("default", "http://biblereader.cn/brresources.php");
@@ -33,7 +33,27 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     currentChapterNumber = 0;
     currentVerseNumber = 0;
     previousVerseNumber = 0;
+}
 
+BibleReaderCore::~BibleReaderCore()
+{
+    LOG_DEBUG("destructor");
+    qDeleteAll(allBTDAOs);
+    qDeleteAll(allBDDAOs);
+    qDeleteAll(allBCDAOs);
+    qDeleteAll(allBXDAOs);
+
+    configurator->setLastBook(currentBookNumber);
+    configurator->setLastChapter(currentChapterNumber);
+    configurator->setLastVerse(currentVerseNumber);
+
+    delete configurator;
+    delete version;
+    delete resManager;
+}
+
+void BibleReaderCore::init()
+{
     // get configurations of BibleReader
     configurator = new BibleReaderConfigurator();
     // process bibles
@@ -63,23 +83,6 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     // store first verse history
     history.push_back(BibleVersePos(currentBookNumber, currentChapterNumber, currentVerseNumber));
     historyPos = 0;
-}
-
-BibleReaderCore::~BibleReaderCore()
-{
-    LOG_DEBUG("destructor");
-    qDeleteAll(allBTDAOs);
-    qDeleteAll(allBDDAOs);
-    qDeleteAll(allBCDAOs);
-    qDeleteAll(allBXDAOs);
-
-    configurator->setLastBook(currentBookNumber);
-    configurator->setLastChapter(currentChapterNumber);
-    configurator->setLastVerse(currentVerseNumber);
-
-    delete configurator;
-    delete version;
-    delete resManager;
 }
 
 BibleVerse BibleReaderCore::getVerse(QString book, int chapter, int verse)
@@ -351,6 +354,7 @@ bool BibleReaderCore::addCommentary(QString &name, QString &path)
         allBCDAOs.insert(name, bcDAO);
     }
 
+    emit loadResourceFinished(name);
     return true;
 }
 
@@ -489,6 +493,7 @@ bool BibleReaderCore::addBibleVersion(QString &version, QString &dataPath)
 {
     allBTDAOs.insert(version,
                      new BibleTextDAO(version, dataPath));
+    emit loadResourceFinished(version);
     return true;
 }
 
@@ -522,6 +527,7 @@ bool BibleReaderCore::addDictionary(QString &name, QString &path)
 {
     allBDDAOs.insert(name,
                      new BibleDictDAO(name, path));
+    emit loadResourceFinished(name);
     return true;
 }
 

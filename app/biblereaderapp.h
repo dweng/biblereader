@@ -48,6 +48,9 @@ private:
     bool deinitBibleReaderCore();
     void setTheme(QString theme);
 
+private slots:
+    void showSplashMessage(QString msg);
+
 protected:
     bool notify(QObject *obj, QEvent *e);
     bool eventFilter(QObject *obj, QEvent *e);
@@ -60,7 +63,7 @@ private:
 
     BibleReaderCore *brCore;
 
-    QSplashScreen *startScreen;
+    QSplashScreen *splash;
 };
 
 #endif // BIBLEREADERAPP_H

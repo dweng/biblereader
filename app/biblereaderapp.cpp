@@ -32,7 +32,7 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
 #ifdef Q_OS_LINUX
     setFont(QFont(QString("Noto Sans CJK SC"), 10));
 #endif
-    QSplashScreen *splash = new QSplashScreen; // create a QSplashScreen
+    splash = new QSplashScreen; // create a QSplashScreen
     splash->setPixmap(QPixmap(":/img/assets/images/splash.png")); // set the image I would show
     splash->show(); // after show it  close immediately
     splash->raise();
@@ -51,6 +51,7 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
 
     LOG_INFO() << "Loading translations...";
     splash->showMessage(tr("Loading translations..."), Qt::AlignBottom|Qt::AlignLeft, Qt::blue);
+    this->processEvents();
     LOG_INFO() << "Loading ZH_cn:" << translator.load(dir.absolutePath() + "/translations/ZH_cn.qm");
     LOG_INFO() << "Loading Qt ZH_cn:" << qtTranslator.load(dir.absolutePath() + "/translations/qt_zh_CN.qm");
     installTranslator(&translator);
@@ -58,19 +59,23 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
 
     // init biblereadercore
     splash->showMessage(tr("Loading modules..."), Qt::AlignBottom|Qt::AlignLeft, Qt::white);
+    this->processEvents();
+    this->brCore = new BibleReaderCore();
+    connect(brCore, SIGNAL(loadResourceFinished(QString)), this, SLOT(showSplashMessage(QString)));
     initBibleReaderCore();
-    setApplicationName("biblereader");
+
+    setApplicationName(tr("biblereader"));
     setApplicationVersion("0.0.4");
+    setApplicationDisplayName(tr("biblereader"));
     //setTheme(":qdarkstyle/style.qss");
     //setStyleSheet("QMenu[bid=1]:item {color: red;}");
 
     // Initialize objects
     w = new BibleReaderMainWindow(brCore);
-    w->show();
+    //w->show();
 
-    QTimer::singleShot(2000, splash, SLOT(close()));
+    QTimer::singleShot(5000, splash, SLOT(close()));
     splash->finish(w);
-    delete splash;
 }
 
 BibleReaderApp::~BibleReaderApp()
@@ -79,13 +84,18 @@ BibleReaderApp::~BibleReaderApp()
         delete w;
     }
 
+    if (splash) {
+        delete splash;
+    }
+
     deinitBibleReaderCore();
 }
 
 bool BibleReaderApp::initBibleReaderCore()
 {
     LOG_DEBUG("Bible Reader Core Initing...");
-    this->brCore = new BibleReaderCore();
+    //this->brCore = new BibleReaderCore();
+    this->brCore->init();
     LOG_DEBUG("Bible Reader Core inited.");
     return true;
 }
@@ -108,6 +118,15 @@ void BibleReaderApp::setTheme(QString theme)
     }
 
     setStyleSheet(themeCSS);
+}
+
+void BibleReaderApp::showSplashMessage(QString msg)
+{
+    if (splash) {
+        splash->showMessage(tr("Loading %1").arg(msg), Qt::AlignBottom|Qt::AlignLeft,
+                            Qt::white);
+        qApp->processEvents();
+    }
 }
 
 bool BibleReaderApp::notify(QObject *obj, QEvent *e)

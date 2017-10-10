@@ -61,6 +61,12 @@ public:
     ~BibleReaderCore();
 
     /**
+     * @brief init
+     * initial bible reader core
+     */
+    void init();
+
+    /**
      * @brief get a verse which in book [book], chapter [chapter], verse [verse]
      * @param book book name
      * @param chapter chapter of verse in
@@ -364,6 +370,13 @@ signals:
      * @param q
      */
     void searchRequest(QString q);
+
+    /**
+     * @brief loadResourceFinished
+     * signal for when loaded a resurce
+     * @param resName
+     */
+    void loadResourceFinished(QString resName);
 
 public slots:
     /**
