@@ -347,9 +347,9 @@ bool BibleReaderCore::addCommentary(QString &name, QString &path)
     if (!allBCDAOs.contains(name)) {
         BibleCommentaryDAO *bcDAO = new BibleCommentaryDAO(name, path);
         allBCDAOs.insert(name, bcDAO);
+        emit loadResourceFinished(bcDAO->getCmtInfo().getFullname());
     }
 
-    emit loadResourceFinished(name);
     return true;
 }
 
@@ -486,9 +486,9 @@ void BibleReaderCore::setCurrentVersion(const QString &version)
 
 bool BibleReaderCore::addBibleVersion(QString &version, QString &dataPath)
 {
-    allBTDAOs.insert(version,
-                     new BibleTextDAO(version, dataPath));
-    emit loadResourceFinished(version);
+    BibleTextDAO *btdao = new BibleTextDAO(version, dataPath);
+    allBTDAOs.insert(version, btdao);
+    emit loadResourceFinished(btdao->getBibleInfo().getFullname());
     return true;
 }
 
@@ -520,9 +520,10 @@ void BibleReaderCore::setCurrentDict(const QString &dictName)
 
 bool BibleReaderCore::addDictionary(QString &name, QString &path)
 {
+    BibleDictDAO *bddao = new BibleDictDAO(name, path);
     allBDDAOs.insert(name,
-                     new BibleDictDAO(name, path));
-    emit loadResourceFinished(name);
+                     bddao);
+    emit loadResourceFinished(bddao->getBibleDictInfo().getFullname());
     return true;
 }
 
