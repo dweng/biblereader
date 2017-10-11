@@ -70,7 +70,6 @@ SOURCES += main.cpp\
     biblereaderhtmldelegate.cpp \
     biblereaderconfigdlg.cpp \
     biblereaderconfiggeneralpage.cpp \
-    biblereaderversion.cpp \
     biblereaderresourcemanager.cpp \
     biblereaderresourcemanagerdlg.cpp \
     biblecommentarybrowser.cpp \
@@ -114,7 +113,6 @@ HEADERS  += biblereadercore.h \
     biblereaderhtmldelegate.h \
     biblereaderconfigdlg.h \
     biblereaderconfiggeneralpage.h \
-    biblereaderversion.h \
     biblereaderresourcemanager.h \
     biblereaderdownloader.h \
     biblereaderresourcemanagerdlg.h \

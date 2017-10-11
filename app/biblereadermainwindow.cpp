@@ -202,26 +202,6 @@ void BibleReaderMainWindow::replyFinished(QNetworkReply *reply)
                 middle = object.value("middle").toInt();
                 minor = object.value("minor").toInt();
                 newVersionUrl = object.value("newversionurl").toString();
-
-                BibleReaderVersion *version = bibleReaderCore->getVersion();
-
-                int oldVersionNum = 100*version->getMajor()+10*version->getMiddle()+version->getMinor();
-                int newVersionNum = 100*major + 10*middle + minor;
-                if (newVersionNum > oldVersionNum) {
-                    QMessageBox::StandardButton reply;
-                    reply = QMessageBox::question(this, tr("Update"),
-                                                  tr("New version Bible Reader found, update?"), QMessageBox::Yes | QMessageBox::No);
-                    if(reply == QMessageBox::Yes)
-                    {
-                        QDesktopServices::openUrl(QUrl(newVersionUrl));
-                    }
-                    else
-                    {
-                        //do nothing
-                    }
-                } else {
-                    QMessageBox::information(this, tr("Update"), tr("No new version Bible Reader found."), QMessageBox::Ok);
-                }
             }
         } else {
             qDebug() << replyString;
