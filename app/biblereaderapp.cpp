@@ -71,6 +71,8 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     //setStyleSheet("QMenu[bid=1]:item {color: red;}");
 
     // Initialize objects
+    splash->showMessage(tr("Building layout..."), Qt::AlignBottom|Qt::AlignLeft, Qt::white);
+    this->processEvents();
     w = new BibleReaderMainWindow(brCore);
     w->show();
 
@@ -149,5 +151,5 @@ bool BibleReaderApp::eventFilter(QObject *obj, QEvent *e)
     }
     */
 
-    QApplication::eventFilter(obj, e);
+    return QApplication::eventFilter(obj, e);
 }
