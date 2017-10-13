@@ -20,9 +20,14 @@
         <translation>圣经研读</translation>
     </message>
     <message>
-        <location filename="../biblereaderapp.cpp" line="126"/>
+        <location filename="../biblereaderapp.cpp" line="74"/>
+        <source>Building layout...</source>
+        <translation>构建界面...</translation>
+    </message>
+    <message>
+        <location filename="../biblereaderapp.cpp" line="128"/>
         <source>Loading %1</source>
-        <translation type="unfinished">载入 %1</translation>
+        <translation>载入 %1</translation>
     </message>
 </context>
 <context>
@@ -150,12 +155,12 @@
 <context>
     <name>BibleReaderMainWindow</name>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="68"/>
+        <location filename="../biblereadermainwindow.cpp" line="74"/>
         <source>Bible Reader</source>
         <translation>圣经研读</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="384"/>
+        <location filename="../biblereadermainwindow.cpp" line="423"/>
         <source>Bible Navigator</source>
         <translation>导航工具栏</translation>
     </message>
@@ -168,165 +173,171 @@
         <translation type="vanished">获取一节经文</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="417"/>
+        <location filename="../biblereadermainwindow.cpp" line="456"/>
         <source>previous chapter</source>
         <translation>上一章</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="422"/>
+        <location filename="../biblereadermainwindow.cpp" line="461"/>
         <source>next chapter</source>
         <translation>下一章</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="427"/>
+        <location filename="../biblereadermainwindow.cpp" line="466"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="433"/>
+        <location filename="../biblereadermainwindow.cpp" line="472"/>
         <source>Forword</source>
         <translation>前进</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="531"/>
+        <location filename="../biblereadermainwindow.cpp" line="570"/>
         <source>Bible Search</source>
         <translation>圣经搜索</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="510"/>
+        <location filename="../biblereadermainwindow.cpp" line="549"/>
         <source>Bible Tree</source>
         <translation>圣经目录树</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="577"/>
+        <location filename="../biblereadermainwindow.cpp" line="616"/>
         <source>File(&amp;F)</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="578"/>
+        <location filename="../biblereadermainwindow.cpp" line="617"/>
         <source>Edit(&amp;E)</source>
         <translation>编辑(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="580"/>
+        <location filename="../biblereadermainwindow.cpp" line="619"/>
         <source>Tools(&amp;T)</source>
         <translation>工具(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="582"/>
+        <location filename="../biblereadermainwindow.cpp" line="621"/>
         <source>Help(&amp;H)</source>
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="586"/>
+        <location filename="../biblereadermainwindow.cpp" line="625"/>
         <source>Project Verses</source>
         <translation>投影圣经经文</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="459"/>
+        <location filename="../biblereadermainwindow.cpp" line="498"/>
         <source>Copy current verse</source>
         <translation>复制当前经文节</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="386"/>
+        <location filename="../biblereadermainwindow.cpp" line="323"/>
+        <source>Layout</source>
+        <translation>布局</translation>
+    </message>
+    <message>
+        <location filename="../biblereadermainwindow.cpp" line="327"/>
+        <source>Load layout error</source>
+        <translation>载入布局失败</translation>
+    </message>
+    <message>
+        <location filename="../biblereadermainwindow.cpp" line="425"/>
         <source>Configure</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="388"/>
+        <location filename="../biblereadermainwindow.cpp" line="427"/>
         <source>Resources manager</source>
         <translation>资源管理器</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="407"/>
+        <location filename="../biblereadermainwindow.cpp" line="446"/>
         <source>previous book</source>
         <translation>上一卷</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="412"/>
+        <location filename="../biblereadermainwindow.cpp" line="451"/>
         <source>next book</source>
         <translation>下一卷</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="442"/>
+        <location filename="../biblereadermainwindow.cpp" line="481"/>
         <source>Zoom in</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="447"/>
+        <location filename="../biblereadermainwindow.cpp" line="486"/>
         <source>Zoom out</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="452"/>
+        <location filename="../biblereadermainwindow.cpp" line="491"/>
         <source>Jump directly</source>
         <translation>直接跳转</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="464"/>
+        <location filename="../biblereadermainwindow.cpp" line="503"/>
         <source>Compare current verse</source>
         <translation>比较当前经文</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="470"/>
+        <location filename="../biblereadermainwindow.cpp" line="509"/>
         <source>Print current chapter</source>
         <translation>打印当前章经文</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="475"/>
+        <location filename="../biblereadermainwindow.cpp" line="514"/>
         <source>Show current bible information</source>
         <translation>显示当前圣经版本信息</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="579"/>
+        <location filename="../biblereadermainwindow.cpp" line="618"/>
         <source>View(&amp;V)</source>
         <translation>查看(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="581"/>
+        <location filename="../biblereadermainwindow.cpp" line="620"/>
         <source>Window(&amp;W)</source>
         <translation>窗口(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="622"/>
+        <location filename="../biblereadermainwindow.cpp" line="661"/>
         <source>About [Bible Reader]...</source>
         <translation>关于【圣经研读】...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="625"/>
+        <location filename="../biblereadermainwindow.cpp" line="664"/>
         <source>Check Update...</source>
         <translation>检查更新...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="627"/>
+        <location filename="../biblereadermainwindow.cpp" line="666"/>
         <source>Show Help Content...</source>
         <translation>显示帮助内容...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="629"/>
+        <location filename="../biblereadermainwindow.cpp" line="668"/>
         <source>Donate [Bible Reader]...</source>
         <translation>捐助【圣经研读】...</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="757"/>
+        <location filename="../biblereadermainwindow.cpp" line="796"/>
         <source>Bible Information</source>
         <translation>圣经信息</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="212"/>
-        <location filename="../biblereadermainwindow.cpp" line="223"/>
         <source>Update</source>
-        <translation>升级</translation>
+        <translation type="vanished">升级</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="213"/>
         <source>New version Bible Reader found, update?</source>
-        <translation>发现新版本的圣经研读，升级？</translation>
+        <translation type="vanished">发现新版本的圣经研读，升级？</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="223"/>
         <source>No new version Bible Reader found.</source>
-        <translation>未发现新版本的圣经研读。</translation>
+        <translation type="vanished">未发现新版本的圣经研读。</translation>
     </message>
     <message>
         <source>search</source>
@@ -345,7 +356,7 @@
         <translation type="vanished">圣经</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="548"/>
+        <location filename="../biblereadermainwindow.cpp" line="587"/>
         <source>Commentary</source>
         <translation>注释书</translation>
     </message>
@@ -354,7 +365,7 @@
         <translation type="vanished">帮助</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="589"/>
+        <location filename="../biblereadermainwindow.cpp" line="628"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
@@ -367,7 +378,7 @@
         <translation type="vanished">关于</translation>
     </message>
     <message>
-        <location filename="../biblereadermainwindow.cpp" line="561"/>
+        <location filename="../biblereadermainwindow.cpp" line="600"/>
         <source>Dictionary Window</source>
         <translation>字典窗口</translation>
     </message>
@@ -596,47 +607,47 @@ Query string:%2</source>
 <context>
     <name>BibleTextBrowser</name>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="180"/>
+        <location filename="../bibletextbrowser.cpp" line="184"/>
         <source>Copy this verse</source>
         <translation>复制该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="181"/>
+        <location filename="../bibletextbrowser.cpp" line="185"/>
         <source>Copy this verse header</source>
         <translation>复制当前经节头</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="182"/>
+        <location filename="../bibletextbrowser.cpp" line="186"/>
         <source>Copy this verse with long book name</source>
         <translation>复制该节经文（书卷全名）</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="193"/>
+        <location filename="../bibletextbrowser.cpp" line="197"/>
         <source>Compare this verse</source>
         <translation>比较该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="194"/>
+        <location filename="../bibletextbrowser.cpp" line="198"/>
         <source>Project this verse</source>
         <translation>投影该节经文</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="198"/>
+        <location filename="../bibletextbrowser.cpp" line="202"/>
         <source>Search &quot;%1&quot;</source>
         <translation>搜索“%1”</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="185"/>
+        <location filename="../bibletextbrowser.cpp" line="189"/>
         <source>Copy verses from current verse to...</source>
         <translation>复制经文从当前经文到...</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="205"/>
+        <location filename="../bibletextbrowser.cpp" line="209"/>
         <source>Print...</source>
         <translation>打印...</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="585"/>
+        <location filename="../bibletextbrowser.cpp" line="582"/>
         <source>Print Document</source>
         <translation>打印文档</translation>
     </message>
