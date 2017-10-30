@@ -210,6 +210,7 @@ void BibleReaderMainWindow::replyFinished(QNetworkReply *reply)
                 middle = object.value("middle").toInt();
                 minor = object.value("minor").toInt();
                 newVersionUrl = object.value("newversionurl").toString();
+
             }
         } else {
             qDebug() << replyString;

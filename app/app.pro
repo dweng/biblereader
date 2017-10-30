@@ -3,8 +3,6 @@
 # Project created by QtCreator 2014-04-15T11:50:47
 #
 #-------------------------------------------------
-message(Qt version: $$[QT_VERSION])
-message(Qt is installed in $$[QT_INSTALL_PREFIX])
 
 QT       += core gui sql xml network printsupport webkitwidgets
 
