@@ -38,6 +38,7 @@
     <qresource prefix="/data">
         <file>assets/data/description.txt</file>
         <file>assets/data/donation.txt</file>
+        <file>assets/data/booknames.txt</file>
     </qresource>
     <qresource prefix="/others">
         <file>assets/others/style.css</file>
