@@ -3,9 +3,9 @@
     <name>1-单独圣经文本窗口</name>
     <shortname>1-bibletext</shortname>
     <settings>
-        <bibletree show="false"></bibletree>
-        <biblesearch show="false"></biblesearch>
-        <bibledict show="false"></bibledict>
-        <biblecommentary show="false"></biblecommentary>
+        <bibletree show="false" area="west"></bibletree>
+        <biblesearch show="false" area="west"></biblesearch>
+        <bibledict show="false" area="south"></bibledict>
+        <biblecommentary show="false" area="south"></biblecommentary>
     </settings>
 </layout>

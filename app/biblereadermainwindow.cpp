@@ -362,24 +362,68 @@ void BibleReaderMainWindow::doLayout()
                 WidgetLayout wl = layout.layouts[j];
 
                 if (wl.widgetName == "bibletree") {
+                    removeDockWidget(bibleTreeDockWidget);
+                    if (wl.position == "south") {
+                        addDockWidget(Qt::BottomDockWidgetArea, bibleTreeDockWidget);
+                    } else if (wl.position == "north") {
+                        addDockWidget(Qt::TopDockWidgetArea, bibleTreeDockWidget);
+                    } else if (wl.position == "east") {
+                        addDockWidget(Qt::RightDockWidgetArea, bibleTreeDockWidget);
+                    } else if (wl.position == "west") {
+                        addDockWidget(Qt::LeftDockWidgetArea, bibleTreeDockWidget);
+                    }
+
                     if (wl.show) {
                         bibleTreeDockWidget->show();
                     } else {
                         bibleTreeDockWidget->hide();
                     }
                 } else if (wl.widgetName == "biblesearch") {
+                    removeDockWidget(bibleSearchDockWidget);
+                    if (wl.position == "south") {
+                        addDockWidget(Qt::BottomDockWidgetArea, bibleSearchDockWidget);
+                    } else if (wl.position == "north") {
+                        addDockWidget(Qt::TopDockWidgetArea, bibleSearchDockWidget);
+                    } else if (wl.position == "east") {
+                        addDockWidget(Qt::RightDockWidgetArea, bibleSearchDockWidget);
+                    } else if (wl.position == "west") {
+                        addDockWidget(Qt::LeftDockWidgetArea, bibleSearchDockWidget);
+                    }
+
                     if (wl.show) {
                         bibleSearchDockWidget->show();
                     } else {
                         bibleSearchDockWidget->hide();
                     }
                 } else if (wl.widgetName == "bibledict") {
+                    removeDockWidget(dictDockWidget);
+                    if (wl.position == "south") {
+                        addDockWidget(Qt::BottomDockWidgetArea, dictDockWidget);
+                    } else if (wl.position == "north") {
+                        addDockWidget(Qt::TopDockWidgetArea, dictDockWidget);
+                    } else if (wl.position == "east") {
+                        addDockWidget(Qt::RightDockWidgetArea, dictDockWidget);
+                    } else if (wl.position == "west") {
+                        addDockWidget(Qt::LeftDockWidgetArea, dictDockWidget);
+                    }
+
                     if (wl.show) {
                         dictDockWidget->show();
                     } else {
                         dictDockWidget->hide();
                     }
                 } else if (wl.widgetName == "biblecommentary") {
+                    removeDockWidget(commentaryDockWidget);
+                    if (wl.position == "south") {
+                        addDockWidget(Qt::BottomDockWidgetArea, commentaryDockWidget);
+                    } else if (wl.position == "north") {
+                        addDockWidget(Qt::TopDockWidgetArea, commentaryDockWidget);
+                    } else if (wl.position == "east") {
+                        addDockWidget(Qt::RightDockWidgetArea, commentaryDockWidget);
+                    } else if (wl.position == "west") {
+                        addDockWidget(Qt::LeftDockWidgetArea, commentaryDockWidget);
+                    }
+
                     if (wl.show) {
                         commentaryDockWidget->show();
                     } else {
@@ -781,28 +825,28 @@ void BibleReaderMainWindow::buildLayoutActions()
                         WidgetLayout tmp_layout;
                         tmp_layout.widgetName = "bibletree";
                         tmp_layout.show = xmlReader.attributes().value("show") == "true" ? true : false;
-                        tmp_layout.position = "west";
+                        tmp_layout.position = xmlReader.attributes().value("area").toString();
                         layout.layouts.push_back(tmp_layout);
                     } else if (xmlReader.name() == "biblesearch") {
                         LOG_INFO() << "biblesearch: " << xmlReader.attributes().value("show");
                         WidgetLayout tmp_layout;
                         tmp_layout.widgetName = "biblesearch";
                         tmp_layout.show = xmlReader.attributes().value("show") == "true" ? true : false;
-                        tmp_layout.position = "west";
+                        tmp_layout.position = xmlReader.attributes().value("area").toString();
                         layout.layouts.push_back(tmp_layout);
                     } else if (xmlReader.name() == "bibledict") {
                         LOG_INFO() << "bibledict: " << xmlReader.attributes().value("show");
                         WidgetLayout tmp_layout;
                         tmp_layout.widgetName = "bibledict";
                         tmp_layout.show = xmlReader.attributes().value("show") == "true" ? true : false;
-                        tmp_layout.position = "south";
+                        tmp_layout.position = xmlReader.attributes().value("area").toString();
                         layout.layouts.push_back(tmp_layout);
                     } else if (xmlReader.name() == "biblecommentary") {
                         LOG_INFO() << "biblecommentary: " << xmlReader.attributes().value("show");
                         WidgetLayout tmp_layout;
                         tmp_layout.widgetName = "biblecommentary";
                         tmp_layout.show = xmlReader.attributes().value("show") == "true" ? true : false;
-                        tmp_layout.position = "south";
+                        tmp_layout.position = xmlReader.attributes().value("area").toString();
                         layout.layouts.push_back(tmp_layout);
                     }
                 }

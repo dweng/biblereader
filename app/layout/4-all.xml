@@ -3,9 +3,9 @@
     <name>4-所有窗口</name>
     <shortname>4-all</shortname>
     <settings>
-        <bibletree show="true" area="right"></bibletree>
-        <biblesearch show="true" area="left"></biblesearch>
-        <bibledict show="true" area="bottom"></bibledict>
-        <biblecommentary show="true" area="bottom"></biblecommentary>
+        <bibletree show="true" area="east"></bibletree>
+        <biblesearch show="true" area="west"></biblesearch>
+        <bibledict show="true" area="south"></bibledict>
+        <biblecommentary show="true" area="south"></biblecommentary>
     </settings>
 </layout>
