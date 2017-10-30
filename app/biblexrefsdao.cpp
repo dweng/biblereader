@@ -1,4 +1,4 @@
-#include "biblexrefsdao.h"
+﻿#include "biblexrefsdao.h"
 #include "Logger.h"
 BibleXRefsDAO::BibleXRefsDAO(QString &xref, QString &dataPath)
 {
@@ -111,12 +111,11 @@ bool BibleXRefsDAO::init()
 QString BibleXRefsDAO::getBookNamebyId(int bid)
 {
     QStringList bookNames;
-    bookNames << "创"<<"出"<<"利"<<"民"<<"申"<<
-                   "书"<<"士"<<"得"<<"撒上"<<"撒下"<<"王上"<<"王下"<<"代上"<<"代下"<<"拉"<<"尼"<<"斯"<<
-                   "伯"<<"诗"<<"箴"<<"传"<<"歌"<<
-                   "赛"<<"耶"<<"哀"<<"结"<<"但"<<"何"<<"珥"<<"摩"<<"俄"<<"拿"<<"弥"<<"鸿"<<"哈"<<"番"<<"该"<<"亚"<<"玛"<<
-                   "太"<<"可"<<"路"<<"约"<<"徒"<<"罗"<<"林前"<<"林后"<<"加"<<"弗"<<"腓"<<"西"<<"帖前"<<"帖后"<<
-                   "提前"<<"提后"<<"多"<<"门"<<"来"<<"雅"<<"彼前"<<"彼后"<<"约一"<<"约二"<<"约三"<<"犹"<<"启";
+    QFile bnfile(QString(":/data/assets/data/booknames.txt"));
+    bnfile.open(QIODevice::ReadOnly | QIODevice::Text);
+    while (!bnfile.atEnd()) {
+        bookNames.push_back(QString(bnfile.readLine()));
+    }
     for (int i = 0; i < bookNames.size(); i++) {
         if (bid == i+1) {
             return bookNames[i];

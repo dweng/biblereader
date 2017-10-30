@@ -1,4 +1,4 @@
-/**
+﻿/**
  * [1 Timothy 3:16-17 ESV]
  * All Scripture is breathed out by God and profitable
  * for teaching, for reproof, for correction, and for training in righteousness,

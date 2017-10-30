@@ -1,4 +1,4 @@
-#include "bibleversexref.h"
+﻿#include "bibleversexref.h"
 
 BibleVerseXref::BibleVerseXref()
 {

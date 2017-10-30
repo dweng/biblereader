@@ -1,4 +1,4 @@
-#include "bibletreemodel.h"
+﻿#include "bibletreemodel.h"
 #include <QIcon>
 #include <QDebug>
 

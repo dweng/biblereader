@@ -25,6 +25,11 @@ class BibleTextBrowser : public QTextBrowser
 {
     Q_OBJECT
 public:
+    enum ShowMethod {
+        NewChapter = 1,
+        Zoom
+    };
+
     explicit BibleTextBrowser(BibleReaderCore *brc, QWidget *parent = 0);
     ~BibleTextBrowser();
 
@@ -32,7 +37,7 @@ public:
     void setBibleVersion(const QString &value);
 
 public slots:
-    bool showCurrentChapter();
+    bool showCurrentChapter(ShowMethod method = NewChapter);
     void printBibleText();
 
 protected:
@@ -46,6 +51,8 @@ protected:
 
 private:/* vars */
     int preVerseId;
+    int preChapterId;
+    int preBookId;
 
     BibleReaderCore *brCore;
 
