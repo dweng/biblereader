@@ -83,7 +83,11 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
                                 verseInfo[1].toInt(),
                                 verseInfo[2].toInt()
                                 ).text();
-                    QToolTip::showText(e->globalPos(), verseText, this, rect(), 100000);
+                    QToolTip::showText(e->globalPos(),
+                                       verseText.replace("\n", "<br/>")
+                                       .replace("[", "<font color='green'>[")
+                                       .replace("]", "]</font>"),
+                                       this, rect(), 100000);
 
                 } else if (verseInfo.size() == 6) {
                     BibleVersePos start = BibleVersePos(
@@ -97,7 +101,9 @@ void BibleTextBrowser::mouseMoveEvent(QMouseEvent *e)
                                 verseInfo[5].toInt()
                                 );
                     QString versesText = brCore->getVerses(start, end);
-                    QToolTip::showText(e->globalPos(), versesText, this, rect(), 100000);
+                    QToolTip::showText(e->globalPos(), versesText.replace("\n", "<br/>")
+                                       .replace("[", "<font color='green'>[")
+                                       .replace("]", "]</font>"), this, rect(), 100000);
 
                 } else {
                     // do nothing
