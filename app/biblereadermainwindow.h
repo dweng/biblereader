@@ -31,6 +31,7 @@
 #include "biblereaderprojectdialog.h"
 #include "biblereaderconfigdlg.h"
 #include "biblereaderresourcemanagerdlg.h"
+#include "biblereaderlayout.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -182,6 +183,8 @@ private:
 
     // layout actions
     QList<QAction *> layoutActions;
+    // layouts
+    QList<BibleReaderLayout> layouts;
 
 
     /**
@@ -236,6 +239,7 @@ private slots:
 
     void toggleDockWidget(bool toggled);
 
+    void doLayout();
 
 private:
     // create all widgets

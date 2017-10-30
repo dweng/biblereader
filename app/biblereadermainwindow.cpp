@@ -38,9 +38,14 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 
+// for layout setting
+#include <QXmlStreamReader>
+#include "biblereaderlayout.h"
+
+// for open system default browser
 #include <QDesktopServices>
 
-#ifdef Q_OSX
+#ifdef Q_OS_MAC
 #include <QtMacExtras/qmacfunctions.h>
 #endif
 
@@ -48,6 +53,7 @@
 #include "bibledictionarywidget.h"
 #include "biblereaderaboutdlg.h"
 #include "biblereaderdonationdlg.h"
+#include "biblereaderlayout.h"
 
 // for logging
 #include "Logger.h"
@@ -68,6 +74,8 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
     this->setWindowState(Qt::WindowMaximized);
     this->setWindowTitle(tr("Bible Reader"));
 
+    // get all layouts
+    buildLayoutActions();
     // create all widgets and do layout
     createWidgets();
 #ifdef Q_OS_MAC
@@ -168,7 +176,7 @@ void BibleReaderMainWindow::showCfgDlg()
 void BibleReaderMainWindow::checkNewVersion()
 {
     // 1. get update information from server
-    QString server = "http://biblereader.cn/brupdate.php";
+    QString server = "http://biblereader.cn/brupdate.xml";
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
@@ -311,6 +319,17 @@ void BibleReaderMainWindow::windowMenuTrigger()
 
     }
     windowMenu->addActions(windowActionList);
+
+    // loading layout
+    windowMenu->addSeparator();
+
+    QMenu *layoutMenu = new QMenu(tr("Layout"),this);
+
+    // add layouts menu item
+    layoutMenu->addActions(layoutActions);
+
+    // add "Layout" to Window menu
+    windowMenu->addMenu(layoutMenu);
 }
 
 void BibleReaderMainWindow::toggleDockWidget(bool toggled)
@@ -325,6 +344,50 @@ void BibleReaderMainWindow::toggleDockWidget(bool toggled)
             } else {
                 allDockWidgets[i]->setVisible(false);
             }
+            break;
+        }
+    }
+}
+
+void BibleReaderMainWindow::doLayout()
+{
+    QAction *act = qobject_cast<QAction *>(sender());
+
+    for (int i=0; i < layoutActions.size(); i++) {
+        if (act->text() == layoutActions[i]->text()) {
+            BibleReaderLayout layout = layouts[i];
+
+            // do layout work
+            for (int j = 0; j < layout.layouts.size(); j++) {
+                WidgetLayout wl = layout.layouts[j];
+
+                if (wl.widgetName == "bibletree") {
+                    if (wl.show) {
+                        bibleTreeDockWidget->show();
+                    } else {
+                        bibleTreeDockWidget->hide();
+                    }
+                } else if (wl.widgetName == "biblesearch") {
+                    if (wl.show) {
+                        bibleSearchDockWidget->show();
+                    } else {
+                        bibleSearchDockWidget->hide();
+                    }
+                } else if (wl.widgetName == "bibledict") {
+                    if (wl.show) {
+                        dictDockWidget->show();
+                    } else {
+                        dictDockWidget->hide();
+                    }
+                } else if (wl.widgetName == "biblecommentary") {
+                    if (wl.show) {
+                        commentaryDockWidget->show();
+                    } else {
+                        commentaryDockWidget->hide();
+                    }
+                }
+            }
+
             break;
         }
     }
@@ -368,9 +431,6 @@ void BibleReaderMainWindow::createGlobalToolbar()
     resourceManagerAction = toolBar->addAction(QIcon(QString(":/img/assets/images/package.png")),tr("Resources manager"));
     //resourceManagerAction->setEnabled(false);
     connect(resourceManagerAction, SIGNAL(triggered(bool)), this, SLOT(showResMgrDlg()));
-
-    // add layout tool buttons
-    buildLayoutActions();
 
     toolBar->show();
 
@@ -677,7 +737,86 @@ QMenu *BibleReaderMainWindow::buildBibleTreeMenu()
 
 void BibleReaderMainWindow::buildLayoutActions()
 {
-    QString layoutPath = bibleReaderCore->getConfigurator()->getLayoutPath();
+    QString layoutPathBase = bibleReaderCore->getConfigurator()->getLayoutPath();
+    QDir layoutPath = QDir(layoutPathBase);
+    if (!layoutPath.exists()) {
+        return;
+    } else {
+        layoutPath.setFilter(QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+        QFileInfoList layoutFiles = layoutPath.entryInfoList();
+        QString layout, layoutFilePath;
+
+        for (int i = 0; i < layoutFiles.count(); i++) {
+            layout = layoutFiles[i].fileName();
+
+            layoutFilePath = layoutPathBase + layout;
+
+            // open xml file
+            QFile f(layoutFilePath);
+            if (!f.open(QIODevice::ReadOnly))
+                continue;
+
+            QXmlStreamReader xmlReader(&f);
+            // get layout information
+
+            QString layoutName;
+            QString layoutShortName;
+            BibleReaderLayout layout;
+            while(!xmlReader.atEnd() && !xmlReader.hasError())
+            {
+                xmlReader.readNext();
+                if(xmlReader.isStartElement()) {
+                    if(xmlReader.name()=="name") {
+                        layoutName = xmlReader.readElementText();
+                        LOG_INFO()<<"layout name: " << layoutName;
+                        QAction *tmp = new QAction(layoutName, this);
+                        layoutActions.push_back(tmp);
+                        layout.layoutName = layoutName;
+                    } else if (xmlReader.name() == "shortname") {
+                        layoutShortName = xmlReader.readElementText();
+                        LOG_INFO()<<"layout short name: " << layoutShortName;
+                        layout.layoutShortName = layoutShortName;
+                    } else if (xmlReader.name() == "bibletree") {
+                        LOG_INFO() << "bibletree: " << xmlReader.attributes().value("show");
+                        WidgetLayout tmp_layout;
+                        tmp_layout.widgetName = "bibletree";
+                        tmp_layout.show = xmlReader.attributes().value("show") == "true" ? true : false;
+                        tmp_layout.position = "west";
+                        layout.layouts.push_back(tmp_layout);
+                    } else if (xmlReader.name() == "biblesearch") {
+                        LOG_INFO() << "biblesearch: " << xmlReader.attributes().value("show");
+                        WidgetLayout tmp_layout;
+                        tmp_layout.widgetName = "biblesearch";
+                        tmp_layout.show = xmlReader.attributes().value("show") == "true" ? true : false;
+                        tmp_layout.position = "west";
+                        layout.layouts.push_back(tmp_layout);
+                    } else if (xmlReader.name() == "bibledict") {
+                        LOG_INFO() << "bibledict: " << xmlReader.attributes().value("show");
+                        WidgetLayout tmp_layout;
+                        tmp_layout.widgetName = "bibledict";
+                        tmp_layout.show = xmlReader.attributes().value("show") == "true" ? true : false;
+                        tmp_layout.position = "south";
+                        layout.layouts.push_back(tmp_layout);
+                    } else if (xmlReader.name() == "biblecommentary") {
+                        LOG_INFO() << "biblecommentary: " << xmlReader.attributes().value("show");
+                        WidgetLayout tmp_layout;
+                        tmp_layout.widgetName = "biblecommentary";
+                        tmp_layout.show = xmlReader.attributes().value("show") == "true" ? true : false;
+                        tmp_layout.position = "south";
+                        layout.layouts.push_back(tmp_layout);
+                    }
+                }
+
+            }
+
+            layouts.push_back(layout);
+            // create action and connect signal
+            for (int i = 0; i < layoutActions.size(); i++) {
+                connect(layoutActions[i], SIGNAL(triggered(bool)), this, SLOT(doLayout()));
+            }
+            // add action
+        }
+    }
 
 }
 
