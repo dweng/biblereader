@@ -17,7 +17,7 @@ BibleReaderConfigurator::BibleReaderConfigurator(QObject *parent) :
     if (!QFile(settingsFile).exists()) {
         // create default settings
         settings = new QSettings(settingsFile, QSettings::IniFormat);
-        settings->setValue("/base/layoutPath", dir.absolutePath() + "/layouts/");
+        settings->setValue("/base/layoutPath", dir.absolutePath() + "/layout/");
         settings->setValue("/base/biblePathBase", dir.absolutePath() + "/bibles/");
         settings->setValue("/base/dictPathBase", dir.absolutePath() + "/dicts/");
         settings->setValue("/base/bcPathBase", dir.absolutePath() + "/commentarys/");

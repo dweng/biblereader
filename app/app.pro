@@ -5,17 +5,6 @@
 #-------------------------------------------------
 message(Qt version: $$[QT_VERSION])
 message(Qt is installed in $$[QT_INSTALL_PREFIX])
-message(Qt resources can be found in the following locations:)
-message(Documentation: $$[QT_INSTALL_DOCS])
-message(Header files: $$[QT_INSTALL_HEADERS])
-message(Libraries: $$[QT_INSTALL_LIBS])
-message(Binary files (executables): $$[QT_INSTALL_BINS])
-message(Plugins: $$[QT_INSTALL_PLUGINS])
-message(Data files: $$[QT_INSTALL_DATA])
-message(Translation files: $$[QT_INSTALL_TRANSLATIONS])
-message(Settings: $$[QT_INSTALL_SETTINGS])
-message(Examples: $$[QT_INSTALL_EXAMPLES])
-message(Demonstrations: $$[QT_INSTALL_DEMOS])
 
 QT       += core gui sql xml network printsupport webkitwidgets
 
@@ -27,14 +16,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = BibleReader
 TEMPLATE = app
 
-message($$QMAKESPEC)
 debug {
     DESTDIR = $$PWD/../bin/debug
 }
 release {
     DESTDIR = $$PWD/../bin/release
 }
-
 
 SOURCES += main.cpp\
     biblereadercore.cpp \
@@ -138,7 +125,8 @@ DEPENDPATH += $$PWD/../lib/
 
 RESOURCES += \
     BibleReader.qrc \
-    styles/qdarkstyle/style.qrc
+    styles/qdarkstyle/style.qrc \
+    styles/white/white.qrc
 win32 {
 RC_FILE = BibleReader.rc
 }
@@ -149,7 +137,7 @@ ICON = $$PWD/assets/images/biblereader.icns
 
 DISTFILES += \
     ebook.ddl.txt \
-    translations/ZH_cn.ts \
     layout/*.xml \
     assets/others/style.css \
-    assets/others/script.js
+    assets/others/script.js \
+    styles/white/white.qss

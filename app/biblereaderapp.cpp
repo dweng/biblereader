@@ -67,7 +67,10 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     setApplicationName(tr("biblereader"));
     setApplicationVersion("0.0.5");
     setApplicationDisplayName(tr("biblereader"));
+    setOrganizationDomain("biblereader.cn");
+    setOrganizationName("Bible Reader");
     //setTheme(":qdarkstyle/style.qss");
+    //setTheme(":whitestyle/white.qss");
     //setStyleSheet("QMenu[bid=1]:item {color: red;}");
 
     // Initialize objects
