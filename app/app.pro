@@ -116,9 +116,10 @@ OTHER_FILES += \
 TRANSLATIONS += \
     translations/ZH_cn.ts
 
-LIBS += -L$$PWD/../lib -lLogger
+LIBS += -L$$PWD/../lib -lLogger -lqsimpleupdater
 
-INCLUDEPATH += $$PWD/../cutelogger/include/
+INCLUDEPATH += $$PWD/../cutelogger/include/ \
+                $$PWD/../QSimpleUpdater/include/
 DEPENDPATH += $$PWD/../lib/
 
 RESOURCES += \

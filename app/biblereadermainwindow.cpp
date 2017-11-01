@@ -81,6 +81,9 @@ BibleReaderMainWindow::BibleReaderMainWindow(BibleReaderCore *brc, QWidget *pare
 #ifdef Q_OS_MAC
     this->setUnifiedTitleAndToolBarOnMac(true);
 #endif
+
+    updater = QSimpleUpdater::getInstance();
+
     // auto update
     if (bibleReaderCore->getConfigurator()->getIsAutoUpdate()) {
         checkNewVersion();
@@ -176,12 +179,14 @@ void BibleReaderMainWindow::showCfgDlg()
 void BibleReaderMainWindow::checkNewVersion()
 {
     // 1. get update information from server
-    QString server = "http://biblereader.cn/brupdate.xml";
+    QString appcast = "http://biblereader.cn/brupdate.xml";
 
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
-
-    manager->get(QNetworkRequest(QUrl(server)));
+    updater->setModuleName(appcast, "biblereader");
+    updater->setModuleVersion(appcast, qApp->applicationVersion());
+    updater->setNotifyOnUpdate(appcast, true);
+    updater->setDownloaderEnabled(appcast, true);
+    updater->setNotifyOnFinish(appcast, true);
+    updater->checkForUpdates(appcast);
 }
 
 void BibleReaderMainWindow::openHelpPage()

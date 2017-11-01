@@ -33,6 +33,9 @@
 #include "biblereaderresourcemanagerdlg.h"
 #include "biblereaderlayout.h"
 
+// auto updater
+#include "QSimpleUpdater.h"
+
 QT_BEGIN_NAMESPACE
 
 class QDockWidget;
@@ -192,6 +195,8 @@ private:
      */
     QStatusBar *statusBar;
 
+    // auto updater
+    QSimpleUpdater *updater;
 signals:
     void chapterChanged(int book, int chapter, int verse);
 

@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = BibleReader
 TEMPLATE = subdirs
-SUBDIRS = app cutelogger
+SUBDIRS = app cutelogger QSimpleUpdater
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
 
@@ -22,4 +22,4 @@ release {
     DESTDIR = $$PWD/bin/release
 }
 
-app.depends = cutelogger
+app.depends = cutelogger QSimpleUpdater
