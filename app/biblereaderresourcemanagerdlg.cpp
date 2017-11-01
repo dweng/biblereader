@@ -56,7 +56,7 @@ void BibleReaderResourceManagerDlg::createWidgets()
     resItemsWidget = new QTableWidget(this);
     resItemsWidget->setColumnCount(6);
     QStringList headers;
-    headers << tr("Name") << tr("Type") << tr("Size")
+    headers << tr("Name") << tr("Size")
             << tr("Description") << tr("Version") << tr("Operation");
     resItemsWidget->setHorizontalHeaderLabels(headers);
     resItemsWidget->horizontalHeader()->setVisible(true);

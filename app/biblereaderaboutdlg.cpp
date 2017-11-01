@@ -1,3 +1,10 @@
+/**
+ * Bible Reader about dialog
+ *
+ * \author dweng
+ * \version 0.0.5
+ */
+
 #include <QFile>
 #include <QGridLayout>
 #include <QApplication>

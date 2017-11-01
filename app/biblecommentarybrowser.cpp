@@ -1,9 +1,33 @@
+/**
+ * [1 Timothy 3:16-17 ESV]
+ * All Scripture is breathed out by God and profitable
+ * for teaching, for reproof, for correction, and for training in righteousness,
+ * that the man of God may be complete, equipped for every good work.
+ *
+ * BibleReader is an simple application for you to study God's Word.
+ * The main user of this application maybe the pastor who's main language
+ * is Chinese.
+ *
+ * You can use it totally free, and if you want to get source code of
+ * this application, please email me at dweng123@gmail to get the source
+ * code.
+ *
+ * \author dweng
+ * \version 0.0.5
+ * \date 2017-11-1
+ */
 #include <QMouseEvent>
 #include <QUrl>
 #include <QToolTip>
 #include <QStringList>
 #include <QTextBrowser>
 #include <QApplication>
+#include <QMenu>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QFile>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "biblecommentarybrowser.h"
 #include "bibleversepos.h"
@@ -106,6 +130,19 @@ void BibleCommentaryBrowser::leaveEvent(QEvent *e)
     QTextBrowser::leaveEvent(e);
 }
 
+void BibleCommentaryBrowser::contextMenuEvent(QContextMenuEvent *e)
+{
+    QMenu *menu = createStandardContextMenu();
+
+    QAction *prtAct = menu->addAction(QIcon(":/img/assets/images/printer.png"), tr("Print"));
+    connect(prtAct, SIGNAL(triggered(bool)), this, SLOT(printCmt()));
+
+    QAction *saveAct = menu->addAction(QIcon(":/img/assets/images/disk.png"), tr("Save"));
+    connect(saveAct, SIGNAL(triggered(bool)), this, SLOT(saveCmt()));
+
+    menu->exec(e->globalPos());
+}
+
 void BibleCommentaryBrowser::setCurrentBCV(QUrl url)
 {
     if (url.scheme() == "br") {
@@ -115,6 +152,34 @@ void BibleCommentaryBrowser::setCurrentBCV(QUrl url)
             int c = verseInfo[1].toInt();
             int v = verseInfo[2].toInt();
             brCore->setCurrentBCV(b, c, v);
+        }
+    }
+}
+
+void BibleCommentaryBrowser::printCmt()
+{
+    QPrinter printer;
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    dialog->setWindowTitle(tr("Print Document"));
+    if (this->textCursor().hasSelection())
+       dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
+    if (dialog->exec() != QDialog::Accepted)
+       return;
+
+    this->print(&printer);
+}
+
+void BibleCommentaryBrowser::saveCmt()
+{
+    QString path = QFileDialog::getSaveFileName(this, tr("Save Commentary"), ".", tr("Word Files(*.doc *.docx)"));
+    if(path.length() == 0) {
+        return;
+    } else {
+        QFile f(path);
+        if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            f.write(this->toHtml().toUtf8());
+            f.close();
         }
     }
 }

@@ -11,6 +11,10 @@
  * You can use it totally free, and if you want to get source code of
  * this application, please email me at dweng123@gmail to get the source
  * code.
+ *
+ * \author dweng
+ * \version 0.0.5
+ * \date 2017-10-31
  */
 #include "biblereaderapp.h"
 #include <QTextCodec>

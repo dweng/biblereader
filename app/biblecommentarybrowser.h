@@ -11,6 +11,10 @@
  * You can use it totally free, and if you want to get source code of
  * this application, please email me at dweng123@gmail to get the source
  * code.
+ *
+ * \author dweng
+ * \version 0.0.5
+ * \date 2017-11-1
  */
 #ifndef BIBLECOMMENTARYBROWSER_H
 #define BIBLECOMMENTARYBROWSER_H
@@ -22,7 +26,7 @@
 
 /**
  * @brief The BibleCommentaryBrowser class
- * 圣经注释浏览器控件
+ * Commentary Browser
  */
 class BibleCommentaryBrowser : public QTextBrowser
 {
@@ -37,6 +41,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
+    void contextMenuEvent(QContextMenuEvent *e);
 
 private:
     BibleReaderCore *brCore;
@@ -47,6 +52,8 @@ private:
 
 private slots:
     void setCurrentBCV(QUrl url);
+    void printCmt();
+    void saveCmt();
 
 private:
     void showToolTip(QString text, QPoint pos);
