@@ -668,12 +668,17 @@ Query string:%2</source>
         <translation>复制经文从当前经文到...</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="215"/>
+        <location filename="../bibletextbrowser.cpp" line="211"/>
+        <source>Copy selected text</source>
+        <translation>复制选中文字</translation>
+    </message>
+    <message>
+        <location filename="../bibletextbrowser.cpp" line="219"/>
         <source>Print...</source>
         <translation>打印...</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="590"/>
+        <location filename="../bibletextbrowser.cpp" line="601"/>
         <source>Print Document</source>
         <translation>打印文档</translation>
     </message>

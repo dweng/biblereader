@@ -208,7 +208,11 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
             QString menuTxt = tr("Search \"%1\"");
             QAction *searchText = menu->addAction(menuTxt.arg(q));
             searchText->setData(q);
+            QString t = tr("Copy selected text");
+            QAction *copyTextAct = menu->addAction(t);
+            copyTextAct->setData(q);
             connect(searchText, SIGNAL(triggered(bool)), this, SLOT(searchBible()));
+            connect(copyTextAct, SIGNAL(triggered(bool)), this, SLOT(copySelectedText()));
         }
 
         //add print function
@@ -260,10 +264,9 @@ void BibleTextBrowser::keyPressEvent(QKeyEvent *e)
         }
         break;
     default:
+        QTextEdit::keyPressEvent(e);
         break;
     }
-
-    //QTextEdit::keyPressEvent(e);
 }
 
 void BibleTextBrowser::mouseReleaseEvent(QMouseEvent *e)
@@ -580,6 +583,14 @@ void BibleTextBrowser::searchBible()
     QAction *m = qobject_cast<QAction *>(sender());
 
     brCore->fireSearchRequest(m->data().toString());
+}
+
+void BibleTextBrowser::copySelectedText()
+{
+    QAction *m = qobject_cast<QAction *>(sender());
+
+    QClipboard *cb = QApplication::clipboard();
+    cb->setText(m->data().toString(), QClipboard::Clipboard);
 }
 
 void BibleTextBrowser::printBibleText()

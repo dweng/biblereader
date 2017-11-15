@@ -89,6 +89,7 @@ private slots:
     // show strong number dict in dict win
     void navTo(QUrl brUrl);
     void searchBible();
+    void copySelectedText();
 };
 
 #endif // BIBLETEXTBROWSER_H
