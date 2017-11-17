@@ -10,6 +10,8 @@
 #include <QRegExp>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QFileDialog>
+
 #include "biblereaderprojectdialog.h"
 #include "bibletextblockdata.h"
 #include "bibleversexref.h"
@@ -215,9 +217,20 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
             connect(copyTextAct, SIGNAL(triggered(bool)), this, SLOT(copySelectedText()));
         }
 
+        QString href = this->cursorForPosition(e->pos()).charFormat().anchorHref();
+        if (!href.isEmpty()) {
+            QStringList anchorName = this->cursorForPosition(e->pos()).charFormat().anchorNames();
+            //QAction *copyXrefAct = menu->addAction(tr("Copy Xref %1").arg(anchorName[0]));
+            //QAction *copyXrefHeadAct = menu->addAction(tr("Copy Xref [%1] head").arg(anchorName[0]));
+        }
+
         //add print function
         QAction *printAct = menu->addAction(tr("Print..."));
         connect(printAct, SIGNAL(triggered(bool)), this, SLOT(printBibleText()));
+
+        // save current chapter action
+        QAction *saveCurChapter = menu->addAction(tr("Save current chapter"));
+        connect(saveCurChapter, SIGNAL(triggered(bool)), this, SLOT(saveCurrentChapter()));
 
 
         connect(copyCurrentVerse, SIGNAL(triggered()), this, SLOT(copyCurVerse()));
@@ -591,6 +604,20 @@ void BibleTextBrowser::copySelectedText()
 
     QClipboard *cb = QApplication::clipboard();
     cb->setText(m->data().toString(), QClipboard::Clipboard);
+}
+
+void BibleTextBrowser::saveCurrentChapter()
+{
+    QString path = QFileDialog::getSaveFileName(this, tr("Save Bible Chapter"), ".", tr("Word Files(*.doc *.docx)"));
+    if(path.length() == 0) {
+        return;
+    } else {
+        QFile f(path);
+        if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            f.write(this->toHtml().toUtf8());
+            f.close();
+        }
+    }
 }
 
 void BibleTextBrowser::printBibleText()

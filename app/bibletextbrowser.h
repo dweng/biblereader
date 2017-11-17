@@ -90,6 +90,9 @@ private slots:
     void navTo(QUrl brUrl);
     void searchBible();
     void copySelectedText();
+
+    // save current bible chapter
+    void saveCurrentChapter();
 };
 
 #endif // BIBLETEXTBROWSER_H
