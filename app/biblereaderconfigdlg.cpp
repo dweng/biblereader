@@ -2,6 +2,7 @@
 #include <QtWidgets>
 
 #include "biblereaderconfiggeneralpage.h"
+#include "biblereaderconfigbiblepage.h"
 
 BibleReaderConfigDlg::BibleReaderConfigDlg(BibleReaderConfigurator *cfg,
                                            QWidget *parent) : QDialog(parent)
@@ -15,6 +16,7 @@ BibleReaderConfigDlg::BibleReaderConfigDlg(BibleReaderConfigurator *cfg,
 
     pagesWidget = new QStackedWidget;
     pagesWidget->addWidget(new BibleReaderConfigGeneralPage(configurator, this));
+    pagesWidget->addWidget(new BibleReaderConfigBiblePage(configurator, this));
 
     QPushButton *closeButton = new QPushButton(tr("Close"));
     QPushButton *applyButton = new QPushButton(tr("Apply"));
@@ -59,6 +61,12 @@ void BibleReaderConfigDlg::createIcons()
     configButton->setText(tr("General"));
     configButton->setTextAlignment(Qt::AlignLeft);
     configButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+    QListWidgetItem *bibleButton = new QListWidgetItem(contentsWidget);
+    //configButton->setIcon(QIcon(":/images/config.png"));
+    bibleButton->setText(tr("Bible"));
+    bibleButton->setTextAlignment(Qt::AlignLeft);
+    bibleButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
     connect(contentsWidget,
             SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),

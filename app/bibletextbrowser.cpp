@@ -202,6 +202,10 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
             connect(tmp, SIGNAL(triggered(bool)), this, SLOT(copyVerseTo()));
         }
         menu->addMenu(copyTo);
+
+        // list all xref of this verse
+        //QAction *listAllXrefs = menu->addAction(tr("List all xrefs of this verse"));
+
         QAction *compareCurrentVerse = menu->addAction(tr("Compare this verse"));
         QAction *projectCurrentVerse = menu->addAction(tr("Project this verse"));
 
@@ -300,11 +304,13 @@ void BibleTextBrowser::setBibleVersion(const QString &value)
 
 bool BibleTextBrowser::showCurrentChapter(ShowMethod method)
 {
+    /*
     if (preBookId == brCore->getCurrentBookNumber() &&
             preChapterId == brCore->getCurrentChapterNumber() &&
             (method != Zoom)) {
+        highlight(brCore->getCurrentVerseNumber(), bgColor);
         return false;
-    }
+    }*/
     // clear all bible text
     clear();
 
@@ -388,11 +394,11 @@ void BibleTextBrowser::highlight(int verse, const QColor &color)
 
         tmpCursor->setBlockFormat(format);
         // move 3 times to make sure the cursor visible
-//        for (int i = 0; i < 2; i++) {
-//            tmpCursor->movePosition(QTextCursor::EndOfBlock);
-//            tmpCursor->movePosition(QTextCursor::NextBlock);
-//        }
-//        setTextCursor(*tmpCursor);
+        for (int i = 0; i < 2; i++) {
+            tmpCursor->movePosition(QTextCursor::EndOfBlock);
+            tmpCursor->movePosition(QTextCursor::NextBlock);
+        }
+        setTextCursor(*tmpCursor);
 
         delete tmpCursor;
     }
