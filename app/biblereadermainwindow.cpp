@@ -111,22 +111,15 @@ BibleReaderMainWindow::~BibleReaderMainWindow()
     // delete dictWidget;
 }
 
-void BibleReaderMainWindow::onChapterVerseChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+void BibleReaderMainWindow::onChapterVerseChanged(QTreeWidgetItem *item, int column)
 {
     int bookNumber = 0;
     int chapter = 0;
     int verse = 1;
-    if (current) {
-        bookNumber = current->data(1, Qt::DisplayRole).toInt();
-        chapter = current->data(2, Qt::DisplayRole).toInt();
-        QVariant temp = current->data(3, Qt::DisplayRole);
-        if (temp.isValid()) {
-            verse = temp.toInt();
-        }
-    } else {
-        bookNumber = previous->data(1, Qt::DisplayRole).toInt();
-        chapter = previous->data(2, Qt::DisplayRole).toInt();
-        QVariant temp = previous->data(3, Qt::DisplayRole);
+    if (item) {
+        bookNumber = item->data(1, Qt::DisplayRole).toInt();
+        chapter = item->data(2, Qt::DisplayRole).toInt();
+        QVariant temp = item->data(3, Qt::DisplayRole);
         if (temp.isValid()) {
             verse = temp.toInt();
         }
@@ -607,9 +600,8 @@ void BibleReaderMainWindow::createBibleTreeDockWidget()
     // bible tree
     bibleTreeWidget = new BibleTreeWidget(bibleReaderCore, this);
     bibleTreeDockWidget->setWidget(bibleTreeWidget);
-    connect(bibleTreeWidget,
-            SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-                   this, SLOT(onChapterVerseChanged(QTreeWidgetItem*,QTreeWidgetItem*)));
+    connect(bibleTreeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+                   this, SLOT(onChapterVerseChanged(QTreeWidgetItem*,int)), Qt::DirectConnection);
     connect(bibleReaderCore, SIGNAL(currentBibleVersionChanged(QString)), bibleTreeWidget,
             SLOT(onBibleVersionChanged(QString)));
 

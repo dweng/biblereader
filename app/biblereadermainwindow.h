@@ -201,7 +201,7 @@ signals:
     void chapterChanged(int book, int chapter, int verse);
 
 private slots:
-    void onChapterVerseChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+    void onChapterVerseChanged(QTreeWidgetItem *item, int column);
     void onChapterChanged(int book, int chapter, int verse);
     void navToNextBook();
     void navToPrevBook();
