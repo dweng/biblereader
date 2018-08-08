@@ -14,8 +14,10 @@ public:
     ~BibleReaderResourceManagerDlg();
 
 private:
-    QListWidget *resUrlWidget;
     QTableWidget *resItemsWidget;
+
+    QPushButton *refreshBtn;
+    QPushButton *closeBtn;
 
 
     BibleReaderCore *brCore;
@@ -26,7 +28,6 @@ private:
     void doLayout();
 
 private slots:
-    void refreshResources(QModelIndex index);
 
 };
 

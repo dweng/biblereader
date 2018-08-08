@@ -28,10 +28,6 @@ BibleReaderResourceManagerDlg::BibleReaderResourceManagerDlg(
 
 BibleReaderResourceManagerDlg::~BibleReaderResourceManagerDlg()
 {
-    if (resUrlWidget) {
-        delete resUrlWidget;
-    }
-
     if (resItemsWidget) {
         delete resItemsWidget;
     }
@@ -39,37 +35,31 @@ BibleReaderResourceManagerDlg::~BibleReaderResourceManagerDlg()
 
 void BibleReaderResourceManagerDlg::createWidgets()
 {
-    resUrlWidget = new QListWidget(this);
-    resUrlWidget->setMinimumWidth(50);
-    resUrlWidget->setMaximumWidth(100);
-    connect(resUrlWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(refreshResources(QModelIndex)));
-
     QMap<QString, QUrl> resUrls = manager->getResourceUrls();
-    QMap<QString, QUrl>::const_iterator i = resUrls.constBegin();
-    while (i != resUrls.constEnd()) {
-        QListWidgetItem *item = new QListWidgetItem(i.key());
 
-        resUrlWidget->addItem(item);
-        ++i;
-    }
 
     resItemsWidget = new QTableWidget(this);
     resItemsWidget->setColumnCount(6);
     QStringList headers;
-    headers << tr("Name") << tr("Size")
+    headers << tr("Type") << tr("Name") << tr("Size")
             << tr("Description") << tr("Version") << tr("Operation");
     resItemsWidget->setHorizontalHeaderLabels(headers);
     resItemsWidget->horizontalHeader()->setVisible(true);
+
+    refreshBtn = new QPushButton(tr("Refresh"));
+    closeBtn = new QPushButton(tr("Close"));
 }
 
 void BibleReaderResourceManagerDlg::doLayout() {
-    QSplitter *splitter = new QSplitter(this);
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    QHBoxLayout *btnLayout = new QHBoxLayout(this);
 
-    splitter->addWidget(resUrlWidget);
-    splitter->addWidget(resItemsWidget);
+    btnLayout->addWidget(refreshBtn);
+    btnLayout->addWidget(closeBtn);
 
-    layout->addWidget(splitter);
+    layout->addWidget(resItemsWidget, 9);
+    layout->addLayout(btnLayout, 1);
+
 
     /*
     QMenuBar *menuBar = new QMenuBar(this);
@@ -82,35 +72,5 @@ void BibleReaderResourceManagerDlg::doLayout() {
     setLayout(layout);
 }
 
-void BibleReaderResourceManagerDlg::refreshResources(QModelIndex index)
-{
-    QListWidgetItem *item = resUrlWidget->item(index.row());
-
-    QList<BRResource> resources = manager->getResources(item->text());
-
-    resItemsWidget->clearContents();
-    resItemsWidget->setRowCount(resources.size());
-
-    for (int i = 0; i < resources.size(); i++) {
-        BRResource res = resources[i];
-        QTableWidgetItem *tmp = new QTableWidgetItem(res.key);
-        resItemsWidget->setItem(i, 0, tmp);
-
-        QTableWidgetItem *tmp2 = new QTableWidgetItem(res.typeStr);
-        resItemsWidget->setItem(i, 1, tmp2);
-
-        QTableWidgetItem *tmp3 = new QTableWidgetItem(QString::number(res.size));
-        resItemsWidget->setItem(i, 2, tmp3);
-
-        QTableWidgetItem *tmp4 = new QTableWidgetItem(res.description);
-        resItemsWidget->setItem(i, 3, tmp4);
-
-        QTableWidgetItem *tmp5 = new QTableWidgetItem(QString::number(res.version));
-        resItemsWidget->setItem(i, 4, tmp5);
-
-        QPushButton *btn = new QPushButton(tr("Update"));
-        resItemsWidget->setCellWidget(i, 5, btn);
-    }
-}
 
 
