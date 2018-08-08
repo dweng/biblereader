@@ -11,6 +11,9 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QFileDialog>
+#include <QRect>
+#include <QScrollBar>
+#include <QAbstractTextDocumentLayout>
 
 #include "biblereaderprojectdialog.h"
 #include "bibletextblockdata.h"
@@ -304,13 +307,15 @@ void BibleTextBrowser::setBibleVersion(const QString &value)
 
 bool BibleTextBrowser::showCurrentChapter(ShowMethod method)
 {
-    /*
     if (preBookId == brCore->getCurrentBookNumber() &&
             preChapterId == brCore->getCurrentChapterNumber() &&
             (method != Zoom)) {
+        highlight(preVerseId, QColor("white"));
         highlight(brCore->getCurrentVerseNumber(), bgColor);
         return false;
-    }*/
+    }
+
+
     // clear all bible text
     clear();
 
@@ -393,12 +398,21 @@ void BibleTextBrowser::highlight(int verse, const QColor &color)
         format.setBackground(color);
 
         tmpCursor->setBlockFormat(format);
-        // move 3 times to make sure the cursor visible
-        for (int i = 0; i < 2; i++) {
-            tmpCursor->movePosition(QTextCursor::EndOfBlock);
-            tmpCursor->movePosition(QTextCursor::NextBlock);
+
+
+        QRect r1 = this->viewport()->geometry();
+        QRect r2 = this->document()->documentLayout()->blockBoundingRect(block).translated(
+                        this->viewport()->geometry().x(), this->viewport()->geometry().y() - (
+                            this->verticalScrollBar()->sliderPosition()
+                            ) ).toRect();
+        if (!r1.contains(r2, true)) {
+            // move 3 times to make sure the cursor visible
+            for (int i = 0; i < 2; i++) {
+                tmpCursor->movePosition(QTextCursor::EndOfBlock);
+                tmpCursor->movePosition(QTextCursor::NextBlock);
+            }
+            setTextCursor(*tmpCursor);
         }
-        setTextCursor(*tmpCursor);
 
         delete tmpCursor;
     }
