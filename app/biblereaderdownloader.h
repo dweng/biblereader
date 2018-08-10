@@ -16,11 +16,12 @@ enum ResourceType {
 };
 
 typedef struct _BRResource {
-    QString key;
+    QString shortName;
     QString description;
     QString url;
     ResourceType type;
     QString typeStr;
+    QString longName;
     int size;
     int version;
 
@@ -32,21 +33,20 @@ class BibleReaderDownloader : public QObject
 {
     Q_OBJECT
 public:
-    explicit BibleReaderDownloader(QString &key, QUrl &url, QObject *parent = 0);
+    explicit BibleReaderDownloader(QUrl &url, QObject *parent = 0);
     ~BibleReaderDownloader();
 
     QList<BRResource> getResources() const;
 
 private:
     QUrl url;
-    QString key;
     QNetworkAccessManager *manager;
     QNetworkReply *reply;
 
     QList<BRResource> resources;
 
 signals:
-    void finished(QString key);
+    void finished();
     //void error(QString errorText);
     //void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 

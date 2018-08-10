@@ -1,14 +1,11 @@
 #include "biblereaderdownloader.h"
-#include <QJsonDocument>
-#include <QJsonParseError>
-#include <QJsonObject>
-#include <QJsonArray>
+#include <QDomDocument>
 #include "Logger.h"
 
-BibleReaderDownloader::BibleReaderDownloader(QString &key, QUrl &url, QObject *parent) :
-    QObject(parent), url(url), key(key)
+BibleReaderDownloader::BibleReaderDownloader(QUrl &url, QObject *parent) :
+    QObject(parent), url(url)
 {
-
+    resources.clear();
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
 
@@ -39,35 +36,43 @@ void BibleReaderDownloader::replyFinished(QNetworkReply *reply)
     //
     QString replyString = reply->readAll();
     if (!replyString.isEmpty()) {
-        QJsonParseError error;
-        QJsonDocument doc = QJsonDocument::fromJson(replyString.toUtf8(), &error);
+        QDomDocument doc;
+        QString error;
+        int row = 0, column = 0;
 
-        if (error.error == QJsonParseError::NoError) {
-            if (doc.isObject()) {
-                QJsonObject object = doc.object();
-                QJsonArray resArray = object.value("BRResource").toArray();
+        if (doc.setContent(replyString, &error, &row, &column)) {
+            QDomElement root = doc.documentElement();
 
-                for (int i=0; i < resArray.size(); i++) {
-                    BRResource res;
-                    QJsonObject tmp = resArray[i].toObject();
-                    res.description = tmp.value("description").toString();
-                    res.key = tmp.value("key").toString();
-                    res.size = tmp.value("size").toInt();
-                    res.type = (ResourceType)tmp.value("type").toInt();
-                    res.typeStr = type2str(res.type);
-                    res.url = tmp.value("url").toString();
-                    res.version = tmp.value("version").toInt();
+            // dicts
+            QDomNode dictRoot = root.firstChild();
+            QDomNodeList dicts = dictRoot.childNodes();
 
-                    resources.push_back(res);
-                }
+            for (int i = 0; i < dicts.count(); i++) {
+                QDomElement dict = dicts.at(i).toElement();
+
+                BRResource res;
+
+                res.longName = dict.attribute("longname");
+                res.shortName = dict.attribute("shortname");
+                res.size = dict.attribute("size").toInt();
+                res.version = dict.attribute("version").toInt();
+                res.url = dict.attribute("url");
+                res.type = Dict;
+                res.typeStr = type2str(Dict);
+
+                resources.push_back(res);
             }
+
+            // bibles
+            QDomNode bibleRoot = dictRoot.nextSibling();
+
         } else {
             LOG_INFO() << replyString;
         }
     }
     reply->deleteLater();
 
-    emit finished(key);
+    emit finished();
 }
 
 QString BibleReaderDownloader::type2str(ResourceType type)

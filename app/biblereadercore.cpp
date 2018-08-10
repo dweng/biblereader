@@ -24,9 +24,8 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
 {
     LOG_DEBUG("constructor");
     resManager = new BibleReaderResourceManager(this);
+    resManager->setResourceUrl(QUrl("http://files.biblereader.cn/resources/all.xml"));
     // test
-    resManager->addResourceUrl("default", "http://biblereader.cn/brresources.php");
-    resManager->refreshAll();
 
     currentBookNumber = 0;
     currentChapterNumber = 0;

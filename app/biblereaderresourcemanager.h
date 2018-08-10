@@ -14,28 +14,24 @@ public:
     explicit BibleReaderResourceManager(QObject *parent = 0);
     ~BibleReaderResourceManager();
 
-    void addResourceUrl(QString key, QString url);
-    void removeResourceUrl(QString key);
+    QList<BRResource> getResources();
 
-    QList<BRResource> getResources(QString key);
-
-    QMap<QString, QUrl> getResourceUrls() const;
+    QUrl getResourceUrl() const;
+    void setResourceUrl(const QUrl &value);
 
 private:
-    QMap<QString, QUrl> resourceUrls;
     BibleReaderDownloader *downloader;
-    QMap< QString, QList<BRResource> > resources;
+    QUrl resourceUrl;
+    QList<BRResource> resources;
 
 signals:
-    void allRefreshed();
-    void refreshed(QString resKey);
+    void refreshed();
 
 public slots:
-    void refresh(QString resKey);
-    void refreshAll();
+    void refresh();
 
 private slots:
-    void gotResources(QString key);
+    void gotResource();
 };
 
 #endif // BIBLEREADERRESOURCEMANAGER_H

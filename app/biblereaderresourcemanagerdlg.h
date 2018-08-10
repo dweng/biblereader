@@ -28,7 +28,7 @@ private:
     void doLayout();
 
 private slots:
-
+    void updateResList();
 };
 
 #endif // BIBLEREADERRESOURCEMANAGERDLG_H

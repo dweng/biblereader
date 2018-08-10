@@ -12,57 +12,32 @@ BibleReaderResourceManager::~BibleReaderResourceManager()
     }
 }
 
-void BibleReaderResourceManager::addResourceUrl(QString key, QString url)
+QList<BRResource> BibleReaderResourceManager::getResources()
 {
-    if (!resourceUrls.contains(key)) {
-        resourceUrls.insert(key, QUrl(url));
-    }
+    return resources;
 }
 
-void BibleReaderResourceManager::removeResourceUrl(QString key)
+QUrl BibleReaderResourceManager::getResourceUrl() const
 {
-    if (resourceUrls.contains(key)) {
-        resourceUrls.remove(key);
-    }
+    return resourceUrl;
 }
 
-QList<BRResource> BibleReaderResourceManager::getResources(QString key)
+void BibleReaderResourceManager::setResourceUrl(const QUrl &value)
 {
-    if (resources.contains(key)) {
-        return resources.value(key);
-    } else {
-        return QList<BRResource>();
-    }
+    resourceUrl = value;
 }
 
-QMap<QString, QUrl> BibleReaderResourceManager::getResourceUrls() const
+void BibleReaderResourceManager::refresh()
 {
-    return resourceUrls;
+    downloader = new BibleReaderDownloader(resourceUrl, this);
+    connect(downloader, SIGNAL(finished()), this, SLOT(gotResource()));
+    downloader->start();
 }
 
-void BibleReaderResourceManager::refresh(QString resKey)
+void BibleReaderResourceManager::gotResource()
 {
-    if (resourceUrls.contains(resKey)) {
-        QUrl url = resourceUrls.value(resKey);
-        downloader = new BibleReaderDownloader(resKey, url, this);
-        connect(downloader, SIGNAL(finished(QString)), this, SLOT(gotResources(QString)));
-        downloader->start();
-    }
-}
-
-void BibleReaderResourceManager::refreshAll()
-{
-    QMap<QString, QUrl>::const_iterator iter = resourceUrls.constBegin();
-
-    while (iter != resourceUrls.constEnd()) {
-        refresh(iter.key());
-        iter++;
-    }
-}
-
-void BibleReaderResourceManager::gotResources(QString key)
-{
-    resources[key] = downloader->getResources();
+    this->resources = downloader->getResources();
+    emit refreshed();
 }
 
 
