@@ -152,8 +152,11 @@ void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
                 // high light current verse
                 highlight(d->getVerse(), bgColor);
                 preVerseId = d->getVerse();
+                //brCore->setPreviousVerseNumber(preVerseId);
                 preChapterId = d->getChapter();
+                //brCore->setPreviousChapterNumber(preChapterId);
                 preBookId = d->getBook();
+                //brCore->setPreviousBookNumber(preBookId);
 
                 brCore->setCurrentBCV(d->getBook(),
                                       d->getChapter(),
@@ -307,12 +310,21 @@ void BibleTextBrowser::setBibleVersion(const QString &value)
 
 bool BibleTextBrowser::showCurrentChapter(ShowMethod method)
 {
+    preBookId = brCore->getPreviousBookNumber();
+    preChapterId = brCore->getPreviousChapterNumber();
+    preVerseId = brCore->getPreviousVerseNumber();
+
     if (preBookId == brCore->getCurrentBookNumber() &&
-            preChapterId == brCore->getCurrentChapterNumber() &&
-            (method != Zoom)) {
-        highlight(preVerseId, QColor("white"));
-        highlight(brCore->getCurrentVerseNumber(), bgColor);
-        return false;
+        preChapterId == brCore->getCurrentChapterNumber()) {
+        if (method == NewChapter) {
+            highlight(preVerseId, QColor("white"));
+            highlight(brCore->getCurrentVerseNumber(), bgColor);
+            return false;
+        } else if (method == Zoom) {
+            ;;
+        } else if (method == TabSwitch) {
+            ;;
+        }
     }
 
 
@@ -382,7 +394,7 @@ bool BibleTextBrowser::showCurrentChapter(ShowMethod method)
     }
 
     highlight(brCore->getCurrentVerseNumber(), bgColor);
-    preVerseId = brCore->getCurrentVerseNumber();
+    //preVerseId = brCore->getCurrentVerseNumber();
 
     // LOG_INFO() << this->toHtml();
     return true;
@@ -408,8 +420,8 @@ void BibleTextBrowser::highlight(int verse, const QColor &color)
         if (!r1.contains(r2, true)) {
             // move 3 times to make sure the cursor visible
             for (int i = 0; i < 2; i++) {
-                tmpCursor->movePosition(QTextCursor::EndOfBlock);
-                tmpCursor->movePosition(QTextCursor::NextBlock);
+                //tmpCursor->movePosition(QTextCursor::EndOfBlock);
+                //tmpCursor->movePosition(QTextCursor::NextBlock);
             }
             setTextCursor(*tmpCursor);
         }

@@ -330,6 +330,15 @@ public:
     QList<BibleVerseXref> getXrefsByChapter(int book, int chapter);
     QList<BibleVerseXref> getXrefsByVerse(int book, int chapter, int verse);
 
+    int getPreviousVerseNumber() const;
+    void setPreviousVerseNumber(int value);
+
+    int getPreviousChapterNumber() const;
+    void setPreviousChapterNumber(int value);
+
+    int getPreviousBookNumber() const;
+    void setPreviousBookNumber(int value);
+
 signals:
     /**
      * @brief this signal will be emited when current verse changed
@@ -471,6 +480,8 @@ private:
      * @brief previous verse number
      */
     int previousVerseNumber;
+    int previousChapterNumber;
+    int previousBookNumber;
 
     /**
      * @brief <bible version, bible DAO>

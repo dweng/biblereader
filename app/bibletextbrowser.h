@@ -21,14 +21,16 @@
 #include <QTextCursor>
 #include "biblereadercore.h"
 
+enum ShowMethod {
+    NewChapter = 1,
+    Zoom = 2,
+    TabSwitch
+};
+
 class BibleTextBrowser : public QTextBrowser
 {
     Q_OBJECT
 public:
-    enum ShowMethod {
-        NewChapter = 1,
-        Zoom
-    };
 
     explicit BibleTextBrowser(BibleReaderCore *brc, QWidget *parent = 0);
     ~BibleTextBrowser();

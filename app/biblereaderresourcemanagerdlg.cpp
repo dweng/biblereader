@@ -75,9 +75,38 @@ void BibleReaderResourceManagerDlg::doLayout() {
     setLayout(layout);
 }
 
+void BibleReaderResourceManagerDlg::mergeResources(QList<BRResource> &resources)
+{
+    // read local resources
+    QList<BibleDictInfo> dicts = brCore->getAllDictionarys();
+
+    // merge local and online resources
+    for (int i = 0; i < dicts.count(); i++) {
+        for (int j = 0; j < resources.count(); j++) {
+            if (resources[j].type == Dict) {
+                if (resources[j].shortName == dicts[i].getShortname()) {
+                    if (dicts[i].getVersion() < resources[j].version) {
+                        resources[j].isupdated = false;
+                        resources[j].isinstalled = true;
+                    } else {
+                        resources[j].isupdated = true;
+                        resources[j].isinstalled = true;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void BibleReaderResourceManagerDlg::updateResList()
 {
     QList<BRResource> resources = manager->getResources();
+
+    // merge local and online resources
+    mergeResources(resources);
+
+
     QTableWidgetItem *temp;
 
     for (int i = 0; i < resources.count(); i++) {

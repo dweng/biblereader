@@ -5,6 +5,7 @@
 #include <QUrl>
 #include <QMap>
 #include <QList>
+
 #include "biblereaderdownloader.h"
 
 class BibleReaderResourceManager : public QObject

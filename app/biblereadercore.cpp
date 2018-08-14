@@ -31,6 +31,8 @@ BibleReaderCore::BibleReaderCore(QObject *parent) :
     currentChapterNumber = 0;
     currentVerseNumber = 0;
     previousVerseNumber = 0;
+    previousBookNumber = 0;
+    previousChapterNumber = 0;
 }
 
 BibleReaderCore::~BibleReaderCore()
@@ -272,6 +274,36 @@ void BibleReaderCore::fireSearchRequest(QString q)
     emit searchRequest(q);
 }
 
+int BibleReaderCore::getPreviousBookNumber() const
+{
+    return previousBookNumber;
+}
+
+void BibleReaderCore::setPreviousBookNumber(int value)
+{
+    previousBookNumber = value;
+}
+
+int BibleReaderCore::getPreviousChapterNumber() const
+{
+    return previousChapterNumber;
+}
+
+void BibleReaderCore::setPreviousChapterNumber(int value)
+{
+    previousChapterNumber = value;
+}
+
+int BibleReaderCore::getPreviousVerseNumber() const
+{
+    return previousVerseNumber;
+}
+
+void BibleReaderCore::setPreviousVerseNumber(int value)
+{
+    previousVerseNumber = value;
+}
+
 int BibleReaderCore::getHistoryPos() const
 {
     return historyPos;
@@ -417,9 +449,16 @@ void BibleReaderCore::setCurrentVerseNumber(int value)
  */
 int BibleReaderCore::setCurrentBCV(int b, int c, int v, int operation)
 {
+    // set previous verse
+    setPreviousBookNumber(currentBookNumber);
+    setPreviousChapterNumber(currentChapterNumber);
+    setPreviousVerseNumber(currentVerseNumber);
+
+    // set current
     setCurrentBookNumber(b);
     setCurrentChapterNumber(c);
     setCurrentVerseNumber(v);
+
     // history navigation, not store to history list
     if (operation == 0) {
         history.push_back(BibleVersePos(b, c, v));

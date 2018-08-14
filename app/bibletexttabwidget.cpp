@@ -64,7 +64,7 @@ void BibleTextTabWidget::showBibleText(int index)
     if (index == compareBrowserTabIndex) {
         compareBrowser->showComparedBibleText();
     } else {
-        btBrowsers[index]->showCurrentChapter();
+        btBrowsers[index]->showCurrentChapter(TabSwitch);
         brCore->setCurrentVersion(bibles[index].getVersion());
     }
 }

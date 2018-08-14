@@ -37,6 +37,7 @@ void BibleReaderResourceManager::refresh()
 void BibleReaderResourceManager::gotResource()
 {
     this->resources = downloader->getResources();
+
     emit refreshed();
 }
 

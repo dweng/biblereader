@@ -27,6 +27,9 @@ private:
     void createWidgets();
     void doLayout();
 
+    // combine resources
+    void mergeResources(QList<BRResource> &resources);
+
 private slots:
     void updateResList();
 };
