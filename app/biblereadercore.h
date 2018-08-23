@@ -480,8 +480,6 @@ private:
      * @brief previous verse number
      */
     int previousVerseNumber;
-    int previousChapterNumber;
-    int previousBookNumber;
 
     /**
      * @brief <bible version, bible DAO>

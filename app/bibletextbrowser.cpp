@@ -36,9 +36,9 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
     connect(brCore->getConfigurator(), SIGNAL(bibleTextFontSizeChanged(double)),
             this, SLOT(changeBibleTextFontSize(double)));
 
-    preVerseId = brCore->getPreviousVerseNumber();
-    preChapterId = brCore->getPreviousChapterNumber();
-    preBookId = brCore->getPreviousBookNumber();
+    preVerseId = -1;
+    preChapterId = -1;
+    preBookId = -1;
 
     bgColor = brCore->getConfigurator()->getSelectedVerseBG();
     fgColor = QColor("blue");
@@ -141,10 +141,6 @@ void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
     QTextCursor cursor = cursorForPosition(e->pos());
     QTextBlock block = cursor.block();
     QUrl url = cursor.charFormat().anchorHref();
-
-    preVerseId = brCore->getPreviousVerseNumber();
-    preChapterId = brCore->getPreviousChapterNumber();
-    preBookId = brCore->getPreviousBookNumber();
 
     if (e->button() == Qt::LeftButton) {
         // check has href or not
@@ -321,10 +317,6 @@ void BibleTextBrowser::setBibleVersion(const QString &value)
 
 bool BibleTextBrowser::showCurrentChapter(ShowMethod method)
 {
-    preBookId = brCore->getPreviousBookNumber();
-    preChapterId = brCore->getPreviousChapterNumber();
-    preVerseId = brCore->getPreviousVerseNumber();
-
     if (preBookId == brCore->getCurrentBookNumber() &&
         preChapterId == brCore->getCurrentChapterNumber()) {
         if (method == NewChapter) {
@@ -405,7 +397,7 @@ bool BibleTextBrowser::showCurrentChapter(ShowMethod method)
     }
 
     highlight(brCore->getCurrentVerseNumber(), bgColor);
-    //preVerseId = brCore->getCurrentVerseNumber();
+    preVerseId = brCore->getCurrentVerseNumber();
 
     // LOG_INFO() << this->toHtml();
     return true;
