@@ -86,21 +86,17 @@ void BibleReaderCore::init()
 
 BibleVerse BibleReaderCore::getVerse(QString book, int chapter, int verse)
 {
-    LOG_DEBUG("get one verse: book:%s, chapter:%i, verse:%i", book.toStdString().c_str(), chapter, verse);
     int bookID = getBookID(book);
     return currentBibleDAO->getOneVerse(bookID, chapter, verse);
 }
 
 BibleVerse BibleReaderCore::getVerse(int bookNumber, int chapter, int verse)
 {
-    LOG_DEBUG("get one verse: book:%i, chapter:%i, verse:%i", bookNumber, chapter, verse);
     return currentBibleDAO->getOneVerse(bookNumber, chapter, verse);
 }
 
 BibleVerse BibleReaderCore::getVerse(QString version, int bookNumber, int chapter, int verse)
 {
-    LOG_DEBUG() << "get one verse: "<< version << ", book:"<<bookNumber<<", chapter:"
-                   << chapter << ", verse: " << verse;
     return allBTDAOs.value(version)->getOneVerse(bookNumber, chapter, verse);
 }
 
@@ -471,7 +467,6 @@ int BibleReaderCore::setCurrentBCV(int b, int c, int v, int operation)
 
 QString BibleReaderCore::getExplaination(QString dict, QString word)
 {
-    LOG_INFO() << "dict:"<<dict<<", word:"<<word;
     return allBDDAOs.value(dict)->getExplaination(word);
 }
 

@@ -11,7 +11,6 @@ BibleReaderConfigBiblePage::BibleReaderConfigBiblePage(BibleReaderConfigurator *
     QGroupBox *bibleBox = new QGroupBox(tr("Bible Setting"), this);
     QFormLayout *bibleLayout = new QFormLayout(bibleBox);
     defaultXrefBibleCB = new QComboBox(this);
-    defaultXrefBibleCB->addItem(tr("11111111111"));
 
     bibleLayout->addRow(tr("default bible version:"), defaultXrefBibleCB);
 

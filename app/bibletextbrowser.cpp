@@ -36,9 +36,9 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
     connect(brCore->getConfigurator(), SIGNAL(bibleTextFontSizeChanged(double)),
             this, SLOT(changeBibleTextFontSize(double)));
 
-    preVerseId = 0;
-    preChapterId = 0;
-    preBookId = 0;
+    preVerseId = brCore->getPreviousVerseNumber();
+    preChapterId = brCore->getPreviousChapterNumber();
+    preBookId = brCore->getPreviousBookNumber();
 
     bgColor = brCore->getConfigurator()->getSelectedVerseBG();
     fgColor = QColor("blue");
@@ -59,7 +59,7 @@ BibleTextBrowser::BibleTextBrowser(BibleReaderCore *brc, QWidget *parent) :
     // remove default menus
 
 
-    connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(navTo(QUrl)));
+    // connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(navTo(QUrl)));
 }
 
 BibleTextBrowser::~BibleTextBrowser()
@@ -140,10 +140,35 @@ void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
 {
     QTextCursor cursor = cursorForPosition(e->pos());
     QTextBlock block = cursor.block();
+    QUrl url = cursor.charFormat().anchorHref();
 
-    // check has href or not
-    if (cursor.charFormat().anchorHref().isEmpty()) {
+    preVerseId = brCore->getPreviousVerseNumber();
+    preChapterId = brCore->getPreviousChapterNumber();
+    preBookId = brCore->getPreviousBookNumber();
 
+    if (e->button() == Qt::LeftButton) {
+        // check has href or not
+        if (url.toString() == "") {
+
+            BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
+            if (d && d->getVerse() != 0) {
+                if (d->getVerse() != preVerseId ) {
+                    // de hilight previous verse
+                    highlight(preVerseId, QColor("white"));
+                    // high light current verse
+                    highlight(d->getVerse(), bgColor);
+                    preVerseId = d->getVerse();
+                    brCore->setCurrentBCV(d->getBook(),
+                                          d->getChapter(),
+                                          d->getVerse());
+
+                    //block.layout()->lineAt(0).setLineWidth(this->width());
+                }
+            }
+        } else {
+            navTo(url);
+        }
+    } else if (e->button() == Qt::RightButton) {
         BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
         if (d && d->getVerse() != 0) {
             if (d->getVerse() != preVerseId ) {
@@ -152,12 +177,6 @@ void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
                 // high light current verse
                 highlight(d->getVerse(), bgColor);
                 preVerseId = d->getVerse();
-                //brCore->setPreviousVerseNumber(preVerseId);
-                preChapterId = d->getChapter();
-                //brCore->setPreviousChapterNumber(preChapterId);
-                preBookId = d->getBook();
-                //brCore->setPreviousBookNumber(preBookId);
-
                 brCore->setCurrentBCV(d->getBook(),
                                       d->getChapter(),
                                       d->getVerse());
@@ -166,6 +185,9 @@ void BibleTextBrowser::mousePressEvent(QMouseEvent *e)
             }
         }
     }
+
+
+
     QTextBrowser::mousePressEvent(e);
 
 }
@@ -184,17 +206,6 @@ void BibleTextBrowser::contextMenuEvent(QContextMenuEvent *e) {
     QTextBlock block = cursor.block();
     BibleTextBlockData *d = (BibleTextBlockData*)block.userData();
     if (d && d->getVerse() != 0) {
-        if (d->getVerse() != preVerseId) {
-            // de hilight previous verse
-            highlight(preVerseId, QColor("white"));
-
-            highlight(d->getVerse(), bgColor);
-            preVerseId = d->getVerse();
-
-            brCore->setCurrentBookNumber(d->getBook());
-            brCore->setCurrentChapterNumber(d->getChapter());
-            brCore->setCurrentVerseNumber(d->getVerse());
-        }
         QAction *copyCurrentVerse = menu->addAction(tr("Copy this verse"));
         QAction *copyCurrentVerseHeader = menu->addAction(tr("Copy this verse header"));
         QAction *copyCurrentVerseLongHeader = menu->addAction(tr("Copy this verse with long book name"));

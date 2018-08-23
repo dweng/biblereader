@@ -88,7 +88,6 @@ QString BibleCommentaryDAO::getChapterCmt(int book, int chapter)
     QString chapterNumber = QString("%1").arg(chapter, len, 10, QChar('0'));
     QString cmtfile = bcPath + QDir::separator() +
             bookNumber + "_" + chapterNumber + ".htm";
-    LOG_INFO() << "loading cmt: " << cmtfile;
     QFile f(cmtfile);
 
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
