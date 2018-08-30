@@ -2,7 +2,7 @@
 #define BIBLEREADERABOUTDLG_H
 
 #include <QDialog>
-#include <QTextBrowser>
+#include <QLabel>
 #include <QString>
 #include <QUrl>
 
@@ -22,7 +22,7 @@ public slots:
 private slots:
     void openUrl(QUrl url);
 private:
-    QTextBrowser *description;
+    QLabel *description;
 };
 
 #endif // BIBLEREADERABOUTDLG_H

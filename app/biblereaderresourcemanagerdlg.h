@@ -18,6 +18,8 @@ private:
 
     QPushButton *refreshBtn;
     QPushButton *closeBtn;
+    QPushButton *installUpdateBtn;
+    QPushButton *removeBtn;
 
 
     BibleReaderCore *brCore;

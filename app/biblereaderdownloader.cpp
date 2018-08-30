@@ -43,8 +43,28 @@ void BibleReaderDownloader::replyFinished(QNetworkReply *reply)
         if (doc.setContent(replyString, &error, &row, &column)) {
             QDomElement root = doc.documentElement();
 
+            // bibles
+            QDomNode bibleRoot = root.firstChild();
+            QDomNodeList bibles = bibleRoot.childNodes();
+
+            for (int i = 0; i < bibles.count(); i++) {
+                QDomElement bible = bibles.at(i).toElement();
+
+                BRResource res;
+
+                res.longName = bible.attribute("longname");
+                res.shortName = bible.attribute("shortname");
+                res.size = bible.attribute("size").toInt();
+                res.version = bible.attribute("version").toInt();
+                res.url = bible.attribute("url");
+                res.type = Bible;
+                res.typeStr = type2str(Bible);
+
+                resources.push_back(res);
+            }
+
             // dicts
-            QDomNode dictRoot = root.firstChild();
+            QDomNode dictRoot = bibleRoot.nextSibling();
             QDomNodeList dicts = dictRoot.childNodes();
 
             for (int i = 0; i < dicts.count(); i++) {
@@ -62,9 +82,6 @@ void BibleReaderDownloader::replyFinished(QNetworkReply *reply)
 
                 resources.push_back(res);
             }
-
-            // bibles
-            QDomNode bibleRoot = dictRoot.nextSibling();
 
         } else {
             LOG_INFO() << replyString;

@@ -47,7 +47,6 @@ SOURCES += main.cpp\
     bibletextcomparebrowser.cpp \
     biblesearchresultwidget.cpp \
     biblereaderaboutdlg.cpp \
-    biblereaderdonationdlg.cpp \
     bibledicttabwidget.cpp \
     biblecommentaryinfo.cpp \
     biblecommentarytabwidget.cpp \
@@ -91,7 +90,6 @@ HEADERS  += biblereadercore.h \
     bibletextcomparebrowser.h \
     biblesearchresultwidget.h \
     biblereaderaboutdlg.h \
-    biblereaderdonationdlg.h \
     bibledicttabwidget.h \
     biblecommentaryinfo.h \
     biblecommentarytabwidget.h \

@@ -17,13 +17,14 @@ BibleReaderAboutDlg::BibleReaderAboutDlg(QWidget *parent) :
 {
     description = NULL;
 
-    setFixedSize(480, 320);
+    setFixedSize(480, 160);
     setModal(true);
 
-    description = new QTextBrowser(this);
-    description->setOpenLinks(false);
+    description = new QLabel(this);
+    description->setOpenExternalLinks(true);
     connect(description, SIGNAL(anchorClicked(QUrl)), this, SLOT(openUrl(QUrl)));
-    description->setHtml(readDescription(QString(":/data/assets/data/description.txt")).
+    description->setTextFormat(Qt::RichText);
+    description->setText(readDescription(QString(":/data/assets/data/description.txt")).
                          append(qApp->applicationVersion()));
 
     QGridLayout *layout = new QGridLayout(this);

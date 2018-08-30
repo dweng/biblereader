@@ -173,7 +173,6 @@ private:
     QAction *aboutMeAction;
     QAction *checkUpdate;
     QAction *showHelpContent;
-    QAction *donateBibleReader;
 
     // menus
     QMenu *fileMenu;
@@ -226,8 +225,6 @@ private slots:
 
     // show about dialog
     void showAboutDlg();
-    // show donate dialog
-    void showDonationDlg();
 
     // show resource manager dilaog
     void showResMgrDlg();

@@ -42,12 +42,18 @@ void BibleReaderResourceManagerDlg::createWidgets()
     resItemsWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     resItemsWidget->setColumnCount(6);
     QStringList headers;
-    headers << tr("Type") << tr("Name") << tr("Size")
+    headers << tr("?") << tr("Type") << tr("Name") << tr("Size")
             << tr("Description") << tr("Version") << tr("Operation");
     resItemsWidget->setHorizontalHeaderLabels(headers);
+    resItemsWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    resItemsWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     resItemsWidget->horizontalHeader()->setVisible(true);
+    resItemsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    resItemsWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     refreshBtn = new QPushButton(tr("Refresh"));
+    installUpdateBtn = new QPushButton(tr("Install/Update"));
+    removeBtn = new QPushButton(tr("Remove"));
     closeBtn = new QPushButton(tr("Close"));
 }
 
@@ -56,6 +62,8 @@ void BibleReaderResourceManagerDlg::doLayout() {
     QHBoxLayout *btnLayout = new QHBoxLayout(this);
 
     btnLayout->addWidget(refreshBtn);
+    btnLayout->addWidget(installUpdateBtn);
+    btnLayout->addWidget(removeBtn);
     btnLayout->addWidget(closeBtn);
 
     connect(refreshBtn, SIGNAL(clicked()), manager, SLOT(refresh()));
@@ -108,6 +116,7 @@ void BibleReaderResourceManagerDlg::updateResList()
 
 
     QTableWidgetItem *temp;
+    resItemsWidget->setRowCount(0);
 
     for (int i = 0; i < resources.count(); i++) {
         // add type
@@ -116,25 +125,30 @@ void BibleReaderResourceManagerDlg::updateResList()
 
         BRResource res = resources[i];
 
+        // checkbox
+        temp = new QTableWidgetItem();
+        temp->setCheckState(Qt::Unchecked);
+        resItemsWidget->setItem(row-1, 0, temp);
+
         // type
         temp = new QTableWidgetItem(res.typeStr);
-        resItemsWidget->setItem(row-1, 0, temp);
+        resItemsWidget->setItem(row-1, 1, temp);
 
         // name
         temp = new QTableWidgetItem(res.longName);
-        resItemsWidget->setItem(row-1, 1, temp);
+        resItemsWidget->setItem(row-1, 2, temp);
 
         // size
-        temp = new QTableWidgetItem(QString::number(res.size));
-        resItemsWidget->setItem(row-1, 2, temp);
+        temp = new QTableWidgetItem( QString::number(res.size / (1024)) + "KB");
+        resItemsWidget->setItem(row-1, 3, temp);
 
         // description
         temp = new QTableWidgetItem(res.description);
-        resItemsWidget->setItem(row-1, 3, temp);
+        resItemsWidget->setItem(row-1, 4, temp);
 
         // version
         temp = new QTableWidgetItem(QString::number(res.version));
-        resItemsWidget->setItem(row-1, 4, temp);
+        resItemsWidget->setItem(row-1, 5, temp);
 
         // operation
     }

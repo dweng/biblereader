@@ -52,7 +52,6 @@
 #include "bibletreewidget.h"
 #include "bibledictionarywidget.h"
 #include "biblereaderaboutdlg.h"
-#include "biblereaderdonationdlg.h"
 #include "biblereaderlayout.h"
 
 // for logging
@@ -223,12 +222,6 @@ void BibleReaderMainWindow::showAboutDlg()
     dlg.exec();
 }
 
-void BibleReaderMainWindow::showDonationDlg()
-{
-    BibleReaderDonationDlg dlg(this);
-    dlg.show();
-    dlg.exec();
-}
 
 void BibleReaderMainWindow::showResMgrDlg()
 {
@@ -708,8 +701,6 @@ void BibleReaderMainWindow::createTopMenus()
     connect(checkUpdate, SIGNAL(triggered(bool)), this, SLOT(checkNewVersion()));
     showHelpContent = helpMenu->addAction(QIcon(QString(":/img/assets/images/help.png")),tr("Show Help Content..."));
     connect(showHelpContent, SIGNAL(triggered(bool)), this, SLOT(openHelpPage()));
-    donateBibleReader = helpMenu->addAction(QIcon(QString(":/img/assets/images/emoticon_smile.png")),tr("Donate [Bible Reader]..."));
-    connect(donateBibleReader, SIGNAL(triggered()), this, SLOT(showDonationDlg()));
 
     // set main menu
     this->setMenuBar(mainMenuBar);
