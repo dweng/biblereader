@@ -4,6 +4,7 @@
 #include <QMenuBar>
 #include <QPushButton>
 #include <QTableWidgetItem>
+#include <QMessageBox>
 
 #include "biblereaderresourcemanagerdlg.h"
 #include "Logger.h"
@@ -40,13 +41,13 @@ void BibleReaderResourceManagerDlg::createWidgets()
 {
     resItemsWidget = new QTableWidget(this);
     resItemsWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    resItemsWidget->setColumnCount(6);
+    resItemsWidget->setColumnCount(7);
     QStringList headers;
     headers << tr("?") << tr("Type") << tr("Name") << tr("Size")
             << tr("Description") << tr("Version") << tr("Operation");
     resItemsWidget->setHorizontalHeaderLabels(headers);
-    resItemsWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    resItemsWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    resItemsWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    resItemsWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     resItemsWidget->horizontalHeader()->setVisible(true);
     resItemsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     resItemsWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -62,8 +63,8 @@ void BibleReaderResourceManagerDlg::doLayout() {
     QHBoxLayout *btnLayout = new QHBoxLayout(this);
 
     btnLayout->addWidget(refreshBtn);
-    btnLayout->addWidget(installUpdateBtn);
-    btnLayout->addWidget(removeBtn);
+    //btnLayout->addWidget(installUpdateBtn);
+    //btnLayout->addWidget(removeBtn);
     btnLayout->addWidget(closeBtn);
 
     connect(refreshBtn, SIGNAL(clicked()), manager, SLOT(refresh()));
@@ -81,6 +82,41 @@ void BibleReaderResourceManagerDlg::doLayout() {
     */
 
     setLayout(layout);
+}
+
+QWidget *BibleReaderResourceManagerDlg::createButtons(BRResource resource)
+{
+    QWidget *widget = new QWidget(resItemsWidget);
+
+    QHBoxLayout *layout = new QHBoxLayout(widget);
+
+    QPushButton *updateBtn = new QPushButton( QIcon(":/img/assets/images/arrow_up.png"), tr("Update"));
+    updateBtn->setProperty("resname", QVariant(resource.shortName));
+    updateBtn->setProperty("resurl", QVariant(resource.url));
+    connect(updateBtn, SIGNAL(clicked()), this, SLOT(updateRes()));
+    if (!resource.isinstalled || (resource.isinstalled && !resource.isupdated)) {
+        updateBtn->setEnabled(false);
+    }
+    QPushButton *installBtn = new QPushButton(QIcon(":/img/assets/images/add.png"), tr("Install"));
+    connect(installBtn, SIGNAL(clicked()), this, SLOT(installRes()));
+    if (resource.isinstalled) {
+        installBtn->setEnabled(false);
+    }
+    QPushButton *removeBtn = new QPushButton(QIcon(":/img/assets/images/delete.png"), tr("Remove"));
+    removeBtn->setProperty("resname", QVariant(resource.shortName));
+    removeBtn->setProperty("resurl", QVariant(resource.url));
+    connect(removeBtn, SIGNAL(clicked()), this, SLOT(removeRes()));
+    if (!resource.isinstalled) {
+        removeBtn->setEnabled(false);
+    }
+
+    layout->addWidget(updateBtn);
+    layout->addWidget(installBtn);
+    layout->addWidget(removeBtn);
+
+    widget->setLayout(layout);
+
+    return widget;
 }
 
 void BibleReaderResourceManagerDlg::mergeResources(QList<BRResource> &resources)
@@ -151,7 +187,35 @@ void BibleReaderResourceManagerDlg::updateResList()
         resItemsWidget->setItem(row-1, 5, temp);
 
         // operation
+        QWidget *tempBtns = createButtons(res);
+        resItemsWidget->setCellWidget(row-1, 6, tempBtns);
     }
+}
+
+bool BibleReaderResourceManagerDlg::installRes()
+{
+    return true;
+}
+
+bool BibleReaderResourceManagerDlg::updateRes()
+{
+    return true;
+}
+
+bool BibleReaderResourceManagerDlg::removeRes()
+{
+    bool ret = true;
+    QPushButton* btn = qobject_cast<QPushButton*>(sender());
+
+    QList<BRResource> resources = manager->getResources();
+    for (int i = 0; i < resources.size(); i++) {
+        if (btn->property("resname").toString() == resources[i].shortName) {
+            ret = manager->removeRes(resources[i], brCore);
+            break;
+        }
+    }
+
+    return ret;
 }
 
 

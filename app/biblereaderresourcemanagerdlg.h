@@ -28,12 +28,16 @@ private:
 private:
     void createWidgets();
     void doLayout();
+    QWidget* createButtons(BRResource resource);
 
     // combine resources
     void mergeResources(QList<BRResource> &resources);
 
 private slots:
     void updateResList();
+    bool installRes();
+    bool updateRes();
+    bool removeRes();
 };
 
 #endif // BIBLEREADERRESOURCEMANAGERDLG_H

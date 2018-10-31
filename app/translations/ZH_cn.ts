@@ -430,68 +430,75 @@
 <context>
     <name>BibleReaderResourceManagerDlg</name>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="21"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="22"/>
         <source>Resource Manager</source>
         <translation>资源管理器</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="45"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="46"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="45"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="46"/>
         <source>Type</source>
         <translation>类别</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="45"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="46"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="45"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="46"/>
         <source>?</source>
-        <translation type="unfinished"></translation>
+        <translation>？</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="46"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="47"/>
         <source>Description</source>
         <translation>简介</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="46"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="47"/>
         <source>Version</source>
         <translation>版本节</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="46"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="47"/>
         <source>Operation</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="54"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="55"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="55"/>
-        <source>Install/Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../biblereaderresourcemanagerdlg.cpp" line="56"/>
-        <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <source>Install/Update</source>
+        <translation>安装/升级</translation>
     </message>
     <message>
         <location filename="../biblereaderresourcemanagerdlg.cpp" line="57"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="105"/>
+        <source>Remove</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="58"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="93"/>
         <source>Update</source>
-        <translation type="vanished">升级</translation>
+        <translation>升级</translation>
+    </message>
+    <message>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="100"/>
+        <source>Install</source>
+        <translation>安装</translation>
     </message>
 </context>
 <context>

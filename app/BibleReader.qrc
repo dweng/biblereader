@@ -35,6 +35,8 @@
         <file>assets/images/compare.png</file>
         <file>assets/images/information.png</file>
         <file>assets/images/disk.png</file>
+        <file>assets/images/add.png</file>
+        <file>assets/images/delete.png</file>
     </qresource>
     <qresource prefix="/data">
         <file>assets/data/description.txt</file>

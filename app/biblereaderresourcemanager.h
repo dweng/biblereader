@@ -8,6 +8,8 @@
 
 #include "biblereaderdownloader.h"
 
+class BibleReaderCore;
+
 class BibleReaderResourceManager : public QObject
 {
     Q_OBJECT
@@ -19,6 +21,10 @@ public:
 
     QUrl getResourceUrl() const;
     void setResourceUrl(const QUrl &value);
+
+    bool removeRes(BRResource resource, BibleReaderCore *brCore);
+    bool installRes(BRResource resource);
+    bool updateRes(BRResource resource);
 
 private:
     BibleReaderDownloader *downloader;
@@ -33,6 +39,8 @@ public slots:
 
 private slots:
     void gotResource();
-};
 
+private:
+    bool deleteDirectory(const QString &path);
+};
 #endif // BIBLEREADERRESOURCEMANAGER_H
