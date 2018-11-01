@@ -1,8 +1,7 @@
 #ifndef BIBLEREADERRESOURCEMANAGERDLG_H
 #define BIBLEREADERRESOURCEMANAGERDLG_H
 #include <QDialog>
-#include <QListWidget>
-#include <QTableWidget>
+#include <QTreeWidget>
 #include "biblereadercore.h"
 
 
@@ -14,7 +13,7 @@ public:
     ~BibleReaderResourceManagerDlg();
 
 private:
-    QTableWidget *resItemsWidget;
+    QTreeWidget *resItemsWidget;
 
     QPushButton *refreshBtn;
     QPushButton *closeBtn;

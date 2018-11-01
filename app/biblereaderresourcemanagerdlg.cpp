@@ -28,7 +28,7 @@ BibleReaderResourceManagerDlg::BibleReaderResourceManagerDlg(
     doLayout();
 
     // update resource list
-    updateResList();
+    refreshBtn->click();
 }
 
 BibleReaderResourceManagerDlg::~BibleReaderResourceManagerDlg()
@@ -40,21 +40,18 @@ BibleReaderResourceManagerDlg::~BibleReaderResourceManagerDlg()
 
 void BibleReaderResourceManagerDlg::createWidgets()
 {
-    resItemsWidget = new QTableWidget(this);
+    resItemsWidget = new QTreeWidget(this);
     resItemsWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    resItemsWidget->setColumnCount(7);
+    resItemsWidget->setColumnCount(5);
     QStringList headers;
-    headers << tr("?") << tr("Type") << tr("Name") << tr("Size")
+    headers << tr("Name") << tr("Size")
             << tr("Description") << tr("Version") << tr("Operation");
-    resItemsWidget->setHorizontalHeaderLabels(headers);
-    resItemsWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    resItemsWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    resItemsWidget->horizontalHeader()->setVisible(true);
+    resItemsWidget->setHeaderLabels(headers);
     resItemsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     resItemsWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    refreshBtn = new QPushButton(tr("Refresh"));
-    closeBtn = new QPushButton(tr("Close"));
+    refreshBtn = new QPushButton(QIcon(":/img/assets/images/arrow_refresh.png"),tr("Refresh"));
+    closeBtn = new QPushButton(QIcon(":/img/assets/images/cancel.png"),tr("Close"));
 }
 
 void BibleReaderResourceManagerDlg::doLayout() {
@@ -171,45 +168,42 @@ void BibleReaderResourceManagerDlg::updateResList()
     mergeResources(resources);
 
 
-    QTableWidgetItem *temp;
-    resItemsWidget->setRowCount(0);
+    QTreeWidgetItem *biblesItem = new QTreeWidgetItem();
+    biblesItem->setData(0, Qt::DisplayRole, tr("Bibles"));
+    QTreeWidgetItem *dictsItem = new QTreeWidgetItem();
+    dictsItem->setData(0, Qt::DisplayRole, tr("Dictionarys"));
+
+    QTreeWidgetItem *temp = NULL;
+    resItemsWidget->clear();
 
     for (int i = 0; i < resources.count(); i++) {
-        // add type
-        resItemsWidget->setRowCount(resItemsWidget->rowCount() + 1);
-        int row = resItemsWidget->rowCount();
-
         BRResource res = resources[i];
-
-        // checkbox
-        temp = new QTableWidgetItem();
-        temp->setCheckState(Qt::Unchecked);
-        resItemsWidget->setItem(row-1, 0, temp);
-
-        // type
-        temp = new QTableWidgetItem(res.typeStr);
-        resItemsWidget->setItem(row-1, 1, temp);
+        if (res.type == Bible) {
+            temp = new QTreeWidgetItem(biblesItem);
+        } else if (res.type == Dict) {
+            temp = new QTreeWidgetItem(dictsItem);
+        }
 
         // name
-        temp = new QTableWidgetItem(res.longName);
-        resItemsWidget->setItem(row-1, 2, temp);
+        temp->setData(0, Qt::DisplayRole, res.longName);
 
         // size
-        temp = new QTableWidgetItem( QString::number(res.size / (1024)) + "KB");
-        resItemsWidget->setItem(row-1, 3, temp);
+        temp->setData(1, Qt::DisplayRole, QString::number(res.size / (1024)) + "KB");
 
         // description
-        temp = new QTableWidgetItem(res.description);
-        resItemsWidget->setItem(row-1, 4, temp);
+        temp->setData(2, Qt::DisplayRole, res.description);
+
 
         // version
-        temp = new QTableWidgetItem(QString::number(res.version));
-        resItemsWidget->setItem(row-1, 5, temp);
+        temp->setData(3, Qt::DisplayRole, QString::number(res.version));
 
         // operation
         QWidget *tempBtns = createButtons(res);
-        resItemsWidget->setCellWidget(row-1, 6, tempBtns);
+        resItemsWidget->setItemWidget(temp, 4, tempBtns);
     }
+
+    resItemsWidget->addTopLevelItem(biblesItem);
+    resItemsWidget->addTopLevelItem(dictsItem);
 }
 
 bool BibleReaderResourceManagerDlg::installRes()
