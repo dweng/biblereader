@@ -53,6 +53,9 @@ public:
     QString getFullname() const;
     void setFullname(const QString &value);
 
+    int getNumber() const;
+    void setNumber(int value);
+
 private:
     /**
      * @brief bible version with full name
@@ -94,6 +97,12 @@ private:
      * @brief copyright text
      */
     QString copyright;
+
+    /**
+     * @brief number
+     * bible version, Ex: 1, 2, 3
+     */
+    int number;
 };
 
 #endif // BIBLEINFO_H

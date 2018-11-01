@@ -59,6 +59,8 @@ void BibleReaderDownloader::replyFinished(QNetworkReply *reply)
                 res.url = bible.attribute("url");
                 res.type = Bible;
                 res.typeStr = type2str(Bible);
+                res.isinstalled = false;
+                res.isupdated = false;
 
                 resources.push_back(res);
             }
@@ -79,6 +81,8 @@ void BibleReaderDownloader::replyFinished(QNetworkReply *reply)
                 res.url = dict.attribute("url");
                 res.type = Dict;
                 res.typeStr = type2str(Dict);
+                res.isinstalled = false;
+                res.isupdated = false;
 
                 resources.push_back(res);
             }

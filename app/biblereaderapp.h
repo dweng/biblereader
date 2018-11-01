@@ -50,6 +50,7 @@ private:
 
 private slots:
     void showSplashMessage(QString msg);
+    void reboot();
 
 protected:
     bool notify(QObject *obj, QEvent *e);

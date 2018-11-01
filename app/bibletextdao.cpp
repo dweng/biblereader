@@ -34,7 +34,9 @@ BibleTextDAO::BibleTextDAO(QString &bv, QString &path)
 
 BibleTextDAO::~BibleTextDAO()
 {
-    bibleDB.close();
+    if (bibleDB.isOpen()) {
+        bibleDB.close();
+    }
     delete query;
 }
 
@@ -241,6 +243,13 @@ bool BibleTextDAO::init()
     return true;
 }
 
+bool BibleTextDAO::deinit()
+{
+    if (bibleDB.isOpen()) {
+        bibleDB.close();
+    }
+}
+
 BibleInfo BibleTextDAO::getBibleInfo()
 {
     if (bi.getVersion() == "") {
@@ -264,6 +273,8 @@ BibleInfo BibleTextDAO::getBibleInfo()
                 bi.setRtl(value.toBool());
             } else if (name.compare("fullname") == 0) {
                 bi.setFullname(value.toString());
+            } else if (name.compare("version") == 0) {
+                bi.setNumber(value.toInt());
             }
         }
         bi.setVersion(bibleVersion);

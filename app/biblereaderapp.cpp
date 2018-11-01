@@ -66,6 +66,8 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     this->processEvents();
     this->brCore = new BibleReaderCore();
     connect(brCore, SIGNAL(loadResourceFinished(QString)), this, SLOT(showSplashMessage(QString)));
+    connect(brCore, SIGNAL(bibleRemoved(QString)), this, SLOT(reboot()));
+
     initBibleReaderCore();
 
     setApplicationName(tr("biblereader"));
@@ -136,6 +138,11 @@ void BibleReaderApp::showSplashMessage(QString msg)
                             Qt::white);
         qApp->processEvents();
     }
+}
+
+void BibleReaderApp::reboot()
+{
+    qApp->exit(773);
 }
 
 bool BibleReaderApp::notify(QObject *obj, QEvent *e)

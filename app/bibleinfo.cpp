@@ -107,4 +107,14 @@ void BibleInfo::setFullname(const QString &value)
     fullname = value;
 }
 
+int BibleInfo::getNumber() const
+{
+    return number;
+}
+
+void BibleInfo::setNumber(int value)
+{
+    number = value;
+}
+
 

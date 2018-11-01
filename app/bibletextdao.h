@@ -65,6 +65,7 @@ public:
                        SearchScope scope = All,
                        QList<int> customBooks = QList<int>());
     bool init();
+    bool deinit();
 
     BibleInfo getBibleInfo();
     QList<BibleBook> getAllBooks();

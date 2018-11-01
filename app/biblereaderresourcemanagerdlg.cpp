@@ -27,7 +27,8 @@ BibleReaderResourceManagerDlg::BibleReaderResourceManagerDlg(
     createWidgets();
     doLayout();
 
-
+    // update resource list
+    updateResList();
 }
 
 BibleReaderResourceManagerDlg::~BibleReaderResourceManagerDlg()
@@ -53,8 +54,6 @@ void BibleReaderResourceManagerDlg::createWidgets()
     resItemsWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     refreshBtn = new QPushButton(tr("Refresh"));
-    installUpdateBtn = new QPushButton(tr("Install/Update"));
-    removeBtn = new QPushButton(tr("Remove"));
     closeBtn = new QPushButton(tr("Close"));
 }
 
@@ -68,6 +67,7 @@ void BibleReaderResourceManagerDlg::doLayout() {
     btnLayout->addWidget(closeBtn);
 
     connect(refreshBtn, SIGNAL(clicked()), manager, SLOT(refresh()));
+    connect(closeBtn, SIGNAL(clicked()), this, SLOT(accept()));
 
     layout->addWidget(resItemsWidget, 9);
     layout->addLayout(btnLayout, 1);
@@ -94,7 +94,7 @@ QWidget *BibleReaderResourceManagerDlg::createButtons(BRResource resource)
     updateBtn->setProperty("resname", QVariant(resource.shortName));
     updateBtn->setProperty("resurl", QVariant(resource.url));
     connect(updateBtn, SIGNAL(clicked()), this, SLOT(updateRes()));
-    if (!resource.isinstalled || (resource.isinstalled && !resource.isupdated)) {
+    if (!resource.isinstalled || (resource.isinstalled && resource.isupdated)) {
         updateBtn->setEnabled(false);
     }
     QPushButton *installBtn = new QPushButton(QIcon(":/img/assets/images/add.png"), tr("Install"));
@@ -123,13 +123,33 @@ void BibleReaderResourceManagerDlg::mergeResources(QList<BRResource> &resources)
 {
     // read local resources
     QList<BibleDictInfo> dicts = brCore->getAllDictionarys();
+    QList<BibleInfo> bibles = brCore->getAllBibleVersions();
 
     // merge local and online resources
+    // dict
     for (int i = 0; i < dicts.count(); i++) {
         for (int j = 0; j < resources.count(); j++) {
             if (resources[j].type == Dict) {
                 if (resources[j].shortName == dicts[i].getShortname()) {
                     if (dicts[i].getVersion() < resources[j].version) {
+                        resources[j].isupdated = false;
+                        resources[j].isinstalled = true;
+                    } else {
+                        resources[j].isupdated = true;
+                        resources[j].isinstalled = true;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    // bible
+    for (int i = 0; i < bibles.count(); i++) {
+        for (int j = 0; j < resources.count(); j++) {
+            if (resources[j].type == Bible) {
+                if (resources[j].shortName == bibles[i].getVersion()) {
+                    if (bibles[i].getNumber() < resources[j].version) {
                         resources[j].isupdated = false;
                         resources[j].isinstalled = true;
                     } else {
@@ -211,9 +231,18 @@ bool BibleReaderResourceManagerDlg::removeRes()
     for (int i = 0; i < resources.size(); i++) {
         if (btn->property("resname").toString() == resources[i].shortName) {
             ret = manager->removeRes(resources[i], brCore);
+
+            if (ret) {
+                QMessageBox::information(this, tr("Done"), tr("Resource removed succeed! Please click Ok to restart Bible Reader to apply changes!"));
+                qApp->exit(773);
+            } else {
+                QMessageBox::warning(this, tr("Sorry"), tr("Resource removed failed!"));
+            }
             break;
         }
     }
+
+    updateResList();
 
     return ret;
 }

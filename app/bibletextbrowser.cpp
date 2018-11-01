@@ -304,6 +304,16 @@ void BibleTextBrowser::mouseReleaseEvent(QMouseEvent *e)
     QTextBrowser::mouseReleaseEvent(e);
 }
 
+int BibleTextBrowser::getBibleIndex() const
+{
+    return bibleIndex;
+}
+
+void BibleTextBrowser::setBibleIndex(int value)
+{
+    bibleIndex = value;
+}
+
 
 QString BibleTextBrowser::getBibleVersion() const
 {

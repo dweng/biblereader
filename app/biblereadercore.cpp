@@ -499,6 +499,25 @@ bool BibleReaderCore::addBibleVersion(QString &version, QString &dataPath)
     return true;
 }
 
+bool BibleReaderCore::removeBibleVersion(QString &version)
+{
+    if (allBTDAOs.contains(version)) {
+        LOG_INFO() << version << " bible removing";
+        allBTDAOs.value(version)->deinit();
+        allBTDAOs.remove(version);
+        // if the removed bible version is current bible version,
+        // we need to set current bible version to another bible version
+        // default to the first bible version in bible list
+        if (currentVersion == version) {
+            setCurrentVersion(allBibles[0].getVersion());
+        }
+        // emit bibleRemoved(version);
+        LOG_INFO() << version << " bible removed";
+    }
+
+    return true;
+}
+
 bool BibleReaderCore::addBibleVersions(QStringList &versions, QStringList &dataPaths)
 {
     if ((versions.count() == dataPaths.count())) {

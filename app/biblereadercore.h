@@ -210,6 +210,15 @@ public:
     bool addBibleVersion(QString &version, QString &dataPath);
 
     /**
+     * @brief removeBibleVersion
+     * remove bible [version] from bibles list, DAO will be removed.
+     * at last, signal bibleRemoved(QString&) singal will be emited.
+     * @param version
+     * @return
+     */
+    bool removeBibleVersion(QString &version);
+
+    /**
      * @brief addBibleVersions
      * add bibles [versions] to bibles list, and these bible data are stored at
      * [dataPaths] list
@@ -384,6 +393,13 @@ signals:
      * @param resName
      */
     void loadResourceFinished(QString resName);
+
+    /**
+     * @brief bibleRemoved
+     * signal for when a bible [version] removed succeed
+     * @param version
+     */
+    void bibleRemoved(QString version);
 
 public slots:
     /**

@@ -16,6 +16,11 @@
 #include "biblereaderapp.h"
 
 int main(int argc, char *argv[]) {
-    BibleReaderApp a(argc, argv);
-    return a.exec();
+    int ret = -1;
+    do {
+        BibleReaderApp a(argc, argv);
+        ret = a.exec();
+    } while(ret == 773);
+
+    return ret;
 }

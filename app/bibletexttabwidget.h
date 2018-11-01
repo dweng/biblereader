@@ -69,6 +69,7 @@ private slots:
      * show compare text browser tab
      */
     void showCmpTxtTab();
+
 private:
     /**
      * @brief BibleReaderCore instance

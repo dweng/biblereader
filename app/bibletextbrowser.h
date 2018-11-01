@@ -38,6 +38,9 @@ public:
     QString getBibleVersion() const;
     void setBibleVersion(const QString &value);
 
+    int getBibleIndex() const;
+    void setBibleIndex(int value);
+
 public slots:
     bool showCurrentChapter(ShowMethod method = NewChapter);
     void printBibleText();
@@ -71,6 +74,11 @@ private:/* vars */
      * @brief the bible version of this browser
      */
     QString bibleVersion;
+
+    /**
+     * @brief bibleIndex tab index
+     */
+    int bibleIndex;
 private:/* functions */
     void highlight(int verse, const QColor &color);
 

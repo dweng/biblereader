@@ -17,6 +17,7 @@
 #include <QTextDocumentFragment>
 #include <QTextBlock>
 #include "bibletextblockdata.h"
+#include "Logger.h"
 
 BibleTextTabWidget::BibleTextTabWidget(BibleReaderCore *brc, QWidget *parent) :
     QTabWidget(parent)
@@ -43,10 +44,9 @@ BibleTextTabWidget::BibleTextTabWidget(BibleReaderCore *brc, QWidget *parent) :
 
         btBrowser->setBibleVersion(bibles[i].getVersion());
         btBrowser->showCurrentChapter();
-
-        btBrowsers.push_back(btBrowser);
-
         int index = addTab(btBrowser, bibles[i].getFullname());
+        btBrowser->setBibleIndex(index);
+        btBrowsers.push_back(btBrowser);
         if (brCore->getCurrentVersion() == bibles[i].getVersion()) {
             setCurrentIndex(index);
         }
@@ -101,3 +101,4 @@ void BibleTextTabWidget::showCmpTxtTab()
     setCurrentIndex(compareBrowserTabIndex);
     compareBrowser->showComparedBibleText();
 }
+

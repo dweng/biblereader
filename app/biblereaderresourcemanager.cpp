@@ -37,6 +37,7 @@ bool BibleReaderResourceManager::removeRes(BRResource resource, BibleReaderCore 
     bool ret = true;
     switch (resource.type) {
     case Bible:
+        brCore->removeBibleVersion(resource.shortName);
         folderName.append(brCore->getConfigurator()->getBiblePathBase()).
                 append(resource.shortName).append(QDir::separator());
 
