@@ -52,7 +52,18 @@ QSimpleUpdater::~QSimpleUpdater()
 QSimpleUpdater* QSimpleUpdater::getInstance()
 {
     QTranslator *t = new QTranslator();
+#ifdef Q_OS_WIN32
     t->load(QApplication::applicationDirPath() + "/translations/updater_zh_CN.qm");
+#endif
+
+#ifdef Q_OS_MACX
+    t->load(QApplication::applicationDirPath() + "../Resources/translations/updater_zh_CN.qm");
+#endif
+
+#ifdef Q_OS_LINUX
+    t->load(QApplication::applicationDirPath() + "/translations/updater_zh_CN.qm");
+#endif
+
     qApp->installTranslator(t);
 
     static QSimpleUpdater updater;
