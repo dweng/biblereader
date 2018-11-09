@@ -1,11 +1,10 @@
 #include "biblereaderdownloader.h"
-#include <QDomDocument>
 #include "Logger.h"
 
 BibleReaderDownloader::BibleReaderDownloader(QUrl &url, QObject *parent) :
     QObject(parent), url(url)
 {
-    resources.clear();
+    data.clear();
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
 
@@ -18,114 +17,33 @@ BibleReaderDownloader::~BibleReaderDownloader()
     }
 }
 
-QList<BRResource> BibleReaderDownloader::getResources() const
+QByteArray BibleReaderDownloader::getData() const
 {
-    return resources;
+    return data;
 }
 
 void BibleReaderDownloader::start()
 {
+    data.clear();
     reply = manager->get(QNetworkRequest(url));
+
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+            this, SIGNAL(getErrorString(QNetworkReply::NetworkError)));
+    connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SIGNAL(downloadProgress(qint64, qint64)));
 }
 
 void BibleReaderDownloader::replyFinished(QNetworkReply *reply)
 {
-    // delete all resource item
-    resources.clear();
-
-    //
-    QString replyString = reply->readAll();
-    if (!replyString.isEmpty()) {
-        QDomDocument doc;
-        QString error;
-        int row = 0, column = 0;
-
-        if (doc.setContent(replyString, &error, &row, &column)) {
-            QDomElement root = doc.documentElement();
-
-            // bibles
-            QDomNode bibleRoot = root.firstChild();
-            QDomNodeList bibles = bibleRoot.childNodes();
-
-            for (int i = 0; i < bibles.count(); i++) {
-                QDomElement bible = bibles.at(i).toElement();
-
-                BRResource res;
-
-                res.longName = bible.attribute("longname");
-                res.shortName = bible.attribute("shortname");
-                res.size = bible.attribute("size").toInt();
-                res.version = bible.attribute("version").toInt();
-                res.url = bible.attribute("url");
-                res.type = Bible;
-                res.typeStr = type2str(Bible);
-                res.isinstalled = false;
-                res.isupdated = false;
-
-                resources.push_back(res);
-            }
-
-            // dicts
-            QDomNode dictRoot = bibleRoot.nextSibling();
-            QDomNodeList dicts = dictRoot.childNodes();
-
-            for (int i = 0; i < dicts.count(); i++) {
-                QDomElement dict = dicts.at(i).toElement();
-
-                BRResource res;
-
-                res.longName = dict.attribute("longname");
-                res.shortName = dict.attribute("shortname");
-                res.size = dict.attribute("size").toInt();
-                res.version = dict.attribute("version").toInt();
-                res.url = dict.attribute("url");
-                res.type = Dict;
-                res.typeStr = type2str(Dict);
-                res.isinstalled = false;
-                res.isupdated = false;
-
-                resources.push_back(res);
-            }
-
-        } else {
-            LOG_INFO() << replyString;
-        }
-    }
+    data = reply->readAll();
     reply->deleteLater();
-
     emit finished();
 }
 
-QString BibleReaderDownloader::type2str(ResourceType type)
+void BibleReaderDownloader::getErrorString(QNetworkReply::NetworkError code)
 {
-    QString typeStr;
-    switch (type) {
-    case Book:
-        typeStr = tr("Book");
-        break;
+    errorString = "";
 
-    case Bible:
-        typeStr = tr("Bible");
-        break;
-
-    case Commentary:
-        typeStr = tr("Commentary");
-        break;
-
-    case Dict:
-        typeStr = tr("Dict");
-        break;
-
-    case Map:
-        typeStr = tr("Map");
-        break;
-    default:
-        typeStr = tr("Unknown");
-        break;
-
-    }
-
-    return typeStr;
+    emit error(errorString);
 }
 
 

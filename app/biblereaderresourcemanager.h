@@ -10,6 +10,35 @@
 
 class BibleReaderCore;
 
+/**
+ * @brief The ResourceType enum
+ * Bible Resource enum
+ */
+enum ResourceType {
+    Bible,
+    Commentary,
+    Dict,
+    Map,
+    Book
+};
+
+/**
+ * @brief Bible Resource structure
+ */
+typedef struct _BRResource {
+    QString shortName;
+    QString description;
+    QString url;
+    ResourceType type;
+    QString typeStr;
+    QString longName;
+    int size;
+    int version;
+
+    bool isinstalled;
+    bool isupdated;
+} BRResource;
+
 class BibleReaderResourceManager : public QObject
 {
     Q_OBJECT
@@ -38,9 +67,11 @@ public slots:
     void refresh();
 
 private slots:
-    void gotResource();
+    void gotResources();
 
 private:
     bool deleteDirectory(const QString &path);
+    QString type2str(ResourceType type);
+    void parseResources(QString resString);
 };
 #endif // BIBLEREADERRESOURCEMANAGER_H

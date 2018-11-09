@@ -1,4 +1,5 @@
 #include <QDir>
+#include <QDomDocument>
 #include "biblereaderresourcemanager.h"
 #include "biblereadercore.h"
 #include <Logger.h>
@@ -57,24 +58,32 @@ bool BibleReaderResourceManager::removeRes(BRResource resource, BibleReaderCore 
 
 bool BibleReaderResourceManager::installRes(BRResource resource)
 {
+    QString baseUrl = "http://files.biblereader.cn/resources/";
+
+    // download resource
+
+    // copy to right place
+    // if errors occured, return false
     return true;
 }
 
 bool BibleReaderResourceManager::updateRes(BRResource resource)
 {
+
     return true;
 }
 
 void BibleReaderResourceManager::refresh()
 {
     downloader = new BibleReaderDownloader(resourceUrl, this);
-    connect(downloader, SIGNAL(finished()), this, SLOT(gotResource()));
+    connect(downloader, SIGNAL(finished()), this, SLOT(gotResources()));
     downloader->start();
 }
 
-void BibleReaderResourceManager::gotResource()
+void BibleReaderResourceManager::gotResources()
 {
-    this->resources = downloader->getResources();
+    QString replyString = downloader->getData();
+    parseResources(replyString);
 
     emit refreshed();
 }
@@ -100,4 +109,99 @@ bool BibleReaderResourceManager::deleteDirectory(const QString &path)
             LOG_INFO() << deleteDirectory(fi.absoluteFilePath());
     }
     return dir.rmpath(dir.absolutePath());
+}
+
+QString BibleReaderResourceManager::type2str(ResourceType type)
+{
+    QString typeStr;
+    switch (type) {
+    case Book:
+        typeStr = tr("Book");
+        break;
+
+    case Bible:
+        typeStr = tr("Bible");
+        break;
+
+    case Commentary:
+        typeStr = tr("Commentary");
+        break;
+
+    case Dict:
+        typeStr = tr("Dict");
+        break;
+
+    case Map:
+        typeStr = tr("Map");
+        break;
+    default:
+        typeStr = tr("Unknown");
+        break;
+
+    }
+
+    return typeStr;
+}
+
+void BibleReaderResourceManager::parseResources(QString resString)
+{
+    // delete all resource item
+    resources.clear();
+
+    if (!resString.isEmpty()) {
+        QDomDocument doc;
+        QString error;
+        int row = 0, column = 0;
+
+        if (doc.setContent(resString, &error, &row, &column)) {
+            QDomElement root = doc.documentElement();
+
+            // bibles
+            QDomNode bibleRoot = root.firstChild();
+            QDomNodeList bibles = bibleRoot.childNodes();
+
+            for (int i = 0; i < bibles.count(); i++) {
+                QDomElement bible = bibles.at(i).toElement();
+
+                BRResource res;
+
+                res.longName = bible.attribute("longname");
+                res.shortName = bible.attribute("shortname");
+                res.size = bible.attribute("size").toInt();
+                res.version = bible.attribute("version").toInt();
+                res.url = bible.attribute("url");
+                res.type = Bible;
+                res.typeStr = type2str(Bible);
+                res.isinstalled = false;
+                res.isupdated = false;
+
+                resources.push_back(res);
+            }
+
+            // dicts
+            QDomNode dictRoot = bibleRoot.nextSibling();
+            QDomNodeList dicts = dictRoot.childNodes();
+
+            for (int i = 0; i < dicts.count(); i++) {
+                QDomElement dict = dicts.at(i).toElement();
+
+                BRResource res;
+
+                res.longName = dict.attribute("longname");
+                res.shortName = dict.attribute("shortname");
+                res.size = dict.attribute("size").toInt();
+                res.version = dict.attribute("version").toInt();
+                res.url = dict.attribute("url");
+                res.type = Dict;
+                res.typeStr = type2str(Dict);
+                res.isinstalled = false;
+                res.isupdated = false;
+
+                resources.push_back(res);
+            }
+
+        } else {
+            LOG_INFO() << resString;
+        }
+    }
 }
