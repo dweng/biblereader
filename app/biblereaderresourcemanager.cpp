@@ -1,4 +1,5 @@
 #include <QDir>
+#include <QFile>
 #include <QDomDocument>
 #include "biblereaderresourcemanager.h"
 #include "biblereadercore.h"
@@ -47,7 +48,6 @@ bool BibleReaderResourceManager::removeRes(BRResource resource, BibleReaderCore 
         break;
 
     case Dict:
-
         break;
     default:
         break;
@@ -56,15 +56,47 @@ bool BibleReaderResourceManager::removeRes(BRResource resource, BibleReaderCore 
     return ret;
 }
 
-bool BibleReaderResourceManager::installRes(BRResource resource)
+bool BibleReaderResourceManager::installRes(BRResource resource, BibleReaderCore *brCore)
 {
     QString baseUrl = "http://files.biblereader.cn/resources/";
 
-    // download resource
+    QString folderName = "";
+    QDir tempDir;
+    bool ret = true;
+    switch (resource.type) {
+    case Bible:
+        // brCore->removeBibleVersion(resource.shortName);
+        folderName.append(brCore->getConfigurator()->getBiblePathBase()).
+                append(resource.shortName).append(QDir::separator());
 
-    // copy to right place
-    // if errors occured, return false
-    return true;
+        downloader->setUrl(QUrl(baseUrl.append(resource.url)));
+        downloader->start();
+        while (downloader->getIsFinished()) {
+            // create folder
+            tempDir.setPath(brCore->getConfigurator()->getBiblePathBase());
+            tempDir.mkdir(resource.shortName);
+            // save file
+            QFile tmpFile(resource.shortName.append(".BIB"));
+            if (tmpFile.open(QIODevice::WriteOnly)) {
+                tmpFile.write(downloader->getData());
+                tmpFile.close();
+            } else {
+                ret = false;
+            }
+
+            break;
+        }
+        LOG_INFO() << folderName << ret;
+        break;
+
+    case Dict:
+
+        break;
+    default:
+        break;
+
+    }
+    return ret;
 }
 
 bool BibleReaderResourceManager::updateRes(BRResource resource)

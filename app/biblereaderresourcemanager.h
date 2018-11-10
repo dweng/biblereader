@@ -52,7 +52,7 @@ public:
     void setResourceUrl(const QUrl &value);
 
     bool removeRes(BRResource resource, BibleReaderCore *brCore);
-    bool installRes(BRResource resource);
+    bool installRes(BRResource resource, BibleReaderCore *brCore);
     bool updateRes(BRResource resource);
 
 private:

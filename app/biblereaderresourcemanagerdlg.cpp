@@ -95,6 +95,8 @@ QWidget *BibleReaderResourceManagerDlg::createButtons(BRResource resource)
         updateBtn->setEnabled(false);
     }
     QPushButton *installBtn = new QPushButton(QIcon(":/img/assets/images/add.png"), tr("Install"));
+    installBtn->setProperty("resname", QVariant(resource.shortName));
+    installBtn->setProperty("resurl", QVariant(resource.url));
     connect(installBtn, SIGNAL(clicked()), this, SLOT(installRes()));
     if (resource.isinstalled) {
         installBtn->setEnabled(false);
@@ -208,7 +210,27 @@ void BibleReaderResourceManagerDlg::updateResList()
 
 bool BibleReaderResourceManagerDlg::installRes()
 {
-    return true;
+    bool ret = true;
+
+    QPushButton *btn = qobject_cast<QPushButton*>(sender());
+    LOG_INFO() << btn->property("resname");
+    QList<BRResource> resources = manager->getResources();
+    for (int i = 0; i < resources.size(); i++) {
+        if (btn->property("resname").toString() == resources[i].shortName) {
+            ret = manager->installRes(resources[i], brCore);
+
+            if (ret) {
+                QMessageBox::information(this, tr("Done"), tr("Resource installed succeed! Please click Ok to restart Bible Reader to apply changes!"));
+                qApp->exit(773);
+            } else {
+                QMessageBox::warning(this, tr("Sorry"), tr("Resource installed failed!"));
+            }
+            break;
+        }
+    }
+
+    updateResList();
+    return ret;
 }
 
 bool BibleReaderResourceManagerDlg::updateRes()
