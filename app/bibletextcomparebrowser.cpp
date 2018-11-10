@@ -57,7 +57,7 @@ void BibleTextCompareBrowser::showComparedBibleText()
     html.append("<script type=\"text/javascript\" src=\"qrc:/others/assets/others/script.js\"></script>");
     html.append("</head><body>");
     html.append("<h2>").append(currentBookName).append(" ").append(QString::number(currentChapter)).append("</h2>");
-    html.append("<p><button type=\"button\" class=\"btn btn-lg btn-primary prevbook\">");
+    html.append("<div class=\"btn-group\"><button type=\"button\" class=\"btn btn-lg btn-primary prevbook\">");
     html.append("<span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span> 上一卷");
     html.append("</button>");
     html.append("<button type=\"button\" class=\"btn btn-lg btn-primary nextbook\">");
@@ -68,9 +68,9 @@ void BibleTextCompareBrowser::showComparedBibleText()
     html.append("</button>");
     html.append("<button type=\"button\" class=\"btn btn-lg btn-success nextchapter\">");
     html.append("<span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span> 下一章");
-    html.append("</button></p>");
+    html.append("</button></div>");
 
-    html.append("<p>");
+    html.append("<p><div class=\"btn-group\">");
     QList<BibleInfo> bibles = brCore->getAllBibleVersions();
     for (int i = 0; i < bibles.count(); i++) {
         html.append(
@@ -79,7 +79,7 @@ void BibleTextCompareBrowser::showComparedBibleText()
         html.append(bibles[i].getFullname());
         html.append("</button>");
     }
-    html.append("</p>");
+    html.append("</div></p>");
     html.append("<div><table class='table table-bordered table-hover'><thead><tr>");
 
 

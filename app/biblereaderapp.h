@@ -59,6 +59,7 @@ protected:
 private:
     QTranslator translator;
     QTranslator qtTranslator;
+    QTranslator updaterTranslator;
 
     BibleReaderMainWindow *w;
 

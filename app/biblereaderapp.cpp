@@ -58,8 +58,10 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     this->processEvents();
     LOG_INFO() << "Loading ZH_cn:" << translator.load(dir.absolutePath() + "/translations/ZH_cn.qm");
     LOG_INFO() << "Loading Qt ZH_cn:" << qtTranslator.load(dir.absolutePath() + "/translations/qt_zh_CN.qm");
+    LOG_INFO() << "loading updater ZH_cn:" << updaterTranslator.load(dir.absolutePath() + "/translations/updater_zh_CN.qm");
     installTranslator(&translator);
     installTranslator(&qtTranslator);
+    installTranslator(&updaterTranslator);
 
     // init biblereadercore
     splash->showMessage(tr("Loading modules..."), Qt::AlignBottom|Qt::AlignLeft, Qt::white);
