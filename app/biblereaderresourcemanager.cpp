@@ -1,5 +1,6 @@
 #include <QDir>
 #include <QFile>
+#include <QEventLoop>
 #include <QDomDocument>
 #include "biblereaderresourcemanager.h"
 #include "biblereadercore.h"
@@ -61,32 +62,19 @@ bool BibleReaderResourceManager::installRes(BRResource resource, BibleReaderCore
     QString baseUrl = "http://files.biblereader.cn/resources/";
 
     QString folderName = "";
-    QDir tempDir;
     bool ret = true;
+
     switch (resource.type) {
     case Bible:
         // brCore->removeBibleVersion(resource.shortName);
-        folderName.append(brCore->getConfigurator()->getBiblePathBase()).
-                append(resource.shortName).append(QDir::separator());
+        folderName.append(brCore->getConfigurator()->getBiblePathBase());
 
         downloader->setUrl(QUrl(baseUrl.append(resource.url)));
+        downloader->setProperty("shortname", resource.shortName);
+        downloader->setProperty("type", resource.type);
+        downloader->setProperty("copypath", folderName);
         downloader->start();
-        while (downloader->getIsFinished()) {
-            // create folder
-            tempDir.setPath(brCore->getConfigurator()->getBiblePathBase());
-            tempDir.mkdir(resource.shortName);
-            // save file
-            QFile tmpFile(resource.shortName.append(".BIB"));
-            if (tmpFile.open(QIODevice::WriteOnly)) {
-                tmpFile.write(downloader->getData());
-                tmpFile.close();
-            } else {
-                ret = false;
-            }
-
-            break;
-        }
-        LOG_INFO() << folderName << ret;
+        connect(downloader, SIGNAL(finished()), this, SLOT(copyRes()));
         break;
 
     case Dict:
@@ -97,6 +85,31 @@ bool BibleReaderResourceManager::installRes(BRResource resource, BibleReaderCore
 
     }
     return ret;
+}
+
+bool BibleReaderResourceManager::copyRes() {
+    LOG_INFO() << "Got resource data!";
+    BibleReaderDownloader *dl =  qobject_cast<BibleReaderDownloader*>(sender());
+
+    // create folder
+    QDir tempDir;
+    tempDir.setPath(dl->property("copypath").toString());
+    tempDir.mkdir(dl->property("shortname").toString());
+    tempDir.cd(dl->property("shortname").toString());
+    // save file
+    QString resFileName = dl->property("shortname").toString().append(".BIB");
+    QString resFilePath = tempDir.filePath(resFileName);
+    LOG_INFO() << resFilePath;
+    QFile tmpFile;
+    tmpFile.setFileName(resFilePath);
+    if (tmpFile.open(QIODevice::WriteOnly)) {
+        tmpFile.write(downloader->getData());
+        LOG_INFO() << tmpFile.fileName();
+        tmpFile.close();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool BibleReaderResourceManager::updateRes(BRResource resource)

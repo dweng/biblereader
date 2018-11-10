@@ -1,3 +1,4 @@
+#include <QEventLoop>
 #include "biblereaderdownloader.h"
 #include "Logger.h"
 
@@ -38,14 +39,23 @@ bool BibleReaderDownloader::getIsFinished() const
     return isFinished;
 }
 
-void BibleReaderDownloader::start()
+void BibleReaderDownloader::start(int block)
 {
     data.clear();
-    reply = manager->get(QNetworkRequest(url));
-
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(getErrorString(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SIGNAL(downloadProgress(qint64, qint64)));
+    if (block == 1) {
+        QEventLoop el;
+        reply = manager->get(QNetworkRequest(url));
+        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                this, SLOT(getErrorString(QNetworkReply::NetworkError)));
+        connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SIGNAL(downloadProgress(qint64, qint64)));
+        connect(manager, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
+        el.exec();
+    } else {
+        reply = manager->get(QNetworkRequest(url));
+        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                this, SLOT(getErrorString(QNetworkReply::NetworkError)));
+        connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SIGNAL(downloadProgress(qint64, qint64)));
+    }
 }
 
 void BibleReaderDownloader::replyFinished(QNetworkReply *reply)

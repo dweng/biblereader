@@ -35,7 +35,7 @@ signals:
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
 public slots:
-    void start();
+    void start(int block = -1);
 
 private slots:
     virtual void replyFinished(QNetworkReply *reply);

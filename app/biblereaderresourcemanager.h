@@ -68,6 +68,7 @@ public slots:
 
 private slots:
     void gotResources();
+    bool copyRes();
 
 private:
     bool deleteDirectory(const QString &path);
