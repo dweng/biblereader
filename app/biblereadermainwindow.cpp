@@ -463,6 +463,7 @@ void BibleReaderMainWindow::createGlobalToolbar()
     toolBar = new QToolBar(tr("Bible Navigator"), this);
     toolBar->setMovable(false);
     configAction = toolBar->addAction(QIcon(QString(":/img/assets/images/wrench.png")),tr("Configure"));
+    configAction->setMenuRole(QAction::PreferencesRole);
     connect(configAction, SIGNAL(triggered(bool)), this, SLOT(showCfgDlg()));
     resourceManagerAction = toolBar->addAction(QIcon(QString(":/img/assets/images/package.png")),tr("Resources manager"));
     //resourceManagerAction->setEnabled(false);
@@ -662,6 +663,7 @@ void BibleReaderMainWindow::createTopMenus()
     projectVersesAction->setEnabled(false);
     connect(projectVersesAction, SIGNAL(triggered()), this, SLOT(projectVerses()));
     exitAppAction = fileMenu->addAction(QIcon(QString(":/img/assets/images/cancel.png")), tr("Exit"));
+    exitAppAction->setMenuRole(QAction::QuitRole);
     exitAppAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_X));
     connect(exitAppAction, SIGNAL(triggered()), this, SLOT(quitBibleReader()));
 
@@ -695,6 +697,7 @@ void BibleReaderMainWindow::createTopMenus()
     // add actions to Help menu
     mainMenuBar->addMenu(helpMenu);
     aboutMeAction = helpMenu->addAction(QIcon(QString(":/img/assets/images/32X32.ico")), tr("About [Bible Reader]..."));
+    aboutMeAction->setMenuRole(QAction::AboutRole);
     connect(aboutMeAction, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
 
     checkUpdate = helpMenu->addAction(QIcon(QString(":/img/assets/images/arrow_refresh.png")),tr("Check Update..."));
