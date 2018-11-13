@@ -112,10 +112,33 @@ bool BibleReaderResourceManager::copyRes() {
     }
 }
 
-bool BibleReaderResourceManager::updateRes(BRResource resource)
+bool BibleReaderResourceManager::updateRes(BRResource resource, BibleReaderCore *brCore)
 {
+    QString baseUrl = "http://files.biblereader.cn/resources/";
 
-    return true;
+    QString folderName = "";
+    bool ret = true;
+
+    switch (resource.type) {
+    case Bible:
+        folderName.append(brCore->getConfigurator()->getBiblePathBase());
+
+        downloader->setUrl(QUrl(baseUrl.append(resource.url)));
+        downloader->setProperty("shortname", resource.shortName);
+        downloader->setProperty("type", resource.type);
+        downloader->setProperty("copypath", folderName);
+        downloader->start();
+        connect(downloader, SIGNAL(finished()), this, SLOT(copyRes()));
+        break;
+
+    case Dict:
+
+        break;
+    default:
+        break;
+
+    }
+    return ret;
 }
 
 void BibleReaderResourceManager::refresh()

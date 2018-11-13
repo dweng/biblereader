@@ -53,7 +53,7 @@ public:
 
     bool removeRes(BRResource resource, BibleReaderCore *brCore);
     bool installRes(BRResource resource, BibleReaderCore *brCore);
-    bool updateRes(BRResource resource);
+    bool updateRes(BRResource resource, BibleReaderCore *brCore);
 
 private:
     BibleReaderDownloader *downloader;

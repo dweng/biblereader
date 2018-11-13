@@ -235,6 +235,24 @@ bool BibleReaderResourceManagerDlg::installRes()
 
 bool BibleReaderResourceManagerDlg::updateRes()
 {
+    bool ret = true;
+
+    QPushButton *btn = qobject_cast<QPushButton*>(sender());
+    LOG_INFO() << btn->property("resname").toString();
+    QList<BRResource> resources = manager->getResources();
+    for (int i = 0; i < resources.size(); i++) {
+        if (btn->property("resname").toString() == resources[i].shortName) {
+            ret = manager->updateRes(resources[i], brCore);
+
+            if (ret) {
+                QMessageBox::information(this, tr("Done"), tr("Resource updated succeed! Please click Ok to restart Bible Reader to apply changes!"));
+                qApp->exit(773);
+            } else {
+                QMessageBox::warning(this, tr("Sorry"), tr("Resource updated failed!"));
+            }
+            break;
+        }
+    }
     return true;
 }
 
