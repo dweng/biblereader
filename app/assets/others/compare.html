@@ -1,0 +1,40 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="qrc:/others/assets/others/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="qrc:/others/assets/others/style.css" />
+    <script type="text/javascript" src="qrc:/others/assets/others/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="qrc:/others/assets/others/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="qrc:/others/assets/others/script.js"></script>
+</head>
+<body>
+    <h2 id="bookname"></h2>
+    <div class="btn-group">
+        <button type="button" class="btn btn-lg btn-primary prevbook">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 上一卷</button>
+        <button type="button" class="btn btn-lg btn-primary nextbook">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 下一卷</button>
+        <button type="button" class="btn btn-lg btn-success prevchapter">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 上一章</button>
+        <button type="button" class="btn btn-lg btn-success nextchapter">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> 下一章</button>
+    </div>
+    <p>
+        <div class="btn-group" id="bibles">
+            <button type="button" class="btn btn-sm btn-success active bible" value='CCB'>当代译本</button>
+        </div>
+    </p>
+    <div>
+        <table class='table table-bordered table-hover'>
+            <thead>
+                <tr id="biblestitle">
+                    <th nowrap="nowrap" value='CCB'>当代译本</th>
+                </tr></thead>
+            <tbody id="verseslist">
+                <tr id="verse1">
+                    <td value='CCB'><span>[ 1:1] 以下是在耶路撒冷做王的大卫之子——传道者的话。 </span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

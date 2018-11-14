@@ -49,6 +49,11 @@ bool BibleReaderResourceManager::removeRes(BRResource resource, BibleReaderCore 
         break;
 
     case Dict:
+        folderName.append(brCore->getConfigurator()->getDictPathBase()).
+                append(resource.shortName).append(QDir::separator());
+
+        ret = deleteDirectory(folderName);
+        LOG_INFO() << folderName << ret;
         break;
     default:
         break;
@@ -78,7 +83,14 @@ bool BibleReaderResourceManager::installRes(BRResource resource, BibleReaderCore
         break;
 
     case Dict:
+        folderName.append(brCore->getConfigurator()->getDictPathBase());
 
+        downloader->setUrl(QUrl(baseUrl.append(resource.url)));
+        downloader->setProperty("shortname", resource.shortName);
+        downloader->setProperty("type", resource.type);
+        downloader->setProperty("copypath", folderName);
+        downloader->start();
+        connect(downloader, SIGNAL(finished()), this, SLOT(copyRes()));
         break;
     default:
         break;
@@ -97,7 +109,7 @@ bool BibleReaderResourceManager::copyRes() {
     tempDir.mkdir(dl->property("shortname").toString());
     tempDir.cd(dl->property("shortname").toString());
     // save file
-    QString resFileName = dl->property("shortname").toString().append(".BIB");
+    QString resFileName = dl->property("shortname").toString().append(".BIBDICT");
     QString resFilePath = tempDir.filePath(resFileName);
     LOG_INFO() << resFilePath;
     QFile tmpFile;
@@ -132,7 +144,14 @@ bool BibleReaderResourceManager::updateRes(BRResource resource, BibleReaderCore 
         break;
 
     case Dict:
+        folderName.append(brCore->getConfigurator()->getDictPathBase());
 
+        downloader->setUrl(QUrl(baseUrl.append(resource.url)));
+        downloader->setProperty("shortname", resource.shortName);
+        downloader->setProperty("type", resource.type);
+        downloader->setProperty("copypath", folderName);
+        downloader->start();
+        connect(downloader, SIGNAL(finished()), this, SLOT(copyRes()));
         break;
     default:
         break;

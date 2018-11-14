@@ -26,4 +26,13 @@ $(document).ready(function(){
             $('td[value='+$(this).val()+']').show();
         }
     });
+
+    // show title
+    $('h2#bookname').text(window.brCore.getCurrentBook().getLongName());
+
+    // build compare browser verse table
+    var bibles = window.brCore.getAllBibleVersions();
+    for(var i=0; i < bibles.length; i++) {
+
+    }
 });

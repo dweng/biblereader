@@ -16,6 +16,7 @@
 #include <QWebFrame>
 #include "bibletextcomparebrowser.h"
 #include "bibletextblockdata.h"
+#include "Logger.h"
 
 BibleTextCompareBrowser::BibleTextCompareBrowser(BibleReaderCore *brc, QWidget *parent):
     QWebView(parent)

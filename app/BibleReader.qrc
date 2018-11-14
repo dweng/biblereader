@@ -63,4 +63,7 @@
         <file>assets/others/bootstrap-3.3.7-dist/js/bootstrap.min.js</file>
         <file>assets/others/bootstrap-3.3.7-dist/js/npm.js</file>
     </qresource>
+    <qresource prefix="/">
+        <file>assets/others/compare.html</file>
+    </qresource>
 </RCC>
