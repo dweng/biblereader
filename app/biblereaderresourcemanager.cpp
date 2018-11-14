@@ -49,6 +49,7 @@ bool BibleReaderResourceManager::removeRes(BRResource resource, BibleReaderCore 
         break;
 
     case Dict:
+        brCore->removeDictionary(resource.shortName);
         folderName.append(brCore->getConfigurator()->getDictPathBase()).
                 append(resource.shortName).append(QDir::separator());
 
@@ -71,7 +72,6 @@ bool BibleReaderResourceManager::installRes(BRResource resource, BibleReaderCore
 
     switch (resource.type) {
     case Bible:
-        // brCore->removeBibleVersion(resource.shortName);
         folderName.append(brCore->getConfigurator()->getBiblePathBase());
 
         downloader->setUrl(QUrl(baseUrl.append(resource.url)));
@@ -109,7 +109,14 @@ bool BibleReaderResourceManager::copyRes() {
     tempDir.mkdir(dl->property("shortname").toString());
     tempDir.cd(dl->property("shortname").toString());
     // save file
-    QString resFileName = dl->property("shortname").toString().append(".BIBDICT");
+    QString ext = "";
+    ResourceType type = (ResourceType)dl->property("type").toInt();
+    if (type == Bible) {
+        ext = ".BIB";
+    } else if (type == Dict) {
+        ext = ".BIBDICT";
+    }
+    QString resFileName = dl->property("shortname").toString().append(ext);
     QString resFilePath = tempDir.filePath(resFileName);
     LOG_INFO() << resFilePath;
     QFile tmpFile;

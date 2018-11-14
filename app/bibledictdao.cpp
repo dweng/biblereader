@@ -90,6 +90,15 @@ bool BibleDictDAO::init()
     return true;
 }
 
+bool BibleDictDAO::deinit()
+{
+    if (dictDB.isOpen()) {
+        dictDB.close();
+    }
+
+    return true;
+}
+
 bool BibleDictDAO::initDictData()
 {
     LOG_INFO() << "init dictionary data:" << dictName;

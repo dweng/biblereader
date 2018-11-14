@@ -62,12 +62,19 @@ public:
      */
     BibleDictInfo getBibleDictInfo();
 
+    /**
+     * @brief deinit
+     * @return
+     */
+    bool deinit();
+
 private:
     /**
      * @brief init database connection.
      * @return true if succeed, false if failed
      */
     bool init();
+
     /**
      * @brief Cache all dictionary to memory.
      * @return true if succeed, false if failed.

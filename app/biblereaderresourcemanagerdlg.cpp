@@ -20,7 +20,7 @@ BibleReaderResourceManagerDlg::BibleReaderResourceManagerDlg(
     connect(manager, SIGNAL(refreshed()), this, SLOT(updateResList()));
 
     setWindowTitle(tr("Resource Manager"));
-    setMinimumSize(600, 480);
+    setMinimumSize(800, 600);
     setModal(true);
 
     // create UI
@@ -171,18 +171,22 @@ void BibleReaderResourceManagerDlg::updateResList()
 
 
     QTreeWidgetItem *biblesItem = new QTreeWidgetItem();
-    biblesItem->setData(0, Qt::DisplayRole, tr("Bibles"));
+    biblesItem->setData(0, Qt::DisplayRole, tr("Bibles(%1)"));
     QTreeWidgetItem *dictsItem = new QTreeWidgetItem();
-    dictsItem->setData(0, Qt::DisplayRole, tr("Dictionarys"));
+    dictsItem->setData(0, Qt::DisplayRole, tr("Dictionarys(%1)"));
 
     QTreeWidgetItem *temp = NULL;
+    int biblesCount = 0;
+    int dictsCount = 0;
     resItemsWidget->clear();
 
     for (int i = 0; i < resources.count(); i++) {
         BRResource res = resources[i];
         if (res.type == Bible) {
+            biblesCount++;
             temp = new QTreeWidgetItem(biblesItem);
         } else if (res.type == Dict) {
+            dictsCount++;
             temp = new QTreeWidgetItem(dictsItem);
         }
 
@@ -203,6 +207,9 @@ void BibleReaderResourceManagerDlg::updateResList()
         QWidget *tempBtns = createButtons(res);
         resItemsWidget->setItemWidget(temp, 4, tempBtns);
     }
+
+    biblesItem->setText(0, biblesItem->text(0).arg(biblesCount));
+    dictsItem->setText(0, dictsItem->text(0).arg(dictsCount));
 
     resItemsWidget->addTopLevelItem(biblesItem);
     resItemsWidget->addTopLevelItem(dictsItem);

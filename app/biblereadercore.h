@@ -251,6 +251,13 @@ public:
     bool addDictionary(QString &name, QString& path);
 
     /**
+     * @brief removeDictionary
+     * @param name
+     * @return
+     */
+    bool removeDictionary(QString &name);
+
+    /**
      * @brief scan bible data
      * @return a list contains all bible versions information
      */

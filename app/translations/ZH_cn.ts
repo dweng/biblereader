@@ -424,34 +424,34 @@
 <context>
     <name>BibleReaderResourceManager</name>
     <message>
-        <location filename="../biblereaderresourcemanager.cpp" line="187"/>
+        <location filename="../biblereaderresourcemanager.cpp" line="213"/>
         <source>Book</source>
-        <translation type="unfinished"></translation>
+        <translation>书</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanager.cpp" line="191"/>
+        <location filename="../biblereaderresourcemanager.cpp" line="217"/>
         <source>Bible</source>
-        <translation type="unfinished">圣经</translation>
+        <translation>圣经</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanager.cpp" line="195"/>
+        <location filename="../biblereaderresourcemanager.cpp" line="221"/>
         <source>Commentary</source>
-        <translation type="unfinished">注释书</translation>
+        <translation>注释书</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanager.cpp" line="199"/>
+        <location filename="../biblereaderresourcemanager.cpp" line="225"/>
         <source>Dict</source>
-        <translation type="unfinished">字典</translation>
+        <translation>字典</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanager.cpp" line="203"/>
+        <location filename="../biblereaderresourcemanager.cpp" line="229"/>
         <source>Map</source>
-        <translation type="unfinished">地图</translation>
+        <translation>地图</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanager.cpp" line="206"/>
+        <location filename="../biblereaderresourcemanager.cpp" line="232"/>
         <source>Unknown</source>
-        <translation type="unfinished">未知</translation>
+        <translation>未知</translation>
     </message>
 </context>
 <context>
@@ -500,56 +500,64 @@
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="174"/>
         <source>Bibles</source>
-        <translation>圣经</translation>
+        <translation type="vanished">圣经</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="176"/>
         <source>Dictionarys</source>
-        <translation>字典</translation>
+        <translation type="vanished">字典</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="223"/>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="248"/>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="270"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="230"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="255"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="277"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="223"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="230"/>
         <source>Resource installed succeed! Please click Ok to restart Bible Reader to apply changes!</source>
-        <translation type="unfinished"></translation>
+        <translation>资源安装成功！请点击确认重启程序来应用更改！</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="226"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="233"/>
         <source>Resource installed failed!</source>
-        <translation type="unfinished"></translation>
+        <translation>资源安装失败！</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="248"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="255"/>
         <source>Resource updated succeed! Please click Ok to restart Bible Reader to apply changes!</source>
-        <translation type="unfinished"></translation>
+        <translation>资源升级成功！请点击确认重启程序来应用更改！</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="251"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="258"/>
         <source>Resource updated failed!</source>
-        <translation type="unfinished"></translation>
+        <translation>资源升级失败！</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="270"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="277"/>
         <source>Resource removed succeed! Please click Ok to restart Bible Reader to apply changes!</source>
         <translation>删除资源成功！请点击确认重启程序以应用更新！</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="226"/>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="251"/>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="273"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="233"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="258"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="280"/>
         <source>Sorry</source>
         <translation>抱歉</translation>
     </message>
     <message>
-        <location filename="../biblereaderresourcemanagerdlg.cpp" line="273"/>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="174"/>
+        <source>Bibles(%1)</source>
+        <translation>圣经（%1）</translation>
+    </message>
+    <message>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="176"/>
+        <source>Dictionarys(%1)</source>
+        <translation type="unfinished">字典（%1）</translation>
+    </message>
+    <message>
+        <location filename="../biblereaderresourcemanagerdlg.cpp" line="280"/>
         <source>Resource removed failed!</source>
         <translation>资源移除失败！</translation>
     </message>
@@ -809,17 +817,17 @@ Query string:%2</source>
         <translation>保存当前章</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="656"/>
+        <location filename="../bibletextbrowser.cpp" line="655"/>
         <source>Save Bible Chapter</source>
         <translation>保存圣经章</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="656"/>
+        <location filename="../bibletextbrowser.cpp" line="655"/>
         <source>Word Files(*.doc *.docx)</source>
         <translation>Word文档(*.doc *.docx)</translation>
     </message>
     <message>
-        <location filename="../bibletextbrowser.cpp" line="673"/>
+        <location filename="../bibletextbrowser.cpp" line="672"/>
         <source>Print Document</source>
         <translation>打印文档</translation>
     </message>

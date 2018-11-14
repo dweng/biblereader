@@ -73,7 +73,7 @@ BibleReaderApp::BibleReaderApp(int argc, char **argv):
     initBibleReaderCore();
 
     setApplicationName(tr("biblereader"));
-    setApplicationVersion("0.0.11");
+    setApplicationVersion("0.0.12");
     setApplicationDisplayName(tr("biblereader"));
     setOrganizationDomain("biblereader.cn");
     setOrganizationName("Bible Reader");

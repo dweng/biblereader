@@ -248,6 +248,8 @@ bool BibleTextDAO::deinit()
     if (bibleDB.isOpen()) {
         bibleDB.close();
     }
+
+    return true;
 }
 
 BibleInfo BibleTextDAO::getBibleInfo()

@@ -553,6 +553,25 @@ bool BibleReaderCore::addDictionary(QString &name, QString &path)
     return true;
 }
 
+bool BibleReaderCore::removeDictionary(QString &name)
+{
+    if (allBDDAOs.contains(name)) {
+        LOG_INFO() << name << " bible removing";
+        allBDDAOs.value(name)->deinit();
+        allBDDAOs.remove(name);
+        // if the removed dict is dict,
+        // we need to set current dict to another bible version
+        // default to the first dict in dict list
+        if (currentDict == name) {
+            setCurrentDict(allDicts[0].getName());
+        }
+        // emit bibleRemoved(version);
+        LOG_INFO() << name << " dict removed";
+    }
+
+    return true;
+}
+
 QList<BibleInfo> BibleReaderCore::getAllBibleVersions()
 {
     if (allBibles.empty()) {

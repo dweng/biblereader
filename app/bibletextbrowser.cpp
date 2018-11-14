@@ -500,7 +500,6 @@ void BibleTextBrowser::addVerse(QTextCursor *cursor, BibleVerse verse, QFont f)
             xrefStr += tmp;
         }
     }
-    LOG_INFO() << verse.getVerse() <<":"<< xrefStr;
     wholeVerseString += xrefStr;
     wholeVerseString.prepend(QString("<p style='font-family:%1; font-size:%2pt'>").arg(
                           f.family(), QString::number(f.pointSizeF())) );
