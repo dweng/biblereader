@@ -301,15 +301,50 @@ public:
      */
     void setBiblePathBase(const QString &value);
 
+    /**
+     * @brief getCurrentBookNumber
+     * @return current book number
+     */
     int getCurrentBookNumber() const;
+
+    /**
+     * @brief set current book number to value
+     * @param value
+     */
     void setCurrentBookNumber(int value);
 
+    /**
+     * @brief getCurrentChapterNumber
+     * @return current chapter number
+     */
     int getCurrentChapterNumber() const;
+
+    /**
+     * @brief set current chapter number to value
+     * @param value
+     */
     void setCurrentChapterNumber(int value);
 
+    /**
+     * @brief get current verse number
+     * @return current verse number
+     */
     int getCurrentVerseNumber() const;
+
+    /**
+     * @brief set current verse number to value
+     * @param value
+     */
     void setCurrentVerseNumber(int value);
 
+    /**
+     * @brief set current book, chapter, verse
+     * @param b current book
+     * @param c current chapter
+     * @param v current verse
+     * @param operation 0 default, 1 history navigation
+     * @return
+     */
     int setCurrentBCV(int b, int c, int v, int operation = 0);
 
     QString getExplaination(QString dict, QString word);
